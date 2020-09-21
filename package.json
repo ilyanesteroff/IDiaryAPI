@@ -1,0 +1,20 @@
+{
+  "name": "todolist",
+  "version": "1.0.0",
+  "description": "Todo list app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ilya Nesterow",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.8",
+    "@types/node": "^14.11.1",
+    "@types/mongodb": "^3.5.27"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.6.2"
+  }
+}

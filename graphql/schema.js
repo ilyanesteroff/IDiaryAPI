@@ -7,7 +7,6 @@ module.exports = buildSchema(`
     completed: Boolean!
     createdAt: String!
     timeToComlete: Int!
-    overdued: Boolean!
     public: Boolean!
   }
   
@@ -25,7 +24,7 @@ module.exports = buildSchema(`
     followers: [User]!
     following: [User]!
     FulfilledTodos: Int!
-    FailedTodos: Int!
+    ActiveTodos: Int!
   }
 
   type Message {
@@ -69,11 +68,13 @@ module.exports = buildSchema(`
   input CreateTodoInputData {
     task: String!
     completed: Boolean!
-    timeToComplete: String!
+    timeToComplete: Int!
+    public: Boolean!
   }
 
   type RootQuery {
     getAuthUser: FullUser!
+    checkEmailAndUsername(email: String!, username: String!): Boolean!
     getResetPassword(token: String!) : Boolean!
     login(email: String!, password: String!) : AuthData!
     todos : [Todo]!
@@ -91,18 +92,18 @@ module.exports = buildSchema(`
     acceptEmail(userId: ID!) : Boolean!
     requestPasswordReset(email: String!) : Boolean!
     setNewPassword(token: String!, newPassword: String!) : Boolean!
-    createUser(userInput: CreateUserInputData) : FullUser!
-    updateUser(userInput: CreateUserInputData) : FullUser!
+    createUser(userInput: CreateUserInputData) : Boolean!
+    updateUser(userInput: CreateUserInputData) : Boolean!
     deleteUser: Boolean!
     createTodo(todoInput: CreateTodoInputData) : Todo!
     updateTodo(todoInput: CreateTodoInputData) : Todo!
     deleteTodo(todoId: ID!) : Boolean!
-    follow(requestData: Request!) : User!
+    follow(from: ID!, to: ID!) : User!
     acceptFollower(followerId: ID!) : Follower!
     unfollow(userId: ID!) : Boolean!
     blockUser(userId: ID!) : [Follower!]!
     unblockUser(userId: ID!) : [Follower!]
-    contactUser(message: Message!) : Boolean!
+    contactUser(from: ID!, to: ID!, text: String!) : Boolean!
   }
 
   schema {

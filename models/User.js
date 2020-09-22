@@ -46,7 +46,7 @@ exports.User = class {
   }
   //can be used for sending messages, todos and requests
   static pushSomething(userId, fieldName, fieldValue) {
-    return getDb().collection('users')
+    return getDb().collection('Users')
       .findOneAndUpdate({ _id: new mongo.ObjectID(userId)}, { $push :
         { 
           [fieldName]: fieldValue
@@ -73,5 +73,11 @@ exports.User = class {
           }
         }
       })
+  }
+  
+  static getSpecificField(userId, fieldName){
+    return getDb().collection('Users')
+      .findOne({ _id: new mongo.ObjectID(userId)})
+      //.select(fieldName)
   }
 }

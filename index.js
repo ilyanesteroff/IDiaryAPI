@@ -16,10 +16,25 @@ app.use((req, res, next) => {
     : next()
 })
 
+app.use((req, res, next) => {
+  req.isAuth = true
+  req.userId = '5f6a493fabfb660d40e53365'
+  next()
+})
+
 app.use('/graphql', graphqlHTTP({
   schema: graphqlSchema, 
   rootValue: graphqlResolvers,
-  graphiql: true
+  graphiql: true,
+  customFormatErrorFn(err) {
+    if(!err.originalError) return err
+    const {data, message, status} = err.originalError
+    return { 
+      message: message,
+      data: data,
+      status: status
+    }
+  }
 }))
 
 mongoConnect(_ => app.listen(3000))

@@ -27,7 +27,7 @@ exports.User = class {
 
   static updateUser(userId, info) {
     return getDb().collection('Users')
-      .findOneAndUpdate({ _id: new mongo.ObjectID(userId)}, { $set : info })
+      .findOneAndUpdate({ _id: new mongo.ObjectID(userId)}, info)
   }
 
   static deleteUser(userId) {
@@ -69,15 +69,14 @@ exports.User = class {
         $set : {
           resetPassword: {
             token: token,
-            bestBefore: new Date()
+            bestBefore: new Date().getTime() + 7400000
           }
         }
       })
   }
   
-  static getSpecificField(userId, fieldName){
+  static getSpecificField(userId, params){
     return getDb().collection('Users')
-      .findOne({ _id: new mongo.ObjectID(userId)})
-      //.select(fieldName)
+      .findOne({ _id: new mongo.ObjectID(userId)}, params)
   }
 }

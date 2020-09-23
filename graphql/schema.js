@@ -18,7 +18,10 @@ module.exports = buildSchema(`
   }
 
   type User {
-    BasicInfo: Follower!
+    _id: ID!
+    username: String!
+    firstname: String!
+    lastname: String!
     email: String!
     Todos: [Todo]!
     followers: [User]!
@@ -42,11 +45,19 @@ module.exports = buildSchema(`
   }
 
   type FullUser {
-    UserInfo: User!
+    _id: ID!
+    username: String!
+    firstname: String!
+    lastname: String!
+    email: String!
+    Todos: [Todo]!
+    followers: [User]!
+    following: [User]!
+    FulfilledTodos: Int!
+    ActiveTodos: Int!
     messages: [Message]!
     requests: [Request]!
     phone: String
-    password: String!
     createdAt: String!
   }
 
@@ -78,23 +89,23 @@ module.exports = buildSchema(`
     getResetPassword(token: String!) : Boolean!
     login(email: String!, password: String!) : AuthData!
     todos : [Todo]!
-    todo(todoId: String!): Todo!
-    user(userId: ID!): User!
-    findUser(username: String!) : User!
-    followers: [User]!
-    following: [User]!
+    todo(todoId: String!, userId: ID): Todo!
+    user(userId: ID): User!
+    findUser(username: String!) : Follower!
+    followingOrFollowers(userId: ID, field: String!): [Follower]!
     messages: [Message]!
     requests: [Request]!
     blacklist: [Follower]!
   }
 
   type RootMutation {
-    acceptEmail(userId: ID!) : Boolean!
+    acceptEmail(token: ID!) : Boolean!
     requestPasswordReset(email: String!) : Boolean!
     setNewPassword(token: String!, newPassword: String!) : Boolean!
     createUser(userInput: CreateUserInputData) : Boolean!
     updateUser(userInput: CreateUserInputData) : Boolean!
     deleteUser: Boolean!
+    verifyPassword(password: String!) : Boolean!
     createTodo(todoInput: CreateTodoInputData) : Todo!
     updateTodo(todoInput: CreateTodoInputData) : Todo!
     deleteTodo(todoId: ID!) : Boolean!

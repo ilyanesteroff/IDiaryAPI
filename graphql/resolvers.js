@@ -8,7 +8,6 @@ const {secrets} = require('../utils/variables')
 const {throwAnError} = require('../utils/error-handlers')
 
 const randomBytes = promisify(crypto.randomBytes)
-
 module.exports = {
   getAuthUser: async function(args, req){
     const user = await User.findUser({ _id : new mongo.ObjectID(req.userId)})
@@ -195,8 +194,20 @@ module.exports = {
       createdAt: todo.createdAt.toString()
     }
   },
-  updateTodo: async function({todoInput}, req){
-
+  updateTodo: async function({todoInput, todoId}, req){
+    const user = await User.findUser({ _id: req.userId })
+    if(!user) throwAnError('User not found', 404)
+    const todoIndex = user.Todos.findIndex(td => td.id === todoId)
+    const { Todos } = user
+    Todos[todoIndex].task = todoInput.task
+    Todos[todoIndex].completed = todoInput.completed
+    Todos[todoIndex].timeToComplete = todoInput.timeToComplete
+    Todos[todoIndex].public = todoInput.public
+    await User.updateUser(req.userId, { $set: { Todos: Todos }})
+    return {
+      ...Todos[todoIndex],
+      createdAt: Todos[todoIndex].createdAt.toISOString()
+    }
   },
   deleteTodo: async function({todoId}, req){
     

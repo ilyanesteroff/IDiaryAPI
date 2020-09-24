@@ -107,7 +107,7 @@ module.exports = buildSchema(`
     deleteUser: Boolean!
     verifyPassword(password: String!) : Boolean!
     createTodo(todoInput: CreateTodoInputData) : Todo!
-    updateTodo(todoInput: CreateTodoInputData) : Todo!
+    updateTodo(todoInput: CreateTodoInputData, todoId: ID!) : Todo!
     deleteTodo(todoId: ID!) : Boolean!
     follow(from: ID!, to: ID!) : User!
     acceptFollower(followerId: ID!) : Follower!

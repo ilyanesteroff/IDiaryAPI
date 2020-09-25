@@ -4,12 +4,14 @@ const mongo = require('mongodb')
 const bycrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const {User} = require('../models/User')
+const {Todo} = require('../models/Todo')
 const {secrets} = require('../utils/variables')
 const {throwAnError} = require('../utils/error-handlers')
 
 const randomBytes = promisify(crypto.randomBytes)
 module.exports = {
   getAuthUser: async function(args, req){
+    if(!req.userId) throwAnError('Authorization failed', 400)
     const user = await User.findUser({ _id : new mongo.ObjectID(req.userId)})
     return {
       ...user,
@@ -23,16 +25,16 @@ module.exports = {
       : true
   },
   //checks whether password reset is still actual
-  getResetPassword: async function({token}, req) {
+  getResetPassword: async function({token}) {
     const user = await User.findUser({ resetPassword : { token: token} })
     if(!user) throwAnError('User not found', 404)
     if(user.resetPassword.bestBefore < new Date()) {
-      User.updateUser(req.userId, { $unset: resetPassword })
+      User.updateUser(user._id, { $unset: resetPassword })
       return false
     }
     return true 
   },
-  login: async function({email, password}, req) {
+  login: async function({email, password}) {
     const user = await User.findUser({ email: email })
     if(!user) throwAnError('Email is invalid', 404)
     const pwMatches = await bycrypt.compare(password, user.password)
@@ -49,28 +51,41 @@ module.exports = {
       username: user.username
     }
   },
-  todos: async function(args, req) {
-    const user = await User.findUser({ _id: new mongo.ObjectID(req.userId)})
-    if(!user) throwAnError('User not found', 404)
-    if(user.Todos.length < 1) throwAnError('User has no todos', 422)
-    return user.Todos
+  todos: async function({userId}, req) {
+    if(!req.userId) throwAnError('Authorization failed', 400)
+    const todos = await Todo.findManyTodos({ creatorId: userId || req.userId })
+    if(todos.length === 0) return []
+    if(userId) {
+      _todos = todos.filter(t => t.public)
+      _todos.forEach(t => {
+        t._id = t._id.toString()
+        t.creatorId = t.creatorId.toString()
+        t.createdAt = t.createdAt.toISOString()
+      })
+      return _todos
+    } else {
+      todos.forEach(t => {
+        t._id = t._id.toString()
+        t.creatorId = t.creatorId.toString()
+        t.createdAt = t.createdAt.toISOString()
+      })
+      return todos
+    }
   },
-  todo: async function({todoId, userId}, req) {
-    let userID
-    userId? userID = userId : userID = req.userId
-    const user = await User.findUser({ _id: new mongo.ObjectID(userID)})
-    if(!user) throwAnError('User not found', 404)
-    const todoIndex = user.Todos.findIndex(t => t.id === todoId)
-    if(todoIndex < 0) throwAnError('Todo not found', 404)
+  todo: async function({todoId}, req) {
+    if(!req.userId) throwAnError('Authorization failed', 400)
+    const todo = await Todo.findOneTodo({ _id: new mongo.ObjectID(todoId)})
+    if(!todo) throwAnError('Todo not found', 404)
+    if(!todo.public &&  todo.creatorId !== req.userId) throwAnError('Cannot access todo', 400)
     return {
-      ...user.Todos[todoIndex],
-      createdAt: user.Todos[todoIndex].createdAt.toISOString()
+      ...todo,
+      _id: todo._id.toString(),
+      createdAt: todo.createdAt.toISOString()
     }
   },
   user: async function({userId}, req){
-    let userID
-    userId? userID = userId : userID = req.userId
-    const user = await User.findUser({ _id: new mongo.ObjectID(userID)})
+    if(!req.userId) throwAnError('Authorization failed', 400)
+    const user = await User.findUser({ _id: new mongo.ObjectID(userId || req.userId)})
     if(!user) throwAnError('User not found', 404)
     return {
       ...user, 
@@ -79,6 +94,7 @@ module.exports = {
   },
   //returns a user when searching for users
   findUser: async function({username}, req) {
+    if(!req.userId) throwAnError('Authorization failed', 400)
     const user = await User.findUser({username: username})
     if(!user) throwAnError('User not found', 404)
     return {
@@ -94,19 +110,19 @@ module.exports = {
     if(!user) throwAnError('User not found', 404)
     return user[field]
   },
-  messages: async function(args, req) {
-    const user = await User.findUser({ _id: new mongo.ObjectID(req.userId)})
-    if(!user) throwAnError('User not found', 404)
-    if(user.messages.length === 0) throwAnError('User has no messages', 422)
-    return user.messages
+  conversations: async function(args, req) {
+    //returns all conversations for a single user 
+    if(!req.userId) throwAnError('Authorization failed', 400)
   },
   requests: async function(args, req){
+    if(!req.userId) throwAnError('Authorization failed', 400)
     const user = await User.findUser({ _id: new mongo.ObjectID(req.userId)})
     if(!user) throwAnError('User not found', 404)
     if(user.requests.length === 0) throwAnError('User has no requests', 422)
     return user.requests
   },
   blacklist: async function(args, req){
+    if(!req.userId) throwAnError('Authorization failed', 400)
     const user = await User.findUser({ _id: new mongo.ObjectID(req.userId)})
     if(!user) throwAnError('User not found', 404)
     if(user.blacklist.length === 0) throwAnError('Blacklist is empty', 422)
@@ -158,6 +174,7 @@ module.exports = {
     }
   },
   updateUser: async function({userInput}, req){
+    if(!req.userId) throwAnError('Authorization failed', 400)
     try {
       const hashedPw = await bycrypt.hash(userInput.password, 16)
       userInput.password = hashedPw
@@ -168,6 +185,7 @@ module.exports = {
     }
   },
   deleteUser: async function(req){
+    if(!req.userId) throwAnError('Authorization failed', 400)
     try {
       await User.deleteUser(req.userId)
       return true
@@ -182,32 +200,21 @@ module.exports = {
     return matches
   },
   createTodo: async function({todoInput}, req){
-    const id = await randomBytes(16)
-    const todo = {
-      ...todoInput,
-      id: id.toString('hex'),
-      createdAt: new Date().toISOString()
-    }
-    const updatedUser = await User.pushSomething(req.userId, 'Todos', todo)
-    return { 
+    if(!req.userId) throwAnError('Authorization failed', 400)
+    const user = await User.findUser({ _id: new mongo.ObjectID(req.userId)})
+    if(!user) throwAnError('User does not exist', 404)
+    const todo = new Todo({ 
+      ...todoInput, 
+      creatorId: req.userId
+    })
+    const savedTodo = await todo.save()
+    return {
       ...todo, 
-      createdAt: todo.createdAt.toString()
+      createdAt: todo.createdAt.toISOString()
     }
   },
   updateTodo: async function({todoInput, todoId}, req){
-    const user = await User.findUser({ _id: req.userId })
-    if(!user) throwAnError('User not found', 404)
-    const todoIndex = user.Todos.findIndex(td => td.id === todoId)
-    const { Todos } = user
-    Todos[todoIndex].task = todoInput.task
-    Todos[todoIndex].completed = todoInput.completed
-    Todos[todoIndex].timeToComplete = todoInput.timeToComplete
-    Todos[todoIndex].public = todoInput.public
-    await User.updateUser(req.userId, { $set: { Todos: Todos }})
-    return {
-      ...Todos[todoIndex],
-      createdAt: Todos[todoIndex].createdAt.toISOString()
-    }
+    
   },
   deleteTodo: async function({todoId}, req){
     

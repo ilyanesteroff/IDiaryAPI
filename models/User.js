@@ -7,18 +7,21 @@ exports.User = class {
     this.firstname = userInfo.firstname
     this.lastname = userInfo.lastname
     this.email = userInfo.email
-    this.Todos = []
     this.followers = []
     this.following = []
     this.FulfilledTodos = 0
     this.FailedTodos = 0
-    if(userInfo.phone) this.phone = userInfo.phone
     this.password = userInfo.password
     this.createdAt = new Date()
     this.approved = false
     this.requests = []
-    this.messages = []
     this.blacklist = []
+    this.public = userInfo.public
+    if(userInfo.phone) this.phone = userInfo.phone
+    if(userInfo.website) this.website = userInfo.website
+    if(userInfo.company) this.company = userInfo.company
+    if(userInfo.about) this.about = userInfo.about
+    if(userInfo.relationshipStatus) this.relationshipStatus = userInfo.relationshipStatus
   }
 
   save() {

@@ -2,12 +2,14 @@ const {buildSchema} = require('graphql')
 
 module.exports = buildSchema(`
   type Todo {
-    id: ID!
+    _id: ID!
+    creatorId: ID!
     task: String!
     completed: Boolean!
     createdAt: String!
     timeToComlete: Int!
     public: Boolean!
+    tags: [String]
   }
   
   type Follower {
@@ -23,14 +25,20 @@ module.exports = buildSchema(`
     firstname: String!
     lastname: String!
     email: String!
-    Todos: [Todo]!
-    followers: [User]!
-    following: [User]!
+    followers: [Follower]!
+    following: [Follower]!
     FulfilledTodos: Int!
     ActiveTodos: Int!
   }
 
+  type Conversation {
+    _id: ID!
+    participants: [Follower!]!
+    messages: [Message!]!
+  }
+
   type Message {
+    id: ID!
     from: ID!
     to: ID!
     text: String!
@@ -50,15 +58,19 @@ module.exports = buildSchema(`
     firstname: String!
     lastname: String!
     email: String!
-    Todos: [Todo]!
-    followers: [User]!
-    following: [User]!
+    conversations: [Conversation]!
+    followers: [Follower]!
+    following: [Follower]!
     FulfilledTodos: Int!
     ActiveTodos: Int!
-    messages: [Message]!
     requests: [Request]!
     phone: String
     createdAt: String!
+    website: String
+    company: String
+    about: String
+    relationshipStatus: String
+    public: Boolean!
   }
 
   type AuthData {
@@ -72,6 +84,7 @@ module.exports = buildSchema(`
     firstname: String!
     lastname: String!
     email: String!
+    public: Boolean!
     phone: String
     password: String!
   }
@@ -81,6 +94,7 @@ module.exports = buildSchema(`
     completed: Boolean!
     timeToComplete: Int!
     public: Boolean!
+    tags: [String]
   }
 
   type RootQuery {
@@ -88,12 +102,12 @@ module.exports = buildSchema(`
     checkEmailAndUsername(email: String!, username: String!): Boolean!
     getResetPassword(token: String!) : Boolean!
     login(email: String!, password: String!) : AuthData!
-    todos : [Todo]!
-    todo(todoId: String!, userId: ID): Todo!
+    todos(userId: ID) : [Todo]!
+    todo(todoId: ID!): Todo!
     user(userId: ID): User!
     findUser(username: String!) : Follower!
     followingOrFollowers(userId: ID, field: String!): [Follower]!
-    messages: [Message]!
+    conversations: [Conversation]!
     requests: [Request]!
     blacklist: [Follower]!
   }
@@ -114,7 +128,7 @@ module.exports = buildSchema(`
     unfollow(userId: ID!) : Boolean!
     blockUser(userId: ID!) : [Follower!]!
     unblockUser(userId: ID!) : [Follower!]
-    contactUser(from: ID!, to: ID!, text: String!) : Boolean!
+    contactUser(from: ID!, to: ID!, text: String!) : Conversation!
   }
 
   schema {

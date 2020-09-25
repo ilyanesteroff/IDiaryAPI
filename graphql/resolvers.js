@@ -281,7 +281,10 @@ module.exports = {
   unblockUser: async function({userID}, req){
 
   },
-  contactUser: async function({message}, req) {
+  writeAMessage: async function({from, to, text}, req) {
 
+  },
+  deleteMessage: async function({messageId, conversationId}, req){
+    
   }
 }

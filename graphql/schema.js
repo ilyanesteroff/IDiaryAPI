@@ -155,7 +155,8 @@ module.exports = buildSchema(`
     unfollow(userId: ID!) : Boolean!
     blockUser(userId: ID!) : [Follower!]!
     unblockUser(userId: ID!) : [Follower!]
-    contactUser(from: ID!, to: ID!, text: String!) : Conversation!
+    writeAMessage(from: ID!, to: ID!, text: String!) : Conversation!
+    deleteMessage(messageId: ID!, conversationId: ID!) : Boolean!
   }
 
   schema {

@@ -24,11 +24,12 @@ module.exports = buildSchema(`
     username: String!
     firstname: String!
     lastname: String!
-    email: String!
-    followers: [Follower]!
-    following: [Follower]!
-    FulfilledTodos: Int!
-    ActiveTodos: Int!
+    public: Boolean!
+    email: String
+    followers: [Follower]
+    following: [Follower]
+    FulfilledTodos: Int
+    ActiveTodos: Int
   }
 
   type Conversation {
@@ -87,13 +88,39 @@ module.exports = buildSchema(`
     public: Boolean!
     phone: String
     password: String!
+    website: String
+    company: String
+    about: String
+    relationshipStatus: String
+  }
+
+  input UpdateUserInputData {
+    username: String
+    firstname: String
+    lastname: String
+    email: String
+    public: Boolean
+    phone: String
+    password: String
+    website: String
+    company: String
+    about: String
+    relationshipStatus: String
   }
 
   input CreateTodoInputData {
     task: String!
     completed: Boolean!
-    timeToComplete: Int!
+    timeToComplete: Int
     public: Boolean!
+    tags: [String]
+  }
+
+  input UpdateTodoInputData {
+    task: String
+    completed: Boolean
+    timeToComplete: Int
+    public: Boolean
     tags: [String]
   }
 
@@ -117,11 +144,11 @@ module.exports = buildSchema(`
     requestPasswordReset(email: String!) : Boolean!
     setNewPassword(token: String!, newPassword: String!) : Boolean!
     createUser(userInput: CreateUserInputData) : Boolean!
-    updateUser(userInput: CreateUserInputData) : Boolean!
+    updateUser(userInput: UpdateUserInputData) : Boolean!
     deleteUser: Boolean!
     verifyPassword(password: String!) : Boolean!
     createTodo(todoInput: CreateTodoInputData) : Todo!
-    updateTodo(todoInput: CreateTodoInputData, todoId: ID!) : Todo!
+    updateTodo(todoInput: UpdateTodoInputData, todoId: ID!) : Todo!
     deleteTodo(todoId: ID!) : Boolean!
     follow(from: ID!, to: ID!) : User!
     acceptFollower(followerId: ID!) : Follower!

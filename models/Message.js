@@ -13,12 +13,12 @@ exports.Conversation = class{
       .insertOne(this)
   }
 
-  findConversation(query) {
+  static findConversation(query) {
     return getDb().collection('Conversations')
       .findOne(query)
   }
 
-  findManyConversationsForOneUser(userId) {
+  static findManyConversationsForOneUser(userId) {
     return getDb().collection('Convarsations')
       .find({ 
           $elemMatch : 
@@ -29,9 +29,10 @@ exports.Conversation = class{
                 }
             } 
       })
+      .toArray()
   }
 
-  findDialogue(user1Id, user2Id) {
+  static findDialogue(user1Id, user2Id) {
     return getDb().collection('Conversations')
     //because there can be only one dialogue between only 2 users 
       .findOne({
@@ -52,7 +53,7 @@ exports.Conversation = class{
       })
   }
 
-  addMassage(conversationId, message){
+  static addMassage(conversationId, message){
     return getDb().collection('Conversations')
       .findOneAndUpdate({ _id: new mongo.ObjectID(conversationId)}, {
             $push : {
@@ -61,7 +62,7 @@ exports.Conversation = class{
       })
   }
 
-  deleteMessageForAll(conversationId, messageId){
+  static deleteMessageForAll(conversationId, messageId){
     return getDb().collection('Conversations')
       .findOneAndUpdate({ _id: new mongo.ObjectID(conversationId)}, {
          $pull : {

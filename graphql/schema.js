@@ -44,13 +44,6 @@ module.exports = buildSchema(`
     to: ID!
     text: String!
     writtenAt: String!
-    seen: Boolean!
-  }
-
-  type Request {
-    from: ID!
-    to: ID!
-    accepted: Boolean!
   }
 
   type FullUser {
@@ -64,7 +57,8 @@ module.exports = buildSchema(`
     following: [Follower]!
     FulfilledTodos: Int!
     ActiveTodos: Int!
-    requests: [Request]!
+    requestsTo: [Follower]!
+    requestsFrom: [Follower]!
     phone: String
     createdAt: String!
     website: String
@@ -134,9 +128,9 @@ module.exports = buildSchema(`
     user(userId: ID): User!
     findUser(username: String!) : Follower!
     followingOrFollowers(userId: ID, field: String!): [Follower]!
+    conversation(convId: ID!) : Conversation!
     conversations: [Conversation]!
-    requests: [Request]!
-    blacklist: [Follower]!
+    getList(listname: String!) : [Follower]!
   }
 
   type RootMutation {
@@ -150,12 +144,15 @@ module.exports = buildSchema(`
     createTodo(todoInput: CreateTodoInputData) : Todo!
     updateTodo(todoInput: UpdateTodoInputData, todoId: ID!) : Todo!
     deleteTodo(todoId: ID!) : Boolean!
-    follow(from: ID!, to: ID!) : User!
-    acceptFollower(followerId: ID!) : Follower!
+    sendFollowRequest(to: ID!) : Boolean!
+    unsendFollowRequest(to: ID!) : Boolean!
+    rejectFollowRequest(from: ID!) : Boolean
+    acceptFollower(followerId: ID!) : Boolean!
     unfollow(userId: ID!) : Boolean!
-    blockUser(userId: ID!) : [Follower!]!
-    unblockUser(userId: ID!) : [Follower!]
-    writeAMessage(from: ID!, to: ID!, text: String!) : Conversation!
+    blockUser(userId: ID!) : Boolean!
+    unblockUser(userId: ID!) : Boolean!
+    createConversation(receiver: ID!, message: String!) : Conversation!
+    writeMessage(to: ID!, text: String!, convId: ID!) : Boolean!
     deleteMessage(messageId: ID!, conversationId: ID!) : Boolean!
   }
 

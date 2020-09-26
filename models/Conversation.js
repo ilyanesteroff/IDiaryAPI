@@ -2,7 +2,7 @@ const mongo = require('mongodb')
 const { getDb } = require('../utils/db-connection')
 
 
-exports.Conversation = class{
+exports.Conversation = class {
   constructor(conversationInfo){
     this.participants = conversationInfo.participants
     this.messages = conversationInfo.messages || []
@@ -36,20 +36,14 @@ exports.Conversation = class{
     return getDb().collection('Conversations')
     //because there can be only one dialogue between only 2 users 
       .findOne({
-          $elemMatch : {
-            $and : [
-              {
-                participants : { 
-                  id : new mongo.ObjectID(user1Id)
-                }
-              },
-              {
-                participants : { 
-                  id : new mongo.ObjectID(user2Id)
-                }
-              }
+        participants: {
+          $elemMatch: {
+            $and: [
+                { _id : new mongo.ObjectID(user1Id) },
+                { _id : new mongo.ObjectID(user2Id) }
             ]
           }
+        }  
       })
   }
 

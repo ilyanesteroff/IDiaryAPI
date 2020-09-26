@@ -14,7 +14,8 @@ exports.User = class {
     this.password = userInfo.password
     this.createdAt = new Date()
     this.approved = false
-    this.requests = []
+    this.requestsTo = []
+    this.requestsFrom = []
     this.blacklist = []
     this.public = userInfo.public
     if(userInfo.phone) this.phone = userInfo.phone
@@ -81,5 +82,14 @@ exports.User = class {
   static getSpecificField(userId, params){
     return getDb().collection('Users')
       .findOne({ _id: new mongo.ObjectID(userId)}, params)
+  }
+
+  static formatUserAsFollower(user){
+    return {
+      _id: user._id.toString(),
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname
+    }
   }
 }

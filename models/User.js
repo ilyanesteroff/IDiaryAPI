@@ -7,6 +7,7 @@ exports.User = class {
     this.firstname = userInfo.firstname
     this.lastname = userInfo.lastname
     this.email = userInfo.email
+    this.dialogues = []
     this.followers = []
     this.following = []
     this.FullfilledTodos = 0

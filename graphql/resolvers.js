@@ -388,6 +388,7 @@ module.exports = {
     await User.pullSomething(req.userId, 'blacklist', { _id: userId })
     return true
   },
+  //ps dont forget to improve conversation searchers
   createConversation: async function({receiver, message}, req){
     if(!req.userId) throwAnError('Authorization failed', 400)
     const user = await User.findUser({ _id: new mongo.ObjectID(req.userId)})

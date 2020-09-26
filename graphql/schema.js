@@ -52,7 +52,6 @@ module.exports = buildSchema(`
     firstname: String!
     lastname: String!
     email: String!
-    conversations: [Conversation]!
     followers: [Follower]!
     following: [Follower]!
     FulfilledTodos: Int!
@@ -61,6 +60,7 @@ module.exports = buildSchema(`
     requestsFrom: [Follower]!
     phone: String
     createdAt: String!
+    dialogues: [Conversation]!
     website: String
     company: String
     about: String

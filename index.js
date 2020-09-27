@@ -1,6 +1,6 @@
 const express = require('express')
 const {graphqlHTTP} = require('express-graphql')
-const { mongoConnect } = require('./utils/db-connection')
+const { mongoConnect } = require('./js/utils/db-connection')
 const graphqlSchema = require('./graphql/schema')
 const graphqlResolvers = require('./graphql/resolvers')
 const app = express()

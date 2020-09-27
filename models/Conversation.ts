@@ -1,11 +1,13 @@
-const mongo = require('mongodb')
-const { getDb } = require('../utils/db-connection')
+import mongo from 'mongodb'
+import { getDb } from '../utils/db-connection'
+import { Iconversation, Follower, Message } from './model-types'
 
-
-exports.Conversation = class {
-  constructor(conversationInfo){
-    this.participants = conversationInfo.participants
-    this.messages = conversationInfo.messages || []
+export class Conversation {
+  parcicipants: Follower[]
+  messages: Message[] | []
+  constructor(convInfo: Iconversation){
+    this.parcicipants = convInfo.participants
+    this.messages = convInfo.messages
   }
 
   save() {
@@ -13,12 +15,12 @@ exports.Conversation = class {
       .insertOne(this)
   }
 
-  static findConversation(query) {
+  static findConversation(query: object) {
     return getDb().collection('Conversations')
       .findOne(query)
   }
 
-  static findManyConversationsForOneUser(userId) {
+  static findManyConversationsForOneUser(userId: string) {
     return getDb().collection('Convarsations')
       .find({ 
           $elemMatch : 
@@ -32,7 +34,7 @@ exports.Conversation = class {
       .toArray()
   }
 
-  static findDialogue(user1Id, user2Id) {
+  static findDialogue(user1Id: string, user2Id: string) {
     return getDb().collection('Conversations')
     //because there can be only one dialogue between only 2 users 
       .findOne({
@@ -47,7 +49,7 @@ exports.Conversation = class {
       })
   }
 
-  static addMassage(conversationId, message){
+  static addMassage(conversationId: string, message: Message){
     return getDb().collection('Conversations')
       .findOneAndUpdate({ _id: new mongo.ObjectID(conversationId)}, {
             $push : {
@@ -56,7 +58,7 @@ exports.Conversation = class {
       })
   }
 
-  static deleteMessageForAll(conversationId, messageId){
+  static deleteMessageForAll(conversationId: string, messageId: string){
     return getDb().collection('Conversations')
       .findOneAndUpdate({ _id: new mongo.ObjectID(conversationId)}, {
          $pull : {

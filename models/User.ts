@@ -1,8 +1,32 @@
-const mongo = require('mongodb')
-const { getDb } = require('../utils/db-connection')
+import mongo, { ObjectID } from 'mongodb'
+import { getDb } from '../utils/db-connection'
+import { IUserInfo, Follower } from './model-types'
 
-exports.User = class {
-  constructor(userInfo) {
+export class User {
+  _id: ObjectID | undefined
+  username: string
+  firstname: string
+  lastname: string
+  email: string
+  dialogues: []
+  followers: []
+  following: []
+  FullfilledTodos: 0
+  ActiveTodos: 0
+  password: string
+  createdAt: Date
+  approved: boolean
+  requestsTo: []
+  requestsFrom: []
+  blacklist: []
+  public: boolean
+  phone: string | undefined
+  website: string | undefined
+  company: string | undefined
+  about: string | undefined
+  relationshipStatus: string | undefined
+
+  constructor(userInfo: IUserInfo){
     this.username = userInfo.username
     this.firstname = userInfo.firstname
     this.lastname = userInfo.lastname
@@ -30,27 +54,27 @@ exports.User = class {
     return getDb().collection('Users').insertOne(this)
   }
 
-  static updateUser(userId, info) {
+  static updateUser(userId: string, info: object) {
     return getDb().collection('Users')
       .findOneAndUpdate({ _id: new mongo.ObjectID(userId)}, info)
   }
 
-  static deleteUser(userId) {
+  static deleteUser(userId: string) {
     return getDb().collection('Users')
       .findOneAndDelete({ _id : new mongo.ObjectID(userId)})
   }
 
-  static getUser(username) {
+  static getUser(username: object) {
     return getDb().collection('Users')
       .findOne({ username: username})
   }
 
-  static findUser(query) {
+  static findUser(query: object) {
     return getDb().collection('Users')
       .findOne(query)
   }
   //can be used for sending messages, todos and requests
-  static pushSomething(userId, fieldName, fieldValue) {
+  static pushSomething(userId: string, fieldName: string, fieldValue: any) {
     return getDb().collection('Users')
       .findOneAndUpdate({ _id: new mongo.ObjectID(userId)}, { $push :
         { 
@@ -59,7 +83,7 @@ exports.User = class {
       })
   }
   //
-  static pullSomething(userId, fieldName, query) {
+  static pullSomething(userId: string, fieldName: string, query: object) {
     return getDb().collection('Users')
       .findOneAndUpdate({ _id: new mongo.ObjectID(userId)}, {
         $pull : {
@@ -68,7 +92,7 @@ exports.User = class {
       })
   }
 
-  static setResetPasswordToken(userId, token) {
+  static setResetPasswordToken(userId: string, token: string) {
     return getDb().collection('Users')
       .findOneAndUpdate({ _id: new mongo.ObjectID(userId)}, {
         $set : {
@@ -80,14 +104,14 @@ exports.User = class {
       })
   }
   
-  static getSpecificField(userId, params){
+  static getSpecificField(userId: string, params: object){
     return getDb().collection('Users')
       .findOne({ _id: new mongo.ObjectID(userId)}, params)
   }
 
-  static formatUserAsFollower(user){
+  static formatUserAsFollower(user: User) {
     return {
-      _id: user._id.toString(),
+      _id: user._id? user._id.toString() : undefined,
       username: user.username,
       firstname: user.firstname,
       lastname: user.lastname

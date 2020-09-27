@@ -1,4 +1,3 @@
-const mongo = require('mongodb')
 const userManips = require('./resolvers/user-manipuations')
 const authResolvers = require('./resolvers/auth-stuff')
 const pwReset = require('./resolvers/password-reset')
@@ -6,8 +5,7 @@ const views = require('./resolvers/view-something')
 const todoManips = require('./resolvers/todo-manipulations')
 const FandR = require('./resolvers/following-requesting')
 const security = require('./resolvers/security-stuff')
-const {User} = require('../js/models/User')
-const {Conversation} = require('../js/models/Conversation')
+const convResolvers = require('./resolvers/conversation-stuff')
 
 module.exports = {
   getAuthUser: (args, req) => views.viewYourProfile(req),
@@ -70,62 +68,9 @@ module.exports = {
 
   isAbleToContact: ({userId}, req) => security.isAbleToContact(userId, req),
   //ps dont forget to improve conversation searchers
-  createConversation: async function({receiver, message}, req){
-    if(!req.userId) throwAnError('Authorization failed', 400)
-    const user = await User.findUser({ _id: new mongo.ObjectID(req.userId)})
-    if(!user) throwAnError('User not found', 404)
-    const user_receiver = await User.findUser({ _id: new mongo.ObjectID(receiver) })
-    if(!user_receiver) throwAnError('Receiver does not exist')
-    //test this
-    if(
-      user_receiver.blacklist.some(u => u._id === req.userId) ||
-      (!user_receiver.public && !user_receiver.following.some(u => u._id === req.userId))
-    ) throwAnError('Cannot contact that user', 422)
-    const convAlreadyExists = await Conversation.findDialogue(req.userId, receiver)
-    if(convAlreadyExists) throwAnError('Conversation already exists', 400)
-    const messageId = (await randomBytes(12)).toString('hex')
-    const conversation = new Conversation({
-      participants: [User.formatUserAsFollower(user), User.formatUserAsFollower(user_receiver)],
-      messages: [
-        {
-          id: messageId, 
-          from: req.userId, 
-          to: receiver, 
-          text: message, 
-          writtenAt: new Date()
-        }
-      ]
-    })
-    await conversation.save()
-    conversation.messages.forEach(m => m.writtenAt = m.writtenAt.toISOString())
-    return {
-      ...conversation
-    }
-  },
-  writeMessage: async function({to, text, convId}, req) {
-    if(!req.userId) throwAnError('Authorization failed', 400)
-    const conversation = await Conversation.findConversation({ _id: new mongo.ObjectID(convId)})
-    if(!conversation) throwAnError('Conversation not found', 404)
-    if(!conversation.participants.some(p => p._id === req.userId)) return false
-    const messageId = (await randomBytes(12)).toString('hex')
-    await Conversation.addMassage(convId, {
-      id: messageId,
-      from: req.userId,
-      to: to,
-      text: text,
-      writtenAt: new Date()
-    })
-    return true
-  },
-  deleteMessage: async function({messageId, conversationId}, req){
-    if(!req.userId) throwAnError('Authorization failed', 400)
-    const conversation = await Conversation.findConversation({ _id: new mongo.ObjectID(conversationId)})
-    if(!conversation) throwAnError('Conversation not found', 404)
-    if(!conversation.participants.some(p => p._id === req.userId)) return false
-    let message = conversation.messages.find(m => m.id === messageId)
-    if(!message) return false
-    if(message.from !== req.userId) return false
-    await Conversation.deleteMessageForAll(conversationId, message.id)
-    return true
-  }
+  createConversation: ({receiver, message}, req) => convResolvers.createConversation(receiver, message, req),
+
+  writeMessage: ({to, text, convId}, req) => convResolvers.writeMessage(to, text, convId, req),
+
+  deleteMessage: ({messageId, conversationId}, req) => convResolvers.deleteMessage(messageId, conversationId, req)
 }

@@ -8,7 +8,7 @@ const mongodb_1 = __importDefault(require("mongodb"));
 const db_connection_1 = require("../utils/db-connection");
 class Conversation {
     constructor(convInfo) {
-        this.parcicipants = convInfo.participants;
+        this.participants = convInfo.participants;
         this.messages = convInfo.messages;
     }
     save() {
@@ -19,29 +19,15 @@ class Conversation {
         return db_connection_1.getDb().collection('Conversations')
             .findOne(query);
     }
-    static findManyConversationsForOneUser(userId) {
-        return db_connection_1.getDb().collection('Convarsations')
-            .find({
-            $elemMatch: {
-                participants: {
-                    id: new mongodb_1.default.ObjectID(userId)
-                }
-            }
-        })
-            .toArray();
+    static destroyConversation(query) {
+        return db_connection_1.getDb().collection('Conversations')
+            .deleteOne(query);
     }
-    static findDialogue(user1Id, user2Id) {
+    static findDialogue(participants) {
         return db_connection_1.getDb().collection('Conversations')
             //because there can be only one dialogue between only 2 users 
             .findOne({
-            participants: {
-                $elemMatch: {
-                    $and: [
-                        { _id: new mongodb_1.default.ObjectID(user1Id) },
-                        { _id: new mongodb_1.default.ObjectID(user2Id) }
-                    ]
-                }
-            }
+            participants: participants
         });
     }
     static addMassage(conversationId, message) {
@@ -50,6 +36,10 @@ class Conversation {
             $push: {
                 messages: message
             }
+        })
+            .then(_ => {
+            return db_connection_1.getDb().collection('Conversations')
+                .findOne({ _id: new mongodb_1.default.ObjectID(conversationId) });
         });
     }
     static deleteMessageForAll(conversationId, messageId) {
@@ -60,7 +50,21 @@ class Conversation {
                     id: messageId
                 }
             }
+        })
+            .then(_ => {
+            return db_connection_1.getDb().collection('Conversations')
+                .findOne({ _id: new mongodb_1.default.ObjectID(conversationId) });
         });
+    }
+    static formatAsDialogue(conv) {
+        return {
+            _id: conv._id ? conv._id.toString() : undefined,
+            participants: conv.participants,
+            latestMessage: {
+                writtenAt: conv.messages[conv.messages.length - 1].writtenAt,
+                text: conv.messages[conv.messages.length - 1].text
+            }
+        };
     }
 }
 exports.Conversation = Conversation;

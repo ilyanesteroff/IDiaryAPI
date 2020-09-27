@@ -42,6 +42,17 @@ module.exports = buildSchema(`
     messages: [Message!]!
   }
 
+  type ShortMessage {
+    text: String!
+    writtenAt: String!
+  }
+
+  type Dialogue {
+    _id: ID!
+    participants: [Follower!]!
+    latestMessage: ShortMessage!
+  }
+
   type Message {
     id: ID!
     from: ID!
@@ -64,7 +75,7 @@ module.exports = buildSchema(`
     requestsFrom: [Follower]!
     phone: String
     createdAt: String!
-    dialogues: [Conversation]!
+    dialogues: [Dialogue]!
     website: String
     company: String
     about: String
@@ -133,7 +144,7 @@ module.exports = buildSchema(`
     findUser(username: String!) : Follower!
     followingOrFollowers(userId: ID, field: String!): [Follower]!
     conversation(convId: ID!) : Conversation!
-    conversations: [Conversation]!
+    conversations: [Dialogue]!
     getList(listname: String!) : [Follower]!
   }
 

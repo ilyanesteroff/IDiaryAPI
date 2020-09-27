@@ -109,16 +109,9 @@ exports.viewConversation = async function(convId, req){
 exports.viewConversations = async function(req) {
   //returns all conversations for a single user 
   if(!req.user) throwAnError('Authorization failed', 400)
-  const conversations = await Conversation.findManyConversationsForOneUser(req.user._id)
-  if(conversations.length === 0) return []
-  conversations.forEach(conv => {
-    conv._id = conv._id.toString()
-    conv.participants.forEach(p => p._id = p._id.toString())
-    conv.messages.forEach(m => {
-      m.from = m.from.toString()
-      m.to = m.toString()
-      m.writtenAt = m.writtenAt.toISOString()
-    })
+  if(req.user.dialogues.length === 0) return []
+  req.user.dialogues.forEach(conv => {
+    conv.latestMessage.writtenAt.toISOString()
   })
-  return conversations
+  return req.user.dialogues
 }

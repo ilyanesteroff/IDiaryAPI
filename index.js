@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 
 app.use(async (req, res, next) => {
   //check for token in future
-  const user = await User.findUser({ _id: new mongo.ObjectID('5f6f3c255f2b8435d0dd4266')})
+  const user = await User.findUser({ _id: new mongo.ObjectID('5f70f85fb9ca295060e1ce84')})
   if(user) {
     req.isAuth = true
     req.user = user

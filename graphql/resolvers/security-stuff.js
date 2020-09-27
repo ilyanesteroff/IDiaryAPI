@@ -1,4 +1,3 @@
-const e = require('express')
 const mongo = require('mongodb')
 const {User} = require('../../js/models/User')
 const {throwAnError} = require('../../utils/error-handlers')
@@ -41,20 +40,19 @@ exports.unblockUser = async function(userId, req){
 }
 
 exports.isAbleToContact = async function(userId, req){
-  /*try {
+  try {
     if(!req.user) return false 
     if(req.user._id === userId) return true
     const userThatWantsContact = req.user
-    if(userThatWantsContact.blacklist.some(u => u._id === userId))
+    if(userThatWantsContact.blacklist.some(u => u._id === userId)) throwAnError('Cannot contact blocked user', 422)
     const userToContact = await User.findUser({ _id : new mongo.ObjectID(userId)})
     if(!userToContact) return false
-    if(userToContact.blacklist.some(u => u._id === userThatWantsContact._id)) return false
+    if(userToContact.blacklist.some(u => u._id === userThatWantsContact._id)) throwAnError('Cannot contact user', 422)
     if(userToContact.public) return true
     return !userToContact.public && userToContact.followers.some(f => f._id === userThatWantsContact._id) && userToContact.following.some(f => f._id === userThatWantsContact._id)
       ? true
       : false    
   } catch (err) {
     return false
-  }*/
-  return true
+  }
 }

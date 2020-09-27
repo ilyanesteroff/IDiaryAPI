@@ -1,12 +1,13 @@
-import mongo from 'mongodb'
+import mongo, { ObjectID } from 'mongodb'
 import { getDb } from '../utils/db-connection'
 import { Iconversation, Follower, Message } from './model-types'
 
 export class Conversation {
-  parcicipants: Follower[]
+  _id: ObjectID | undefined
+  participants: Follower[]
   messages: Message[] | []
   constructor(convInfo: Iconversation){
-    this.parcicipants = convInfo.participants
+    this.participants = convInfo.participants
     this.messages = convInfo.messages
   }
 
@@ -20,41 +21,29 @@ export class Conversation {
       .findOne(query)
   }
 
-  static findManyConversationsForOneUser(userId: string) {
-    return getDb().collection('Convarsations')
-      .find({ 
-          $elemMatch : 
-            { 
-              participants : 
-                { 
-                  id : new mongo.ObjectID(userId)
-                }
-            } 
-      })
-      .toArray()
+  static destroyConversation(query: object){
+    return getDb().collection('Conversations')
+      .deleteOne(query)
   }
 
-  static findDialogue(user1Id: string, user2Id: string) {
+  static findDialogue(participants: Follower[]) {
     return getDb().collection('Conversations')
     //because there can be only one dialogue between only 2 users 
       .findOne({
-        participants: {
-          $elemMatch: {
-            $and: [
-                { _id : new mongo.ObjectID(user1Id) },
-                { _id : new mongo.ObjectID(user2Id) }
-            ]
-          }
-        }  
+        participants: participants
       })
   }
 
   static addMassage(conversationId: string, message: Message){
     return getDb().collection('Conversations')
       .findOneAndUpdate({ _id: new mongo.ObjectID(conversationId)}, {
-            $push : {
-              messages: message
-            } 
+        $push : {
+          messages: message
+        } 
+      })
+      .then(_ => {
+        return getDb().collection('Conversations')
+          .findOne({ _id: new mongo.ObjectID(conversationId) })
       })
   }
 
@@ -67,5 +56,20 @@ export class Conversation {
             }
          }
       })
+      .then(_ => {
+        return getDb().collection('Conversations')
+          .findOne({ _id: new mongo.ObjectID(conversationId) })
+      })
   }  
+
+  static formatAsDialogue(conv: Conversation){
+    return {
+      _id: conv._id? conv._id.toString() : undefined, 
+      participants: conv.participants, 
+      latestMessage: {
+        writtenAt: conv.messages[conv.messages.length-1].writtenAt,
+        text: conv.messages[conv.messages.length-1].text
+      }
+    }
+  }
 }

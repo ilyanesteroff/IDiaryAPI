@@ -3,7 +3,7 @@ const {buildSchema} = require('graphql')
 module.exports = buildSchema(`
   type Todo {
     _id: ID!
-    creatorId: ID!
+    creator: Follower! 
     task: String!
     completed: Boolean!
     createdAt: String!
@@ -28,8 +28,12 @@ module.exports = buildSchema(`
     email: String
     followers: [Follower]
     following: [Follower]
-    FulfilledTodos: Int
+    FullfilledTodos: Int
     ActiveTodos: Int
+    website: String
+    company: String
+    about: String
+    relationshipStatus: String
   }
 
   type Conversation {
@@ -141,8 +145,8 @@ module.exports = buildSchema(`
     updateUser(userInput: UpdateUserInputData) : Boolean!
     deleteUser: Boolean!
     verifyPassword(password: String!) : Boolean!
-    createTodo(todoInput: CreateTodoInputData) : Todo!
-    updateTodo(todoInput: UpdateTodoInputData, todoId: ID!) : Todo!
+    createTodo(todoInput: CreateTodoInputData) : Boolean!
+    updateTodo(todoInput: UpdateTodoInputData, todoId: ID!) : Boolean!
     deleteTodo(todoId: ID!) : Boolean!
     sendFollowRequest(to: ID!) : Boolean!
     unsendFollowRequest(to: ID!) : Boolean!
@@ -151,6 +155,7 @@ module.exports = buildSchema(`
     unfollow(userId: ID!) : Boolean!
     blockUser(userId: ID!) : Boolean!
     unblockUser(userId: ID!) : Boolean!
+    isAbleToContact(userId: ID!) : Boolean!
     createConversation(receiver: ID!, message: String!) : Conversation!
     writeMessage(to: ID!, text: String!, convId: ID!) : Boolean!
     deleteMessage(messageId: ID!, conversationId: ID!) : Boolean!

@@ -1,6 +1,6 @@
 
 export interface Itodo {
-  creatorId: string;
+  creator: Follower;
   task: string;
   completed: true;
   timeToComplete: number | undefined;

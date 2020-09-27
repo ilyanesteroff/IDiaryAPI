@@ -1,10 +1,10 @@
 import mongo from 'mongodb'
-import { Itodo } from './model-types'
+import { Itodo, Follower } from './model-types'
 import { getDb } from './../utils/db-connection'
 
 export class Todo{
   task: string
-  creatorId: string
+  creator: Follower
   completed: boolean
   createdAt: Date
   timeToComplete: number | undefined
@@ -12,7 +12,7 @@ export class Todo{
   tags: string[] | undefined
 
   constructor(todo: Itodo){
-    this.creatorId = todo.creatorId
+    this.creator = todo.creator
     this.task = todo.task
     this.completed = todo.completed
     this.createdAt = new Date()

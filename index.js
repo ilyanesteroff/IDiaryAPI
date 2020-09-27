@@ -1,8 +1,10 @@
 const express = require('express')
+const mongo = require('mongodb')
 const {graphqlHTTP} = require('express-graphql')
 const { mongoConnect } = require('./js/utils/db-connection')
 const graphqlSchema = require('./graphql/schema')
 const graphqlResolvers = require('./graphql/resolvers')
+const { User } = require('./js/models/User')
 const app = express()
 
 app.use(express.json())
@@ -16,9 +18,14 @@ app.use((req, res, next) => {
     : next()
 })
 
-app.use((req, res, next) => {
-  req.isAuth = true
-  req.userId = '5f6f3c195f2b8435d0dd4265'
+app.use(async (req, res, next) => {
+  //check for token in future
+  const user = await User.findUser({ _id: new mongo.ObjectID('5f6f3c255f2b8435d0dd4266')})
+  if(user) {
+    req.isAuth = true
+    req.user = user
+    req.user._id = req.user._id.toString()
+  }
   next()
 })
 

@@ -8,7 +8,7 @@ const mongodb_1 = __importDefault(require("mongodb"));
 const db_connection_1 = require("./../utils/db-connection");
 class Todo {
     constructor(todo) {
-        this.creatorId = todo.creatorId;
+        this.creator = todo.creator;
         this.task = todo.task;
         this.completed = todo.completed;
         this.createdAt = new Date();

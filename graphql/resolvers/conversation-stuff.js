@@ -7,7 +7,9 @@ const {randomBytes} = require('../assistants/random-bytes')
 exports.createConversation = async function(receiver, message, req){
   if(!req.user) throwAnError('Authorization failed', 400)
   const user = req.user
-  const user_receiver = await User.findUser({ _id: new mongo.ObjectID(receiver) })
+  const user_receiver = (await User.getSpecificFields({ _id: new mongo.ObjectID(receiver) }, {
+    blacklist: 1, public: 1, following: 1, followers: 1, username: 1, firstname: 1, lastname: 1
+  }))[0]
   if(!user_receiver) throwAnError('Receiver does not exist')
   //test this
   if(
@@ -24,17 +26,16 @@ exports.createConversation = async function(receiver, message, req){
     messages: [
       {
         id: messageId, 
-        from: user._id, 
-        to: receiver, 
+        author: user._id,  
         text: message, 
         writtenAt: new Date()
        }
     ]
   })
   await conversation.save()
-  conversation.messages.forEach(m => m.writtenAt = m.writtenAt.toISOString())
   await User.pushSomething(user._id, 'dialogues', Conversation.formatAsDialogue(conversation))
   await User.pushSomething(receiver, 'dialogues', Conversation.formatAsDialogue(conversation))
+  conversation.messages.forEach(m => m.writtenAt = m.writtenAt.toISOString())
   return {
     ...conversation
   }
@@ -46,12 +47,9 @@ exports.writeMessage = async function(to, text, convId, req) {
   if(!conversation) throwAnError('Conversation not found', 404)
   if(!conversation.participants.some(p => p._id === req.user._id)) return false
   const messageId = (await randomBytes(12)).toString('hex')
-  const message = {id: messageId, from: req.user._id, to: to, text: text, writtenAt: new Date()}
+  const message = {id: messageId, author: req.user._id, text: text, writtenAt: new Date()}
   const updatedConv = await Conversation.addMassage(convId, message)
-  await User.pullSomething(req.user._id, 'dialogues', { _id: convId })
-  await User.pullSomething(to, 'dialogues', { _id: convId })
-  await User.pushSomething(req.user._id, 'dialogues', Conversation.formatAsDialogue(updatedConv))
-  await User.pushSomething(to, 'dialogues', Conversation.formatAsDialogue(updatedConv))
+  await User.updateDialogues(Conversation.formatAsDialogue(updatedConv))
   return true
 }
 
@@ -63,16 +61,11 @@ exports.deleteMessage = async function(messageId, conversationId, req) {
   let message = conversation.messages.find(m => m.id === messageId)
   if(!message) return false
   if(message.from !== req.user._id) return false
-  //supposed for conversations with only 2 participants
-  await User.pullSomething(conversation.participants[0]._id, 'dialogues', { _id: conversationId })
-  await User.pullSomething(conversation.participants[1]._id, 'dialogues', { _id: conversationId })
   if(conversation.messages.length === 1) {
     Conversation.destroyConversation({ _id: new mongo.ObjectID(conversationId) })
     return true
   }
   const updatedConv = await Conversation.deleteMessageForAll(conversationId, message.id)
-  //will be replaced in the future
-  await User.pushSomething(conversation.participants[0]._id, 'dialogues', Conversation.formatAsDialogue(updatedConv))
-  await User.pushSomething(conversation.participants[1]._id, 'dialogues', Conversation.formatAsDialogue(updatedConv))
+  await User.updateDialogues(Conversation.formatAsDialogue(updatedConv))
   return true
 }

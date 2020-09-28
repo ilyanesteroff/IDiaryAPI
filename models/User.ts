@@ -1,6 +1,6 @@
 import mongo, { ObjectID } from 'mongodb'
 import { getDb } from '../utils/db-connection'
-import { IUserInfo, Follower } from './model-types'
+import { IUserInfo, IDialogue } from './model-types'
 
 export class User {
   _id: ObjectID | undefined
@@ -8,6 +8,7 @@ export class User {
   firstname: string
   lastname: string
   email: string
+  approveEmailToken: string
   dialogues: []
   followers: []
   following: []
@@ -31,6 +32,7 @@ export class User {
     this.firstname = userInfo.firstname
     this.lastname = userInfo.lastname
     this.email = userInfo.email
+    this.approveEmailToken = userInfo.approveEmailToken
     this.dialogues = []
     this.followers = []
     this.following = []
@@ -104,9 +106,12 @@ export class User {
       })
   }
   
-  static getSpecificField(userId: string, params: object){
+  static getSpecificFields(query: object, group: object){
     return getDb().collection('Users')
-      .findOne({ _id: new mongo.ObjectID(userId)}, params)
+      .find(query)
+      .project(group)
+      .toArray()
+      .catch(err => console.log(err.message))
   }
 
   static formatUserAsFollower(user: User) {
@@ -116,5 +121,20 @@ export class User {
       firstname: user.firstname,
       lastname: user.lastname
     }
+  }
+
+  static updateDialogues(dialogue: IDialogue){
+    return getDb().collection('Users').updateMany(
+      { dialogues: { $elemMatch: { _id: dialogue._id } } },
+      { $set: { "dialogues.$.latestMessage" : dialogue.latestMessage } }
+    )
+  }
+
+  static deleteRequestsOfDeletedUser(userId: string, fieldName: string){
+    return getDb().collection('Users')
+      .updateMany(
+        { [fieldName] : { $elemMatch: { _id: userId }}},
+        { $pull : { [fieldName] : { _id: userId } } }
+      )
   }
 }

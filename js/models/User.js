@@ -12,6 +12,7 @@ class User {
         this.firstname = userInfo.firstname;
         this.lastname = userInfo.lastname;
         this.email = userInfo.email;
+        this.approveEmailToken = userInfo.approveEmailToken;
         this.dialogues = [];
         this.followers = [];
         this.following = [];
@@ -82,9 +83,12 @@ class User {
             }
         });
     }
-    static getSpecificField(userId, params) {
+    static getSpecificFields(query, group) {
         return db_connection_1.getDb().collection('Users')
-            .findOne({ _id: new mongodb_1.default.ObjectID(userId) }, params);
+            .find(query)
+            .project(group)
+            .toArray()
+            .catch(err => console.log(err.message));
     }
     static formatUserAsFollower(user) {
         return {
@@ -93,6 +97,13 @@ class User {
             firstname: user.firstname,
             lastname: user.lastname
         };
+    }
+    static updateDialogues(dialogue) {
+        return db_connection_1.getDb().collection('Users').updateMany({ dialogues: { $elemMatch: { _id: dialogue._id } } }, { $set: { "dialogues.$.latestMessage": dialogue.latestMessage } });
+    }
+    static deleteRequestsOfDeletedUser(userId, fieldName) {
+        return db_connection_1.getDb().collection('Users')
+            .updateMany({ [fieldName]: { $elemMatch: { _id: userId } } }, { $pull: { [fieldName]: { _id: userId } } });
     }
 }
 exports.User = User;

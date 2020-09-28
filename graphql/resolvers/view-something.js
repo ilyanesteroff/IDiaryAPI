@@ -10,7 +10,9 @@ exports.viewUser = async function(userId, req){
   if(!userId) return { ...user, createdAt: user.createdAt.toISOString() }
   else {
     if(user.blacklist.findIndex(f => f._id === userId) > -1) throwAnError('Forbidden', 400)
-    const userToView = await User.findUser({ _id: new mongo.ObjectID(userId)})
+    const userToView = (await User.getSpecificFields({ _id: new mongo.ObjectID(userId)}, { 
+      requestsTo: 0, requestsFrom: 0, dialogues: 0, blacklist: 0, password: 0, 
+    }))[0]
     if (
       !userToView.public && 
       !userToView.followers.some(f => f._id === user._id) &&
@@ -34,9 +36,12 @@ exports.viewFollowersOrFollowing = async function(userId, field, req){
   let user
   userId === undefined
     ? user = req.user
-    : user = await User.findUser({ _id: new mongo.ObjectID(userId)})
+    : user = (await User.getSpecificFields({ _id: new mongo.ObjectID(userId)}, {followers: 1, following: 1, public: 1}))[0]
   if(!user) throwAnError('User not found', 404)
-  if(userId && userId !== req.user._id && !user.public && !user.following.some(f => f._id === req.user._id)) throwAnError('cannot access this prop', 422)
+  if(userId && userId !== req.user._id && !user.public && 
+    !user.following.some(f => f._id === req.user._id) && 
+    !user.followers.some(f => f._id === req.user._id)
+  ) throwAnError('cannot access this prop', 422)
   return user[field]
 }
 
@@ -60,36 +65,26 @@ exports.viewTodo = async function(todoId, req) {
   }
 }
 
-exports.viewTodos = async function(userId, req) {
+exports.viewTodos = async function(userId, page, req) {
   if(!req.user) throwAnError('Authorization failed', 400)
-  const todos = await Todo.findManyTodos({ creatorId: userId === undefined? req.user._id : userId })
+  let todos 
   if(userId && userId !== req.user._id) {
-    const user = await User.findUser({ _id: new mongo.ObjectID(userId)})
+    const user = (await User.getSpecificFields({ _id: new mongo.ObjectID(userId)}, { public: 1, following: 1, followers: 1}))[0]
     if(!user.public && !user.following.some(f => f._id === req.userId) && !user.followers.some(f => f._id === req.user._id)) 
       throwAnError('Cannot view todos of this user', 422)
-  }
-  if(todos.length === 0) return []
-  if(userId) {
-    _todos = todos.filter(t => t.public)
-    _todos.forEach(t => {
-      t._id = t._id.toString()
-      t.creatorId = t.creatorId.toString()
-      t.createdAt = t.createdAt.toISOString()
-    })
-    return _todos
-  } else {
-    todos.forEach(t => {
-      t._id = t._id.toString()
-      t.creatorId = t.creatorId.toString()
-      t.createdAt = t.createdAt.toISOString()
-    })
-    return todos
-  }
+    todos = await Todo.findManyTodos({ "creator._id": userId, public : true }, page, /*limit should be a constant*/ 20)
+  } else todos = await Todo.findManyTodos({ "creator._id": req.user._id }, page, /*limit should be a constant*/ 20)
+  
+  todos.forEach(t => {
+    t._id = t._id.toString()
+    t.createdAt = t.createdAt.toISOString()
+  })
+  return todos
 }
 
 exports.findUserByUsername = async function(username, req) {
   if(!req.user) throwAnError('Authorization failed', 400)
-  const user = await User.findUser({username: username})
+  const user = (await User.getSpecificFields({username: username}, {username: 1, firstname: 1, lastname: 1}))[0]
   if(!user) throwAnError('User not found', 404)
   return {
     ...user,
@@ -110,8 +105,8 @@ exports.viewConversations = async function(req) {
   //returns all conversations for a single user 
   if(!req.user) throwAnError('Authorization failed', 400)
   if(req.user.dialogues.length === 0) return []
-  req.user.dialogues.forEach(conv => {
-    conv.latestMessage.writtenAt.toISOString()
+  req.user.dialogues.forEach(dialogue => {
+    dialogue.latestMessage.writtenAt = dialogue.latestMessage.writtenAt.toISOString()
   })
   return req.user.dialogues
 }

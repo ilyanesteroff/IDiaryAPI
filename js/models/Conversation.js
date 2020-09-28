@@ -61,8 +61,10 @@ class Conversation {
             _id: conv._id ? conv._id.toString() : undefined,
             participants: conv.participants,
             latestMessage: {
+                id: conv.messages[conv.messages.length - 1].id,
                 writtenAt: conv.messages[conv.messages.length - 1].writtenAt,
-                text: conv.messages[conv.messages.length - 1].text
+                text: conv.messages[conv.messages.length - 1].text,
+                author: conv.messages[conv.messages.length - 1].author
             }
         };
     }

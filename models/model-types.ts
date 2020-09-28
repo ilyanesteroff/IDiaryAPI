@@ -1,3 +1,4 @@
+import { ObjectID } from 'mongodb'
 
 export interface Itodo {
   creator: Follower;
@@ -15,8 +16,7 @@ export interface Iconversation{
 
 export type Message = {
   id: string;
-  from: string;
-  to: string;
+  author: string;
   text: string;
   writtenAt: Date;
 }
@@ -30,6 +30,7 @@ export type Follower = {
 
 export interface IUserInfo {
   username: string
+  approveEmailToken: string
   firstname: string
   lastname: string
   email: string
@@ -40,4 +41,11 @@ export interface IUserInfo {
   company: string | undefined
   about: string | undefined
   relationshipStatus: string | undefined
+}
+
+
+export interface IDialogue {
+  _id: ObjectID,
+  participants: Follower[]
+  latestMessage: Message
 }

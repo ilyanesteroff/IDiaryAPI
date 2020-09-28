@@ -12,10 +12,11 @@ exports.createTodo = async function(todoInput, req){
       creator: User.formatUserAsFollower(user)
     })
     await todo.save()
-    if(todo.completed) await User.updateUser(user._id, { $set : { FullfilledTodos: user.FullfilledTodos + 1}})
-    else await User.updateUser(user._id, { $set : { ActiveTodos: user.ActiveTodos + 1}})
+    if(todo.completed) await User.updateUser(user._id, { $inc : { FullfilledTodos: 1}})
+    else await User.updateUser(user._id, { $inc : { ActiveTodos: 1}})
     return true
-  } catch {
+  } catch(err) {
+    console.log(err)
     return false
   } 
 }
@@ -28,9 +29,9 @@ exports.updateTodo = async function(todoInput, todoId, req){
     if(todo.creator._id !== user._id) return false
     await Todo.updateTodo(todoId, { $set: todoInput })
     if(todoInput.completed === true)
-      await User.updateUser(user._id, { $set : { FullfilledTodos: user.FullfilledTodos + 1, ActiveTodos: user.ActiveTodos - 1}})
+      await User.updateUser(user._id, { $inc : { FullfilledTodos: 1, ActiveTodos: -1}})
     if(todoInput.completed === false)
-      await User.updateUser(user._id, { $set : { ActiveTodos: user.ActiveTodos + 1, FullfilledTodos: user.FullfilledTodos - 1}})
+      await User.updateUser(user._id, { $inc : { ActiveTodos: 1, FullfilledTodos: -1}})
     return true
   } catch {
     return false
@@ -44,12 +45,29 @@ exports.deleteTodo = async function(todoId, req){
     const todo = await Todo.findOneTodo({ _id: new mongo.ObjectID(todoId)})
     if(todo.creator._id !== user._id) return false
     if(todo.completed)
-      await User.updateUser(user._id, { $set : { FullfilledTodos: user.FullfilledTodos - 1}})
+      await User.updateUser(user._id, { $inc : { FullfilledTodos: -1 }})
     else
-      await User.updateUser(user._id, { $set : { ActiveTodos: user.ActiveTodos - 1}})
+      await User.updateUser(user._id, { $inc : { ActiveTodos: -1}})
     await Todo.deleteTodo(todoId)
     return true
   } catch {
     return false
   }
+}
+
+exports.countTodosByTagname = async function(tag, req){
+  if(!req.user) throwAnError('Authorization failed', 400)
+  const todoCount = await Todo.countTodos({ tags: tag })
+  return todoCount
+}
+
+exports.findTodosByTagname = async function(tag, page, req) {
+  if(!req.user) throwAnError('Authorization failed', 400)
+  //make a const limit
+  const todos = await Todo.findManyTodos({tags: tag,public: true}, page, 20)
+  todos.forEach(t => {
+    t._id = t._id.toString()
+    t.createdAt = t.createdAt.toISOString()
+  })
+  return todos
 }

@@ -12,7 +12,8 @@ class Todo {
         this.task = todo.task;
         this.completed = todo.completed;
         this.createdAt = new Date();
-        this.timeToComplete = todo.timeToComplete;
+        if (todo.timeToComplete)
+            this.timeToComplete = todo.timeToComplete;
         this.public = todo.public;
         if (todo.tags)
             this.tags = todo.tags;
@@ -29,14 +30,27 @@ class Todo {
         return db_connection_1.getDb().collection('Todos')
             .findOne(query);
     }
-    static findManyTodos(query) {
+    static findManyTodos(query, currentPage, limit) {
         return db_connection_1.getDb().collection('Todos')
             .find(query)
+            .sort({ createdAt: -1 })
+            .skip((currentPage - 1) * limit)
+            .limit(limit)
             .toArray();
+    }
+    static countTodos(query) {
+        return db_connection_1.getDb().collection('Todos')
+            .find(query)
+            .count();
     }
     static deleteTodo(todoId) {
         return db_connection_1.getDb().collection('Todos')
             .deleteOne({ _id: new mongodb_1.default.ObjectID(todoId) });
+    }
+    static deleteTodosOfDeletedUser(userId) {
+        console.log(userId);
+        return db_connection_1.getDb().collection('Todos')
+            .deleteMany({ "creator._id": userId });
     }
 }
 exports.Todo = Todo;

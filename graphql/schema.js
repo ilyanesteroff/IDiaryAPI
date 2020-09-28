@@ -42,21 +42,15 @@ module.exports = buildSchema(`
     messages: [Message!]!
   }
 
-  type ShortMessage {
-    text: String!
-    writtenAt: String!
-  }
-
   type Dialogue {
     _id: ID!
     participants: [Follower!]!
-    latestMessage: ShortMessage!
+    latestMessage: Message!
   }
 
   type Message {
     id: ID!
-    from: ID!
-    to: ID!
+    author: String!
     text: String!
     writtenAt: String!
   }
@@ -138,7 +132,7 @@ module.exports = buildSchema(`
     checkEmailAndUsername(email: String!, username: String!): Boolean!
     getResetPassword(token: String!) : Boolean!
     login(email: String!, password: String!) : AuthData!
-    todos(userId: ID) : [Todo]!
+    todos(userId: ID, page: Int!) : [Todo]!
     todo(todoId: ID!): Todo!
     user(userId: ID): User!
     findUser(username: String!) : Follower!
@@ -146,6 +140,8 @@ module.exports = buildSchema(`
     conversation(convId: ID!) : Conversation!
     conversations: [Dialogue]!
     getList(listname: String!) : [Follower]!
+    countTodosByTagname(tag: String!) : Int!
+    findTodosByTagname(tag: String!, page: Int!) : [Todo!]!
   }
 
   type RootMutation {
@@ -168,7 +164,7 @@ module.exports = buildSchema(`
     unblockUser(userId: ID!) : Boolean!
     isAbleToContact(userId: ID!) : Boolean!
     createConversation(receiver: ID!, message: String!) : Conversation!
-    writeMessage(to: ID!, text: String!, convId: ID!) : Boolean!
+    writeMessage(text: String!, convId: ID!) : Boolean!
     deleteMessage(messageId: ID!, conversationId: ID!) : Boolean!
   }
 

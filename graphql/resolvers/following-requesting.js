@@ -7,7 +7,11 @@ exports.sendFollowRequest = async function(to, req){
   if(!req.user) throwAnError('Authorization failed', 400)
   if(req.user._id === to) return false
   const requestSender = req.user
-  const requestReceiver = await User.findUser({ _id: new mongo.ObjectID(to)})
+  const requestReceiver = (await User.getSpecificFields({ _id: new mongo.ObjectID(to)}, { 
+    followers: 1, username: 1,
+    blacklist: 1, firstname: 1,
+    requestsFrom: 1, lastname: 1
+  }))[0]
   if(!requestReceiver) throwAnError('Receiver does not exist', 404)
   if(
     requestReceiver.followers.some(f => f._id === requestSender._id) ||
@@ -26,7 +30,7 @@ exports.unsendFollowRequest = async function(to, req){
   if(!req.user) throwAnError('Authorization failed', 400)
   if(req.user._id === to) return false
   const requestSender = req.user
-  const requestReceiver = await User.findUser({_id: new mongo.ObjectID(to)})
+  const requestReceiver = (await User.getSpecificFields({_id: new mongo.ObjectID(to)}, {_id: 1}))[0]
   if(!requestReceiver) throwAnError('Receiver does not exist', 404)
   await User.pullSomething(requestSender._id, 'requestsTo', { _id: to })
   await User.pullSomething(to, 'requestsFrom', { _id: requestSender._id })
@@ -37,7 +41,7 @@ exports.rejectFollowRequest = async function(from, req){
   if(!req.user) throwAnError('Authorization failed', 400)
   if(req.user._id === from) return false
   const requestReceiver = req.user
-  const requestSender = await User.findUser({ _id: new mongo.ObjectID(from)})
+  const requestSender = (await User.getSpecificFields({ _id: new mongo.ObjectID(from)}, {requestsTo: 1}))[0]
   if(!requestSender) throwAnError('Request sender not found', 404)
   if(
     !requestReceiver.requestsFrom.some(r => r._id === from) &&
@@ -51,7 +55,9 @@ exports.rejectFollowRequest = async function(from, req){
 exports.acceptFollower = async function(followerId, req) {
   if(!req.user) throwAnError('Authorization failed', 400)
   if(followerId === req.user._id) return false
-  const requestSender = await User.findUser({ _id: new mongo.ObjectID(followerId)})
+  const requestSender = (await User.getSpecificFields({ _id: new mongo.ObjectID(followerId)}, {
+    requestsTo: 1, following: 1, username: 1, lastname: 1, firstname: 1
+  }))[0]
   if(!requestSender) throwAnError('follower not found', 404)
   const requestReceiver = req.user
   if(
@@ -78,7 +84,7 @@ exports.unfollow = async function(userId, req){
   if(!req.user) throwAnError('Authorization failed', 400)
   if(req.user._id === userId) return false
   const user = req.user
-  const userToUnfollow = await User.findUser({ _id: new mongo.ObjectID(userId) })
+  const userToUnfollow = (await User.getSpecificFields({ _id: new mongo.ObjectID(userId) }, { followers: 1 }))[0]
   if(!userToUnfollow) throwAnError('User not found', 404)
   if(
     !user.following.some(f => f._id === userId) &&

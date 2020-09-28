@@ -16,7 +16,7 @@ module.exports = {
 
   login: ({email, password}) => authResolvers.login(email, password),
 
-  todos: ({userId}, req) => views.viewTodos(userId, req),
+  todos: ({userId, page}, req) => views.viewTodos(userId, page, req),
 
   todo: ({todoId}, req) => views.viewTodo(todoId, req),
 
@@ -31,6 +31,10 @@ module.exports = {
   conversations: (args, req) => views.viewConversations(req),
   //for lists that contains follower type objects
   getList: ({listname}, req) => views.getList(listname, req),
+
+  countTodosByTagname: ({tag}, req) => todoManips.countTodosByTagname(tag, req),
+
+  findTodosByTagname: ({tag, page}, req) => todoManips.findTodosByTagname(tag, page, req),
   //mutations
   acceptEmail: ({token}) => authResolvers.acceptEmail(token),
 

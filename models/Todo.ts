@@ -45,8 +45,7 @@ export class Todo{
 
   static countTodos(query: object) {
     return getDb().collection('Todos')
-      .find(query)
-      .count()
+      .count(query)
   }
     
   static deleteTodo(todoId: string) {

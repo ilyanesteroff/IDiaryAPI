@@ -40,15 +40,13 @@ class Todo {
     }
     static countTodos(query) {
         return db_connection_1.getDb().collection('Todos')
-            .find(query)
-            .count();
+            .count(query);
     }
     static deleteTodo(todoId) {
         return db_connection_1.getDb().collection('Todos')
             .deleteOne({ _id: new mongodb_1.default.ObjectID(todoId) });
     }
     static deleteTodosOfDeletedUser(userId) {
-        console.log(userId);
         return db_connection_1.getDb().collection('Todos')
             .deleteMany({ "creator._id": userId });
     }

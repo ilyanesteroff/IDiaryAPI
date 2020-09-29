@@ -53,27 +53,31 @@ export class User {
   }
 
   save() {
-    return getDb().collection('Users').insertOne(this)
+    return getDb().collection('Users').insertOne(this).catch(err => err)
   }
 
   static updateUser(userId: string, info: object) {
     return getDb().collection('Users')
       .findOneAndUpdate({ _id: new mongo.ObjectID(userId)}, info)
+      .catch(err => err)
   }
 
   static deleteUser(userId: string) {
     return getDb().collection('Users')
       .findOneAndDelete({ _id : new mongo.ObjectID(userId)})
+      .catch(err => err)
   }
-
+  //in future get rid of this
   static getUser(username: object) {
     return getDb().collection('Users')
-      .findOne({ username: username})
+      .findOne({username: username})
+      .catch(err => err)
   }
 
   static findUser(query: object) {
     return getDb().collection('Users')
       .findOne(query)
+      .catch(err => err)
   }
   //can be used for sending messages, todos and requests
   static pushSomething(userId: string, fieldName: string, fieldValue: any) {
@@ -83,6 +87,7 @@ export class User {
           [fieldName]: fieldValue
         }
       })
+      .catch(err => err)
   }
   //
   static pullSomething(userId: string, fieldName: string, query: object) {
@@ -92,6 +97,7 @@ export class User {
           [fieldName] : query
         }
       })
+      .catch(err => err)
   }
 
   static setResetPasswordToken(userId: string, token: string) {
@@ -104,14 +110,17 @@ export class User {
           }
         }
       })
+      .catch(err => err)
   }
   
-  static getSpecificFields(query: object, group: object){
+  static getSpecificFields(query: object, project: object){
     return getDb().collection('Users')
-      .find(query)
-      .project(group)
+      .aggregate([ 
+        { $match : query },
+        { $project: project }
+      ])
       .toArray()
-      .catch(err => console.log(err.message))
+      .catch(err => err)
   }
 
   static formatUserAsFollower(user: User) {
@@ -128,6 +137,14 @@ export class User {
       { dialogues: { $elemMatch: { _id: dialogue._id } } },
       { $set: { "dialogues.$.latestMessage" : dialogue.latestMessage } }
     )
+    .catch(err => err)
+  }
+
+  static deleteDialogues(id: string){
+    return getDb().collection('Users').updateMany(
+      { dialogues: { $elemMatch: { _id: id } } },
+      { $pull: { dialogues : { _id : id }}}
+    )
   }
 
   static deleteRequestsOfDeletedUser(userId: string, fieldName: string){
@@ -136,5 +153,6 @@ export class User {
         { [fieldName] : { $elemMatch: { _id: userId }}},
         { $pull : { [fieldName] : { _id: userId } } }
       )
+      .catch(err => err)
   }
 }

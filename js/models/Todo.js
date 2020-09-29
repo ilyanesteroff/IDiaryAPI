@@ -19,16 +19,18 @@ class Todo {
             this.tags = todo.tags;
     }
     save() {
-        return db_connection_1.getDb().collection('Todos').insertOne(this);
+        return db_connection_1.getDb().collection('Todos').insertOne(this).catch(err => err);
     }
     static updateTodo(todoId, info) {
         return db_connection_1.getDb().collection('Todos')
-            .findOneAndUpdate({ _id: new mongodb_1.default.ObjectID(todoId) }, info);
+            .findOneAndUpdate({ _id: new mongodb_1.default.ObjectID(todoId) }, info)
+            .catch(err => err);
     }
     //findOne
     static findOneTodo(query) {
         return db_connection_1.getDb().collection('Todos')
-            .findOne(query);
+            .findOne(query)
+            .catch(err => err);
     }
     static findManyTodos(query, currentPage, limit) {
         return db_connection_1.getDb().collection('Todos')
@@ -36,19 +38,23 @@ class Todo {
             .sort({ createdAt: -1 })
             .skip((currentPage - 1) * limit)
             .limit(limit)
-            .toArray();
+            .toArray()
+            .catch(err => err);
     }
     static countTodos(query) {
         return db_connection_1.getDb().collection('Todos')
-            .count(query);
+            .count(query)
+            .catch(err => err);
     }
     static deleteTodo(todoId) {
         return db_connection_1.getDb().collection('Todos')
-            .deleteOne({ _id: new mongodb_1.default.ObjectID(todoId) });
+            .deleteOne({ _id: new mongodb_1.default.ObjectID(todoId) })
+            .catch(err => err);
     }
     static deleteTodosOfDeletedUser(userId) {
         return db_connection_1.getDb().collection('Todos')
-            .deleteMany({ "creator._id": userId });
+            .deleteMany({ "creator._id": userId })
+            .catch(err => err);
     }
 }
 exports.Todo = Todo;

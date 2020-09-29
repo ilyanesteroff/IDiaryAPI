@@ -72,9 +72,11 @@ module.exports = {
 
   isAbleToContact: ({userId}, req) => security.isAbleToContact(userId, req),
   //ps dont forget to improve conversation searchers
-  createConversation: ({receiver, message}, req) => convResolvers.createConversation(receiver, message, req),
+  createConversation: ({members, message}, req) => convResolvers.createConversation(members, message, req),
 
-  writeMessage: ({to, text, convId}, req) => convResolvers.writeMessage(to, text, convId, req),
+  writeMessage: ({text, convId}, req) => convResolvers.writeMessage(text, convId, req),
 
-  deleteMessage: ({messageId, conversationId}, req) => convResolvers.deleteMessage(messageId, conversationId, req)
+  updateMessage: ({text, messageId, convId}, req) => convResolvers.updateMessage(text, messageId, convId, req),
+
+  deleteMessage: ({messageId, convId}, req) => convResolvers.deleteMessage(messageId, convId, req)
 }

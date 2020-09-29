@@ -63,7 +63,7 @@ module.exports = buildSchema(`
     email: String!
     followers: [Follower]!
     following: [Follower]!
-    FulfilledTodos: Int!
+    FullfilledTodos: Int!
     ActiveTodos: Int!
     requestsTo: [Follower]!
     requestsFrom: [Follower]!
@@ -163,9 +163,10 @@ module.exports = buildSchema(`
     blockUser(userId: ID!) : Boolean!
     unblockUser(userId: ID!) : Boolean!
     isAbleToContact(userId: ID!) : Boolean!
-    createConversation(receiver: ID!, message: String!) : Conversation!
+    createConversation(members: [ID!]!, message: String!) : Conversation!
     writeMessage(text: String!, convId: ID!) : Boolean!
-    deleteMessage(messageId: ID!, conversationId: ID!) : Boolean!
+    updateMessage(text: String!, messageId: ID!, convId: ID!): Message!
+    deleteMessage(messageId: ID!, convId: ID!) : Boolean!
   }
 
   schema {

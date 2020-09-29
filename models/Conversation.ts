@@ -14,16 +14,19 @@ export class Conversation {
   save() {
     return getDb().collection('Conversations')
       .insertOne(this)
+      .catch(err => err)
   }
 
   static findConversation(query: object) {
     return getDb().collection('Conversations')
       .findOne(query)
+      .catch(err => err)
   }
 
   static destroyConversation(query: object){
     return getDb().collection('Conversations')
       .deleteOne(query)
+      .catch(err => err)
   }
 
   static findDialogue(participants: Follower[]) {
@@ -32,6 +35,7 @@ export class Conversation {
       .findOne({
         participants: participants
       })
+      .catch(err => err)
   }
 
   static addMassage(conversationId: string, message: Message){
@@ -45,6 +49,20 @@ export class Conversation {
         return getDb().collection('Conversations')
           .findOne({ _id: new mongo.ObjectID(conversationId) })
       })
+      .catch(err => err)
+  }
+
+  static updateMessage(convId: string, messageId: string, text: string){
+    return getDb().collection('Conversations')
+      .findOneAndUpdate(
+        {_id: new mongo.ObjectID(convId),  messages: { $elemMatch: { id: messageId } } }, 
+        { $set: { "messages.$.text" : text } }
+      )
+      .then(_ => {
+        return getDb().collection('Conversations')
+          .findOne({ _id: new mongo.ObjectID(convId) })
+      })
+      .catch(err => err)
   }
 
   static deleteMessageForAll(conversationId: string, messageId: string){
@@ -60,6 +78,7 @@ export class Conversation {
         return getDb().collection('Conversations')
           .findOne({ _id: new mongo.ObjectID(conversationId) })
       })
+      .catch(err => err)
   }  
 
   static formatAsDialogue(conv: Conversation){

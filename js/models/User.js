@@ -37,23 +37,28 @@ class User {
             this.relationshipStatus = userInfo.relationshipStatus;
     }
     save() {
-        return db_connection_1.getDb().collection('Users').insertOne(this);
+        return db_connection_1.getDb().collection('Users').insertOne(this).catch(err => err);
     }
     static updateUser(userId, info) {
         return db_connection_1.getDb().collection('Users')
-            .findOneAndUpdate({ _id: new mongodb_1.default.ObjectID(userId) }, info);
+            .findOneAndUpdate({ _id: new mongodb_1.default.ObjectID(userId) }, info)
+            .catch(err => err);
     }
     static deleteUser(userId) {
         return db_connection_1.getDb().collection('Users')
-            .findOneAndDelete({ _id: new mongodb_1.default.ObjectID(userId) });
+            .findOneAndDelete({ _id: new mongodb_1.default.ObjectID(userId) })
+            .catch(err => err);
     }
+    //in future get rid of this
     static getUser(username) {
         return db_connection_1.getDb().collection('Users')
-            .findOne({ username: username });
+            .findOne({ username: username })
+            .catch(err => err);
     }
     static findUser(query) {
         return db_connection_1.getDb().collection('Users')
-            .findOne(query);
+            .findOne(query)
+            .catch(err => err);
     }
     //can be used for sending messages, todos and requests
     static pushSomething(userId, fieldName, fieldValue) {
@@ -61,7 +66,8 @@ class User {
             .findOneAndUpdate({ _id: new mongodb_1.default.ObjectID(userId) }, { $push: {
                 [fieldName]: fieldValue
             }
-        });
+        })
+            .catch(err => err);
     }
     //
     static pullSomething(userId, fieldName, query) {
@@ -70,7 +76,8 @@ class User {
             $pull: {
                 [fieldName]: query
             }
-        });
+        })
+            .catch(err => err);
     }
     static setResetPasswordToken(userId, token) {
         return db_connection_1.getDb().collection('Users')
@@ -81,14 +88,17 @@ class User {
                     bestBefore: new Date().getTime() + 7400000
                 }
             }
-        });
+        })
+            .catch(err => err);
     }
-    static getSpecificFields(query, group) {
+    static getSpecificFields(query, project) {
         return db_connection_1.getDb().collection('Users')
-            .find(query)
-            .project(group)
+            .aggregate([
+            { $match: query },
+            { $project: project }
+        ])
             .toArray()
-            .catch(err => console.log(err.message));
+            .catch(err => err);
     }
     static formatUserAsFollower(user) {
         return {
@@ -99,11 +109,16 @@ class User {
         };
     }
     static updateDialogues(dialogue) {
-        return db_connection_1.getDb().collection('Users').updateMany({ dialogues: { $elemMatch: { _id: dialogue._id } } }, { $set: { "dialogues.$.latestMessage": dialogue.latestMessage } });
+        return db_connection_1.getDb().collection('Users').updateMany({ dialogues: { $elemMatch: { _id: dialogue._id } } }, { $set: { "dialogues.$.latestMessage": dialogue.latestMessage } })
+            .catch(err => err);
+    }
+    static deleteDialogues(id) {
+        return db_connection_1.getDb().collection('Users').updateMany({ dialogues: { $elemMatch: { _id: id } } }, { $pull: { dialogues: { _id: id } } });
     }
     static deleteRequestsOfDeletedUser(userId, fieldName) {
         return db_connection_1.getDb().collection('Users')
-            .updateMany({ [fieldName]: { $elemMatch: { _id: userId } } }, { $pull: { [fieldName]: { _id: userId } } });
+            .updateMany({ [fieldName]: { $elemMatch: { _id: userId } } }, { $pull: { [fieldName]: { _id: userId } } })
+            .catch(err => err);
     }
 }
 exports.User = User;

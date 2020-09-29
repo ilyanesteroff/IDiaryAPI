@@ -22,9 +22,8 @@ exports.sendAcceptEmail = (to, subject, token) => {
         <style> 
           *{box-sizing: border-box;margin: 8%;}
           #body{
-            width: 90%;
+            width: 100%;
             height: auto;
-            margin-left: 5%;
             background-image:  linear-gradient(to bottom right, #e5edf0, #00ccff);
             font-family: 'Epilogue', sans-serif;
           }
@@ -70,18 +69,17 @@ exports.resetPasswordEmail = (to, subject, token) => {
         <style> 
           *{box-sizing: border-box;margin: 8%;}
           #body{
-            width: 90%;
+            width: 100%;
             height: auto;
-            margin-left: 5%;
-            background-image:  linear-gradient(to bottom right, #e5edf0, #00ccff);
+            background-image:  linear-gradient(to bottom right, #e5edf0, #aaccff);
             font-family: 'Epilogue', sans-serif;
           }
           #link{
             text-decoration: none;
             font-size: 1rem;
             background-color: #111187;
-            padding: 1%;
-            border-radius: 1vh;
+            padding: 2% 3%;
+            border-radius: 2vh;
             color: #eee;
           }
           #h1{font-size: 1.3rem;color: #111;margin-top: 5%}
@@ -92,7 +90,7 @@ exports.resetPasswordEmail = (to, subject, token) => {
         <h1 id="h1">You requested password reset&#128640;</h1>
         <div id="linkarea">
           <h3>To reset password follow the link below&#128521;</h3>
-          <a id="link" href="http://localhost:3000/resetpassword/${token}">tap to complete your registration!&#129505;</a>
+          <a id="link" href="http://localhost:3000/resetpassword/${token}">reset password!&#129505;</a>
         </div>
     </body>
     <script>

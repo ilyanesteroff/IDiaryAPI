@@ -1,22 +1,26 @@
 const mongo = require('mongodb')
 const {User} = require('../../js/models/User')
-const {throwAnError} = require('../../utils/error-handlers')
+const {throwAnError, checkAndThrowError} = require('../../utils/error-handlers')
 const {lists} = require('../assistants/vars')
 
 exports.blockUser = async function(userId, req){
-  if(!req.user) throwAnError('Authorization failed', 400)
-  if(req.user._id === userId) return false
-  const user = req.user
-  const userToBlock = (await User.getSpecificFields({ _id: new mongo.ObjectID(userId)}, {
-    username: 1, firstname: 1, lastname: 1
-  }))[0]
-  if(!userToBlock) throwAnError('User you want to block not found', 404)
-  if(user.blacklist.some(u => u._id === userId)) return false
-  for await (let l of lists) User.pullSomething(user._id, l, { _id: userId })
-  for await (let l of lists) User.pullSomething(userId, l, { _id: userId })
+  try {
+    if(!req.user) throwAnError('Authorization failed', 400)
+    if(req.user._id === userId) return false
+    const user = req.user
+    const userToBlock = (await User.getSpecificFields({ _id: new mongo.ObjectID(userId)}, {
+      username: 1, firstname: 1, lastname: 1
+    }))[0]
+    if(!userToBlock) throwAnError('User you want to block not found', 404)
+    if(user.blacklist.some(u => u._id === userId)) return false
+    for await (let l of lists) User.pullSomething(user._id, l, { _id: userId })
+    for await (let l of lists) User.pullSomething(userId, l, { _id: userId })
 
-  await User.pushSomething(user._id, 'blacklist', User.formatUserAsFollower(userToBlock))
-  return true
+    await User.pushSomething(user._id, 'blacklist', User.formatUserAsFollower(userToBlock))
+    return true
+  } catch(err) {
+    checkAndThrowError(err)
+  }
 }
 
 exports.unblockUser = async function(userId, req){
@@ -30,9 +34,7 @@ exports.unblockUser = async function(userId, req){
     await User.pullSomething(user._id, 'blacklist', { _id: userId })
     return true
   } catch(err){
-    //in case if something went wrong e.g. db does not respond
-    console.log(err.message)
-    return false
+    checkAndThrowError(err)
   }
 }
 
@@ -50,6 +52,6 @@ exports.isAbleToContact = async function(userId, req){
       ? true
       : false    
   } catch (err) {
-    return false
+    checkAndThrowError(err)
   }
 }

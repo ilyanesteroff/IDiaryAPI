@@ -13,22 +13,26 @@ class Conversation {
     }
     save() {
         return db_connection_1.getDb().collection('Conversations')
-            .insertOne(this);
+            .insertOne(this)
+            .catch(err => err);
     }
     static findConversation(query) {
         return db_connection_1.getDb().collection('Conversations')
-            .findOne(query);
+            .findOne(query)
+            .catch(err => err);
     }
     static destroyConversation(query) {
         return db_connection_1.getDb().collection('Conversations')
-            .deleteOne(query);
+            .deleteOne(query)
+            .catch(err => err);
     }
     static findDialogue(participants) {
         return db_connection_1.getDb().collection('Conversations')
             //because there can be only one dialogue between only 2 users 
             .findOne({
             participants: participants
-        });
+        })
+            .catch(err => err);
     }
     static addMassage(conversationId, message) {
         return db_connection_1.getDb().collection('Conversations')
@@ -40,7 +44,17 @@ class Conversation {
             .then(_ => {
             return db_connection_1.getDb().collection('Conversations')
                 .findOne({ _id: new mongodb_1.default.ObjectID(conversationId) });
-        });
+        })
+            .catch(err => err);
+    }
+    static updateMessage(convId, messageId, text) {
+        return db_connection_1.getDb().collection('Conversations')
+            .findOneAndUpdate({ _id: new mongodb_1.default.ObjectID(convId), messages: { $elemMatch: { id: messageId } } }, { $set: { "messages.$.text": text } })
+            .then(_ => {
+            return db_connection_1.getDb().collection('Conversations')
+                .findOne({ _id: new mongodb_1.default.ObjectID(convId) });
+        })
+            .catch(err => err);
     }
     static deleteMessageForAll(conversationId, messageId) {
         return db_connection_1.getDb().collection('Conversations')
@@ -54,7 +68,8 @@ class Conversation {
             .then(_ => {
             return db_connection_1.getDb().collection('Conversations')
                 .findOne({ _id: new mongodb_1.default.ObjectID(conversationId) });
-        });
+        })
+            .catch(err => err);
     }
     static formatAsDialogue(conv) {
         return {

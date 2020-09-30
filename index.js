@@ -12,6 +12,8 @@ app.use(cors)
 
 app.use(auth)
 
+app.use('/', (req, res) => res.send('This is graphql API'))
+
 app.use('/graphql', graphqlHTTP({
   schema: graphqlSchema, 
   rootValue: graphqlResolvers,

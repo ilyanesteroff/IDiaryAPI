@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "graphql api fro todolist application",
   "main": "index.js",
+  "engines": {
+    "node": "14.8.0"
+  },
   "scripts": {
     "test": "mocha",
-    "start": "node index.js"
+    "start": "NODE_ENV=production DB_USERNAME=Vasya_Pupkin DB_PASSWORD=A5-lapas DB=TodoList node index.js"
   },
   "repository": {
     "type": "git",

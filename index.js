@@ -12,8 +12,6 @@ app.use(cors)
 
 app.use(auth)
 
-app.use('/', (req, res) => res.send('This is graphql API'))
-
 app.use('/graphql', graphqlHTTP({
   schema: graphqlSchema, 
   rootValue: graphqlResolvers,
@@ -28,5 +26,7 @@ app.use('/graphql', graphqlHTTP({
     }
   }
 }))
+
+app.use('/', (req, res) => res.send('This is graphql API'))
 
 mongoConnect(_ => app.listen(process.env.PORT))

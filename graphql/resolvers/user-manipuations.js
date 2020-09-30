@@ -14,7 +14,7 @@ exports.createUser = async function(userInput, req) {
     userInput.approveEmailToken = approveEmailToken
     const newUser = new User(userInput)
     await newUser.save()
-    //sendMail.sendAcceptEmail(userInput.email, 'accept email', approveEmailToken)
+    sendMail.sendAcceptEmail(userInput.email, 'accept email', approveEmailToken)
     return true
   } catch (err) {
     checkAndThrowError(err)

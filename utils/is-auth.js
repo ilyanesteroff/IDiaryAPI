@@ -1,7 +1,6 @@
 const mongo = require('mongodb')
 const jwt = require('jsonwebtoken')
 const {User} = require('../js/models/User')
-const { secrets } = require('../js/utils/variables')
 
 exports.auth = async (req, res, next) => {
   const authHeader = req.get('Authorization')

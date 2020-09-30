@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport(sendgridTransport({
 exports.sendAcceptEmail = (to, subject, token) => {
   transporter.sendMail({
     to: to, 
-    from: 'toodoodoo.uberstutzung@gmail.com',
+    from: process.env.EMAIL_SENDER,
     subject: subject,
     html: `<!DOCTYPE html>
     <html lang="en">
@@ -58,7 +58,7 @@ exports.sendAcceptEmail = (to, subject, token) => {
 exports.resetPasswordEmail = (to, subject, token) => {
   transporter.sendMail({
     to: to, 
-    from: 'toodoodoo.uberstutzung@gmail.com',
+    from: process.env.EMAIL_SENDER,
     subject: subject,
     html: `<!DOCTYPE html>
     <html lang="en">

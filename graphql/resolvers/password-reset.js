@@ -39,7 +39,7 @@ exports.setNewPassword = async function(token, newPassword, req) {
     await User.updateUser(user._id.toString(), { $set : { password : hashedPw }})
     return true
   } catch(err) {
-    checkAndThrowError(err)
+    checkAndThrowError(err) 
   }
 }
 

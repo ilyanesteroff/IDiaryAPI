@@ -29,4 +29,4 @@ app.use('/graphql', graphqlHTTP({
   }
 }))
 
-mongoConnect(_ => app.listen(3000 || process.env.PORT))
+mongoConnect(_ => app.listen(process.env.PORT))

@@ -16,7 +16,6 @@ exports.mongoConnect = (cb) => {
         cb();
     })
         .catch(err => {
-            console.log(process.env.DB_USERNAME)
         throw err;
     });
 };

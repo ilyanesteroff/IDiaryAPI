@@ -1,7 +1,6 @@
 const bycrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const {throwAnError, checkAndThrowError} = require('../../utils/error-handlers')
-const {secrets} = require('../../js/utils/variables')
 const {User} = require('../../js/models/User')
 
 exports.login = async function(email, password) {
@@ -11,10 +10,8 @@ exports.login = async function(email, password) {
     const pwMatches = await bycrypt.compare(password, user.password)
     if(!pwMatches) throwAnError('Password is invalid', 401)
     const token = jwt.sign({
-      userId: user._id.toString(),
-      username: user.username,
-      email: user.email
-    }, secrets.JWT, { expiresIn : '72h'})
+      userId: user._id.toString()
+    }, process.env.JWT_SECRET, { expiresIn : '72h'})
 
     return {
       token: token,

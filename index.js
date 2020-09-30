@@ -1,5 +1,4 @@
 const express = require('express')
-const mongo = require('mongodb')
 const {graphqlHTTP} = require('express-graphql')
 const { mongoConnect } = require('./js/utils/db-connection')
 const graphqlSchema = require('./graphql/schema')
@@ -28,4 +27,4 @@ app.use('/graphql', graphqlHTTP({
   }
 }))
 
-mongoConnect(_ => app.listen(3000))
+mongoConnect(_ => app.listen(3000 || process.env.PORT))

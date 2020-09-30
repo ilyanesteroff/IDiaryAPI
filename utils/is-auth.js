@@ -1,15 +1,24 @@
 const mongo = require('mongodb')
+const jwt = require('jsonwebtoken')
 const {User} = require('../js/models/User')
+const { secrets } = require('../js/utils/variables')
 
 exports.auth = async (req, res, next) => {
-  //check for token in the future
-  const user = await User.findUser({ _id: new mongo.ObjectID('5f73790e42b796385caab375')})
-  if(user) {
-    req.isAuth = true
-    req.user = user
-    req.user._id = req.user._id.toString()
-  }
-  next()
+  const authHeader = req.get('Authorization')
+  if(authHeader) {
+    try {
+      const token = authHeader.split(' ')[1]
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+      const user = await User.findUser({ _id: new mongo.ObjectID(decodedToken.userId)})
+      if(user) {
+        req.user = user
+        req.user._id = req.user._id.toString()
+      }
+    } catch {} 
+    finally {
+      next()
+    }
+  } else next() 
 }
 
 exports.cors = (req, res, next) => {

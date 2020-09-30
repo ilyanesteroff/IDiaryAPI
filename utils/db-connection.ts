@@ -1,10 +1,9 @@
 import mongo from 'mongodb'
-import { dbvars } from './variables'
 const MongoClient = mongo.MongoClient
 let _db: mongo.Db
 
 const client = new  MongoClient(
-  `mongodb+srv://${dbvars.username}:${dbvars.password}@firstcluster.hazg0.mongodb.net/${dbvars.db}`, 
+  `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@firstcluster.hazg0.mongodb.net/${process.env.DB}`, 
   { useUnifiedTopology: true }
 )
 

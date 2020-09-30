@@ -14,7 +14,7 @@ exports.requestPasswordReset = async function(email, req){
     }
     const token = (await randomBytes(20)).toString('hex')
     await User.setResetPasswordToken(user._id.toString(), token)
-    //resetPasswordEmail(email, 'Password reset', token)
+    resetPasswordEmail(email, 'Password reset', token)
     return true
   } catch(err) {
     checkAndThrowError(err)
@@ -28,12 +28,11 @@ exports.setNewPassword = async function(token, newPassword, req) {
       { resetPassword: 1 } 
     ))[0]
     if(!user) throwAnError('user not found', 404)
-    //add resend email
     await User.updateUser(user._id.toString(), { $unset: { resetPassword : "" } })
     if(user.resetPassword.bestBefore < new Date()) {
       const token = (await randomBytes(20)).toString('hex')
       await User.setResetPasswordToken(user._id.toString(), token)
-      //resetPasswordEmail(email, 'Password reset', token)
+      resetPasswordEmail(email, 'Password reset', token)
       return false 
     }
     const hashedPw = await bycrypt.hash(newPassword, 16)

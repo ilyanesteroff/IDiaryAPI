@@ -35,6 +35,7 @@ exports.updateUser = async function(userInput, req){
 exports.deleteUser = async function(req){
   if(!req.user) throwAnError('Authorization failed', 400)
   try {
+    //in future delete user from conversations
     for await(let f of lists) User.deleteRequestsOfDeletedUser(req.user._id, f)
     await Todo.deleteTodosOfDeletedUser(req.user._id)
     await User.deleteUser(req.user._id)

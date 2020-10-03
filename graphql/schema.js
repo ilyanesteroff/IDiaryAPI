@@ -80,7 +80,7 @@ module.exports = buildSchema(`
   type AuthData {
     token: String!
     userId: ID!
-    username: String!
+    firstname: String!
   } 
 
   input CreateUserInputData {

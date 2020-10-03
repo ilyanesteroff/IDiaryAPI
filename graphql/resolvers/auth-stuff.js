@@ -5,7 +5,7 @@ const {User} = require('../../js/models/User')
 
 exports.login = async function(email, password) {
   try {
-    const user = (await User.getSpecificFields({ email: email }, {password: 1, username: 1, email: 1}))[0]
+    const user = (await User.getSpecificFields({ email: email }, {password: 1, firstname: 1, email: 1}))[0]
     if(!user) throwAnError('Email is invalid', 404)
     const pwMatches = await bycrypt.compare(password, user.password)
     if(!pwMatches) throwAnError('Password is invalid', 401)
@@ -16,7 +16,7 @@ exports.login = async function(email, password) {
     return {
       token: token,
       userId: user._id.toString(),
-      username: user.username
+      firstname: user.firstname
     }
   } catch(err) {
     checkAndThrowError(err)

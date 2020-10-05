@@ -15,7 +15,7 @@ app.use(auth)
 app.use('/graphql', graphqlHTTP({
   schema: graphqlSchema, 
   rootValue: graphqlResolvers,
-  //graphiql: true,
+  graphiql: true,
   customFormatErrorFn(err) {
     if(!err.originalError) return err
     const {data, message, status} = err.originalError

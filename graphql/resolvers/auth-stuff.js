@@ -5,8 +5,9 @@ const {User} = require('../../js/models/User')
 
 exports.login = async function(email, password) {
   try {
-    const user = (await User.getSpecificFields({ email: email }, {password: 1, firstname: 1, email: 1}))[0]
+    const user = (await User.getSpecificFields({ email: email }, {password: 1, firstname: 1, email: 1, approved: 1}))[0]
     if(!user) throwAnError('Email is invalid', 404)
+    if(!user.approved) throwAnError('Please approve your email')
     const pwMatches = await bycrypt.compare(password, user.password)
     if(!pwMatches) throwAnError('Password is invalid', 401)
     const token = jwt.sign({

@@ -145,7 +145,7 @@ module.exports = buildSchema(`
   }
 
   type RootMutation {
-    acceptEmail(token: ID!) : Boolean!
+    acceptEmail(token: ID!) : AuthData!
     requestPasswordReset(email: String!) : Boolean!
     setNewPassword(token: String!, newPassword: String!) : Boolean!
     createUser(userInput: CreateUserInputData) : Boolean!

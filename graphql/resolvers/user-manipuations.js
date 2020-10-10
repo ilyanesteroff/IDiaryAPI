@@ -8,6 +8,8 @@ const sendMail = require('../assistants/email-sender')
 
 exports.createUser = async function(userInput, req) {
   try {
+    const userExists = await verifyEmailAndUsername(userInput.email, userInput.username)
+    if(userExists) throwAnError('User with that username or email already exists')
     const hashedPw = await bycrypt.hash(userInput.password, 16)
     const approveEmailToken = (await randomBytes(24)).toString('hex')
     userInput.password = hashedPw
@@ -45,8 +47,7 @@ exports.deleteUser = async function(req){
   }
 }
 
-//this function checks whether username and email are available, can be used when creating a new user or updating existing one
-exports.checkUsernameAndEmail = async function(email, username){
+async function verifyEmailAndUsername(email, username){
   try {
     const user = (await User.getSpecificFields({$or: [{email: email}, {username: username}]}, { _id : 1 }))[0]
     //returns false if no users found matching the query above and true otherwise
@@ -57,3 +58,7 @@ exports.checkUsernameAndEmail = async function(email, username){
     checkAndThrowError(err)
   }
 }
+
+
+//this function checks whether username and email are available, can be used when creating a new user or updating existing one
+exports.checkUsernameAndEmail = verifyEmailAndUsername

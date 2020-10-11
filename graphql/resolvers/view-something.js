@@ -91,9 +91,9 @@ exports.viewTodos = async function(userId, page, req) {
       const user = (await User.getSpecificFields({ _id: new mongo.ObjectID(userId)}, { public: 1, following: 1, followers: 1}))[0]
       if(!user.public && !user.following.some(f => f._id === req.userId) && !user.followers.some(f => f._id === req.user._id)) 
         throwAnError('Cannot view todos of this user', 422)
-      todos = await Todo.findManyTodos({ "creator._id": userId, public : true }, page, process.env.ITEMS_PER_PAGE)
-    } else todos = await Todo.findManyTodos({ "creator._id": req.user._id }, page, process.env.ITEMS_PER_PAGE)
-   
+      todos = await Todo.findManyTodos({ "creator._id": userId, public : true }, page, parseInt(process.env.ITEMS_PER_PAGE))
+    } else todos = await Todo.findManyTodos({ "creator._id": req.user._id }, page, parseInt(process.env.ITEMS_PER_PAGE))
+    
     todos.forEach(t => {
       t._id = t._id.toString()
       t.createdAt = t.createdAt.toISOString()

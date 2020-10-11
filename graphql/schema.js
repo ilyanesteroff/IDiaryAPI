@@ -7,7 +7,7 @@ module.exports = buildSchema(`
     task: String!
     completed: Boolean!
     createdAt: String!
-    timeToComlete: Int!
+    timeToComplete: Int!
     public: Boolean!
     tags: [String]
   }

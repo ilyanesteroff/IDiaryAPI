@@ -6,8 +6,9 @@ const {resetPasswordEmail} = require('../assistants/email-sender')
 
 exports.requestPasswordReset = async function(email, req){
   try {
-    const user = (await User.getSpecificFields({email: email}, { resetPassword: 1 }))[0]
+    const user = (await User.getSpecificFields({email: email}, { resetPassword: 1 }, {approved: 1}))[0]
     if(!user) throwAnError('User not found', 404)
+    if(!user.approved) return false
     if(user.resetPassword) {
       if(user.resetPassword.bestBefore > new Date()) return true
       else await User.updateUser(user._id.toString(), { $unset: { resetPassword : "" }})

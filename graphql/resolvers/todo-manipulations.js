@@ -15,9 +15,9 @@ exports.createTodo = async function(todoInput, req){
     if(todo.completed) await User.updateUser(user._id, { $inc : { FullfilledTodos: 1}})
     else await User.updateUser(user._id, { $inc : { ActiveTodos: 1}})
     return {
-      ...savedTodo.op[0],
-      createAt: savedTodo.op[0].createAt.toISOString(),
-      _id: savedTodo.op[0]._id.toString()
+      ...savedTodo.ops[0],
+      createAt: savedTodo.ops[0].createAt.toISOString(),
+      _id: savedTodo.ops[0]._id.toString()
     }
   } catch(err) { 
     checkAndThrowError(err)

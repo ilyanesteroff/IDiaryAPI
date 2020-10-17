@@ -27,6 +27,7 @@ export class Todo{
   static updateTodo(todoId : string, info: object) {
     return getDb().collection('Todos')
       .findOneAndUpdate({ _id: new mongo.ObjectID(todoId)}, info, {returnOriginal: false}) 
+      .then(_ => getDb().collection('Todos').findOne({ _id: new mongo.ObjectID(todoId)}))
       .catch(err => err)
   }
   //findOne

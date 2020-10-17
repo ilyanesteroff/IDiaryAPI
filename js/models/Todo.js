@@ -23,7 +23,8 @@ class Todo {
     }
     static updateTodo(todoId, info) {
         return db_connection_1.getDb().collection('Todos')
-            .findOneAndUpdate({ _id: new mongodb_1.default.ObjectID(todoId) }, info, {returnOriginal: false})
+            .findOneAndUpdate({ _id: new mongodb_1.default.ObjectID(todoId) }, info, { returnOriginal: false })
+            .then(_ => db_connection_1.getDb().collection('Todos').findOne({ _id: new mongodb_1.default.ObjectID(todoId) }))
             .catch(err => err);
     }
     //findOne

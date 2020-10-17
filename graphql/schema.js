@@ -152,8 +152,8 @@ module.exports = buildSchema(`
     updateUser(userInput: UpdateUserInputData) : Boolean!
     deleteUser: Boolean!
     verifyPassword(password: String!) : Boolean!
-    createTodo(todoInput: CreateTodoInputData) : Boolean!
-    updateTodo(todoInput: UpdateTodoInputData, todoId: ID!) : Boolean!
+    createTodo(todoInput: CreateTodoInputData) : Todo!
+    updateTodo(todoInput: UpdateTodoInputData, todoId: ID!) : Todo!
     deleteTodo(todoId: ID!) : Boolean!
     sendFollowRequest(to: ID!) : Boolean!
     unsendFollowRequest(to: ID!) : Boolean!

@@ -40,7 +40,7 @@ exports.updateTodo = async function(todoInput, todoId, req){
       createdAt: updatedTodo.createdAt.toISOString(),
       _id: updatedTodo._id.toString()
     }
-  } catch {
+  } catch(err) {
     checkAndThrowError(err)
   }
 }

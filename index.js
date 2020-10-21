@@ -29,4 +29,5 @@ app.use('/graphql', graphqlHTTP({
 
 app.use('/', (req, res) => res.send('This is graphql API'))
 
-mongoConnect(_ => app.listen(process.env.PORT))
+//mongoConnect(_ => app.listen(process.env.PORT))
+mongoConnect(_ => app.listen(3000))

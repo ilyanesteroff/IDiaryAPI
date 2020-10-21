@@ -4,58 +4,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Todo = void 0;
-const mongodb_1 = __importDefault(require("mongodb"));
-const db_connection_1 = require("./../utils/db-connection");
-class Todo {
+const mongodb_1 = require("mongodb");
+const Model_1 = __importDefault(require("./Model"));
+class Todo extends Model_1.default {
     constructor(todo) {
-        this.creator = todo.creator;
-        this.task = todo.task;
-        this.completed = todo.completed;
-        this.createdAt = new Date();
-        if (todo.timeToComplete)
-            this.timeToComplete = todo.timeToComplete;
-        this.public = todo.public;
-        if (todo.tags)
-            this.tags = todo.tags;
+        super('Todos', todo);
     }
-    save() {
-        return db_connection_1.getDb().collection('Todos').insertOne(this).catch(err => err);
+    static updateTodo(todoId, data) {
+        return this.updateAndReturnModel(new mongodb_1.ObjectID(todoId), data, this.collection);
     }
-    static updateTodo(todoId, info) {
-        return db_connection_1.getDb().collection('Todos')
-            .findOneAndUpdate({ _id: new mongodb_1.default.ObjectID(todoId) }, info, { returnOriginal: false })
-            .then(_ => db_connection_1.getDb().collection('Todos').findOne({ _id: new mongodb_1.default.ObjectID(todoId) }))
-            .catch(err => err);
+    static updateManyTodos(query, data) {
+        return this.updateManyModels(query, data, this.collection);
     }
-    //findOne
     static findOneTodo(query) {
-        return db_connection_1.getDb().collection('Todos')
-            .findOne(query)
-            .catch(err => err);
+        return this.getModel(query, this.collection);
     }
     static findManyTodos(query, currentPage, limit) {
-        return db_connection_1.getDb().collection('Todos')
-            .find(query)
-            .sort({ createdAt: -1 })
-            .skip((currentPage - 1) * limit)
-            .limit(limit)
-            .toArray()
-            .catch(err => err);
+        return this.getManyModels(query, this.collection, { createdAt: -1 }, currentPage, limit);
     }
     static countTodos(query) {
-        return db_connection_1.getDb().collection('Todos')
-            .count(query)
-            .catch(err => err);
+        return this.countModels(query, this.collection);
     }
-    static deleteTodo(todoId) {
-        return db_connection_1.getDb().collection('Todos')
-            .deleteOne({ _id: new mongodb_1.default.ObjectID(todoId) })
-            .catch(err => err);
+    static deleteTodo(id) {
+        return this.deleteModel(new mongodb_1.ObjectID(id), this.collection);
     }
     static deleteTodosOfDeletedUser(userId) {
-        return db_connection_1.getDb().collection('Todos')
-            .deleteMany({ "creator._id": userId })
-            .catch(err => err);
+        return this.deleteManyModels({ "creator._id": userId }, this.collection);
     }
 }
 exports.Todo = Todo;
+Todo.collection = 'Todos';

@@ -7,7 +7,9 @@ exports.getDb = exports.mongoConnect = void 0;
 const mongodb_1 = __importDefault(require("mongodb"));
 const MongoClient = mongodb_1.default.MongoClient;
 let _db;
-const client = new MongoClient(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@firstcluster.hazg0.mongodb.net/${process.env.DB}`, { useUnifiedTopology: true });
+const client = new MongoClient(
+//`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@firstcluster.hazg0.mongodb.net/${process.env.DB}`, TodoList
+`mongodb+srv://Vasya_Pupkin:A5-lapas@firstcluster.hazg0.mongodb.net/TodoList`, { useUnifiedTopology: true });
 exports.mongoConnect = (cb) => {
     client.connect()
         .then(client => {

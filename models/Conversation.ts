@@ -1,96 +1,37 @@
-import mongo, { ObjectID } from 'mongodb'
-import { getDb } from '../utils/db-connection'
-import { Iconversation, Follower, Message } from './model-types'
+import { ObjectID } from 'mongodb'
+import DbModel from './Model'
+import { Iconversation, Message } from './model-types'
 
-export class Conversation {
-  _id: ObjectID | undefined
-  participants: Follower[]
-  messages: Message[] | []
+export class Conversation extends DbModel{
+  static collection : string = 'Conversations'
   constructor(convInfo: Iconversation){
-    this.participants = convInfo.participants
-    this.messages = convInfo.messages
+    super('Conversations', convInfo)
   }
 
-  save() {
-    return getDb().collection('Conversations')
-      .insertOne(this)
-      .catch(err => err)
-  }
-
-  static findConversation(query: object) {
-    return getDb().collection('Conversations')
-      .findOne(query)
-      .catch(err => err)
-  }
-
-  static destroyConversation(query: object){
-    return getDb().collection('Conversations')
-      .deleteOne(query)
-      .catch(err => err)
-  }
-
-  static findDialogue(participants: Follower[]) {
-    return getDb().collection('Conversations')
-    //because there can be only one dialogue between only 2 users 
-      .findOne({
-        participants: participants
-      })
-      .catch(err => err)
-  }
-
-  static addMassage(conversationId: string, message: Message){
-    return getDb().collection('Conversations')
-      .findOneAndUpdate({ _id: new mongo.ObjectID(conversationId)}, {
-        $push : {
-          messages: message
+  static findManyConversationsForOneUser(userId: string, currentPage: number, limit: number){
+    return this.getManyModels({ 
+      participants: { 
+        $elemMatch: { 
+          _id: userId 
         } 
-      })
-      .then(_ => {
-        return getDb().collection('Conversations')
-          .findOne({ _id: new mongo.ObjectID(conversationId) })
-      })
-      .catch(err => err)
+      } 
+    }, this.collection, {updatedAt: -1}, currentPage, limit)
   }
 
-  static updateMessage(convId: string, messageId: string, text: string){
-    return getDb().collection('Conversations')
-      .findOneAndUpdate(
-        {_id: new mongo.ObjectID(convId),  messages: { $elemMatch: { id: messageId } } }, 
-        { $set: { "messages.$.text" : text } }
-      )
-      .then(_ => {
-        return getDb().collection('Conversations')
-          .findOne({ _id: new mongo.ObjectID(convId) })
-      })
-      .catch(err => err)
+  static destroyConversation(id: string){
+    return this.deleteModel(new ObjectID(id), this.collection)
   }
 
-  static deleteMessageForAll(conversationId: string, messageId: string){
-    return getDb().collection('Conversations')
-      .findOneAndUpdate({ _id: new mongo.ObjectID(conversationId)}, {
-         $pull : {
-            messages : {
-                id : messageId
-            }
-         }
-      })
-      .then(_ => {
-        return getDb().collection('Conversations')
-          .findOne({ _id: new mongo.ObjectID(conversationId) })
-      })
-      .catch(err => err)
-  }  
-
-  static formatAsDialogue(conv: Conversation){
-    return {
-      _id: conv._id? conv._id.toString() : undefined, 
-      participants: conv.participants, 
-      latestMessage: {
-        id: conv.messages[conv.messages.length-1].id,
-        writtenAt: conv.messages[conv.messages.length-1].writtenAt,
-        text: conv.messages[conv.messages.length-1].text,
-        author: conv.messages[conv.messages.length-1].author
+  static setAnotherLatestMessage(id: string, message: Message){
+    return this.updateModel(new ObjectID(id), {
+      $set : {
+        latestMessage: message,
+        updatedAt: new Date()
       }
-    }
+    }, this.collection)
+  }
+
+  static updateManyConversations(query: object, data: object){
+    return this.updateManyModels(query, data, this.collection)
   }
 }

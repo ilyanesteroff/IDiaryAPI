@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Follower = void 0;
 const mongodb_1 = require("mongodb");
 const Model_1 = __importDefault(require("./Model"));
 class Follower extends Model_1.default {
@@ -58,5 +59,5 @@ class Follower extends Model_1.default {
         return this.countModels({ "followers._id": userId }, this.collection);
     }
 }
-exports.default = Follower;
+exports.Follower = Follower;
 Follower.collection = 'Followers';

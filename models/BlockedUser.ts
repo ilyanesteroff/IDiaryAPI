@@ -1,13 +1,24 @@
 import DbModel from './Model'
 import { IBlock, follower } from './model-types'
 
-export default class BlockedUser extends DbModel{
+
+export class BlockedUser extends DbModel{
   static collection: string = 'BlockedUsers'
   constructor(blockInfo: IBlock){
     super('BlockedUsers', blockInfo)
   }
 
-  static findBlockedUser(userId: string, username: string){
+  static findById(userId : string, blockedUserId : string){
+    return this.getModel(
+      { 
+        "blockedUser._id" : blockedUserId,
+        userWhoBlocked : userId                         
+      }, 
+      this.collection
+    ) 
+  }
+
+  static findByUsername(userId: string, username: string){
     return this.getModel(
       { 
         "blockedUser.username" : username,

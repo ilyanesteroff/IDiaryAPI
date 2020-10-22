@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Request = void 0;
 const mongodb_1 = require("mongodb");
 const Model_1 = __importDefault(require("./Model"));
 class Request extends Model_1.default {
@@ -57,5 +58,5 @@ class Request extends Model_1.default {
         return this.countModels({ "sender._id": userId }, this.collection);
     }
 }
-exports.default = Request;
+exports.Request = Request;
 Request.collection = 'Requests';

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Message = void 0;
 const mongodb_1 = require("mongodb");
 const Model_1 = __importDefault(require("./Model"));
 class Message extends Model_1.default {
@@ -52,5 +53,5 @@ class Message extends Model_1.default {
         }, this.collection, { writtenAt: -1 }, currentPage, limit);
     }
 }
-exports.default = Message;
+exports.Message = Message;
 Message.collection = 'Messages';

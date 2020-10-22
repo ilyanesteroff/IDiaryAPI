@@ -2,7 +2,7 @@ import { ObjectID } from 'mongodb'
 import DbModel from './Model'
 import { IMessage } from './model-types'
 
-export default class Message extends DbModel{
+export class Message extends DbModel{
   static collection: string = 'Messages'
   constructor(messageInfo: IMessage){
     super('Messages', messageInfo)

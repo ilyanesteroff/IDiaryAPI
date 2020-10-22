@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserSettings = void 0;
 const mongodb_1 = require("mongodb");
 const Model_1 = __importDefault(require("./Model"));
 class UserSettings extends Model_1.default {
@@ -18,6 +19,9 @@ class UserSettings extends Model_1.default {
     static getUserSettings(query) {
         return this.getModel(query, this.collection);
     }
+    static getSpecificFields(query, project) {
+        return this._getSpecificFields(query, project, this.collection);
+    }
     static setResetPasswordToken(userId, token) {
         return this.updateModel(new mongodb_1.ObjectID(userId), {
             $set: {
@@ -29,5 +33,5 @@ class UserSettings extends Model_1.default {
         }, this.collection);
     }
 }
-exports.default = UserSettings;
+exports.UserSettings = UserSettings;
 UserSettings.collection = 'UserSettings';

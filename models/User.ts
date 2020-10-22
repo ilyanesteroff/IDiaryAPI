@@ -1,6 +1,5 @@
 import { ObjectID } from 'mongodb'
 import DbModel from './Model'
-import { getDb } from '../utils/db-connection'
 import { IUser, FullUser } from './model-types'
 
 
@@ -15,25 +14,19 @@ export class User extends DbModel{
   }
 
   static updateUser(userId: string, info: object) {
-    return DbModel.updateModel(new ObjectID(userId), info, this.collection)
+    return this.updateModel(new ObjectID(userId), info, this.collection)
   }
 
   static deleteUser(userId: string) {
-    return DbModel.deleteModel(new ObjectID(userId), this.collection)
+    return this.deleteModel(new ObjectID(userId), this.collection)
   }
 
   static findUser(query: object) {
-    return DbModel.getModel(query, this.collection)
+    return this.getModel(query, this.collection)
   }
   
   static getSpecificFields(query: object, project: object){
-    return getDb().collection(this.collection)
-      .aggregate([ 
-        { $match : query },
-        { $project: project }
-      ])
-      .toArray()
-      .catch(err => err)
+    return this._getSpecificFields(query, project, this.collection)
   }
  
   static formatUserAsFollower(user: FullUser) {

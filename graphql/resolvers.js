@@ -6,23 +6,28 @@ const todoManips = require('./resolvers/todo-manipulations')
 const FandR = require('./resolvers/following-requesting')
 const security = require('./resolvers/security-stuff')
 const convResolvers = require('./resolvers/conversation-stuff')
+const getUserData = require('./resolvers/get-full-user')
+const checkEmailAndUsername = require('./resolvers/check-username-email')
+const ifPwResetIsActual = require('./resolvers/if-pw-reset-is-actual')
+const viewTodos = require('./resolvers/view-todos')
+const viewUser = require('./resolvers/view-user')
+const findUser = require('./resolvers/find-user')
+
 
 module.exports = {
-  getAuthUser: (args, req) => views.viewYourProfile(req),
+  getAuthUser: (args, req) => getUserData(req),
 
-  checkEmailAndUsername: ({username, email}) => userManips.checkUsernameAndEmail(email, username),
-  //checks whether password reset is still actual
-  getResetPassword: ({token}) => pwReset.getResetPassword(token),
+  checkEmailAndUsername: ({username, email}) => checkEmailAndUsername(email, username),
+  
+  getResetPassword: ({token}) => ifPwResetIsActual(token),
 
   login: ({email, password}) => authResolvers.login(email, password),
 
-  todos: ({userId, page}, req) => views.viewTodos(userId, page, req),
+  todos: ({userId, page}, {user}) => viewTodos(userId, page, user),
 
-  todo: ({todoId}, req) => views.viewTodo(todoId, req),
-
-  user: ({userId}, req) => views.viewUser(userId, req),
+  user: ({userId}, {user}) => viewUser(userId, user),
   //returns a user when searching for users
-  findUser: ({username}, req) => views.findUserByUsername(username, req),
+  findUser: ({username}, {user}) => findUser(username, user),
   //fetching who follows users or whom user is following
   followingOrFollowers: ({userId, field}, req) => views.viewFollowersOrFollowing(userId, field, req),
 

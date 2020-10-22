@@ -3,7 +3,7 @@ import DbModel from './Model'
 import { follower, IRequest } from './model-types'
 
 
-export default class Request extends DbModel{
+export class Request extends DbModel{
   static collection: string = 'Requests'
   constructor(requestInfo: IRequest){
     super('Requests', requestInfo)

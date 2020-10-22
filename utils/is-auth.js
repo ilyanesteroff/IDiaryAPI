@@ -1,4 +1,4 @@
-const mongo = require('mongodb')
+const { ObjectID } = require('mongodb')
 const jwt = require('jsonwebtoken')
 const {User} = require('../js/models/User')
 
@@ -8,7 +8,7 @@ exports.auth = async (req, res, next) => {
     try {
       const token = authHeader.split(' ')[1]
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
-      const user = await User.findUser({ _id: new mongo.ObjectID(decodedToken.userId)})
+      const user = await User.findUser({ _id: new ObjectID(decodedToken.userId)})
       if(user) {
         req.user = user
         req.user._id = req.user._id.toString()

@@ -74,4 +74,15 @@ export default class DbModel{
       .countDocuments(query)
       .catch(err => err)
   }
+
+  protected static _getSpecificFields(query: object, project: object, collection: string){
+    return getDb().collection(collection)
+      .aggregate([ 
+        { $match : query },
+        { $project: project }
+      ])
+      .toArray()
+      .then(res => res[0])
+      .catch(err => err)
+  }
 }

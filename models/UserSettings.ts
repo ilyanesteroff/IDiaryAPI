@@ -2,7 +2,7 @@ import { ObjectID } from 'mongodb'
 import DbModel from './Model'
 import { IUserSettings } from './model-types'
 
-export default class UserSettings extends DbModel{
+export class UserSettings extends DbModel{
   static collection: string = 'UserSettings'
   constructor(userSettings: IUserSettings){
     super('UserInfo', userSettings)
@@ -20,6 +20,10 @@ export default class UserSettings extends DbModel{
     return this.getModel(query, this.collection)
   }
   
+  static getSpecificFields(query: object, project: object){
+    return this._getSpecificFields(query, project, this.collection)
+  }
+
   static setResetPasswordToken(userId: string, token: string) {
     return this.updateModel(new ObjectID(userId), {
       $set : {

@@ -2,7 +2,7 @@ import { ObjectID } from 'mongodb'
 import DbModel from './Model'
 import { IUserInfo } from './model-types'
 
-export default class UserInfo extends DbModel{
+export class UserInfo extends DbModel{
   static collection: string = 'UserInfo'
   constructor(userInfo: IUserInfo){
     super('UserInfo', userInfo)
@@ -14,6 +14,10 @@ export default class UserInfo extends DbModel{
         lastSeen: new Date()
       }
     }, this.collection)
+  }
+
+  static getSpecificFields(query: object, project: object){
+    return this._getSpecificFields(query, project, this.collection)
   }
 
   static deleteUserInfo(userId: string){

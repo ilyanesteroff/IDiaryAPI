@@ -3,12 +3,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BlockedUser = void 0;
 const Model_1 = __importDefault(require("./Model"));
 class BlockedUser extends Model_1.default {
     constructor(blockInfo) {
         super('BlockedUsers', blockInfo);
     }
-    static findBlockedUser(userId, username) {
+    static findById(userId, blockedUserId) {
+        return this.getModel({
+            "blockedUser._id": blockedUserId,
+            userWhoBlocked: userId
+        }, this.collection);
+    }
+    static findByUsername(userId, username) {
         return this.getModel({
             "blockedUser.username": username,
             userWhoBlocked: userId
@@ -42,5 +49,5 @@ class BlockedUser extends Model_1.default {
         }, this.collection);
     }
 }
-exports.default = BlockedUser;
+exports.BlockedUser = BlockedUser;
 BlockedUser.collection = 'BlockedUsers';

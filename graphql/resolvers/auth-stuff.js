@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const {throwAnError, checkAndThrowError} = require('../../utils/error-handlers')
 const {User} = require('../../js/models/User')
 
+
 exports.login = async function(email, password) {
   try {
     const user = (await User.getSpecificFields({ email: email }, {password: 1, firstname: 1, email: 1, approved: 1}))[0]

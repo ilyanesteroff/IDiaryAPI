@@ -2,7 +2,7 @@ import { ObjectID } from 'mongodb'
 import DbModel from './Model'
 import { follower, IFollower } from './model-types'
 
-export default class Follower extends DbModel{
+export class Follower extends DbModel{
   static collection: string = 'Followers' 
   constructor(followingData: IFollower){
     super('Followers', followingData)

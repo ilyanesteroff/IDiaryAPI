@@ -24,7 +24,7 @@ export class Todo extends DbModel{
   static findManyTodos(query: object, currentPage: number, limit: number) {
     return this.getManyModels(query, this.collection, {createdAt: -1}, currentPage, limit)
   }
-
+   
   static countTodos(query: object) {
     return this.countModels(query, this.collection)
   }

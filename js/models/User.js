@@ -9,7 +9,7 @@ const Model_1 = __importDefault(require("./Model"));
 const db_connection_1 = require("../utils/db-connection");
 class User extends Model_1.default {
     constructor(userInfo) {
-        super('Users', Object.assign(Object.assign({}, userInfo), { FullfilledTodos: 0, ActiveTodos: 0, createdAt: new Date() }));
+        super('Users', Object.assign(Object.assign({}, userInfo), { createdAt: new Date() }));
     }
     static updateUser(userId, info) {
         return Model_1.default.updateModel(new mongodb_1.ObjectID(userId), info, this.collection);

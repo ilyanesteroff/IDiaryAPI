@@ -10,8 +10,6 @@ export class User extends DbModel{
   constructor(userInfo: IUser){
     super('Users', {
       ...userInfo, 
-      FullfilledTodos: 0, 
-      ActiveTodos: 0,
       createdAt: new Date(),
     })
   }

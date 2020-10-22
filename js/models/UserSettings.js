@@ -6,16 +6,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongodb_1 = require("mongodb");
 const Model_1 = __importDefault(require("./Model"));
 class UserSettings extends Model_1.default {
-    constructor(userInfo) {
-        super('UserInfo', userInfo);
+    constructor(userSettings) {
+        super('UserInfo', userSettings);
     }
-    static deleteUserInfo(id) {
+    static deleteUserSettings(id) {
         return this.deleteModel(new mongodb_1.ObjectID(id), this.collection);
     }
-    static updateUserInfo(id, data) {
+    static updateUserSettings(id, data) {
         return this.updateModel(new mongodb_1.ObjectID(id), data, this.collection);
     }
-    static getUserInfo(query) {
+    static getUserSettings(query) {
         return this.getModel(query, this.collection);
     }
     static setResetPasswordToken(userId, token) {

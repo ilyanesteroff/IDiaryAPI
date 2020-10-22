@@ -22,10 +22,10 @@ class Follower extends Model_1.default {
         }, this.collection);
     }
     static findManyFollowers(userId, currentPage, limit) {
-        return this.getManyModels({ "follower._id": userId }, this.collection, { username: -1 }, currentPage, limit);
+        return this.getManyModels({ "follower._id": userId }, this.collection, { "followingTo.username": -1 }, currentPage, limit);
     }
     static findManyFollowings(userId, currentPage, limit) {
-        return this.getManyModels({ "followingTo._id": userId }, this.collection, { username: -1 }, currentPage, limit);
+        return this.getManyModels({ "followingTo._id": userId }, this.collection, { "follower.username": -1 }, currentPage, limit);
     }
     static updateFollower(followerId, newFollower) {
         return this.updateManyModels({ "follower._id": followerId }, {

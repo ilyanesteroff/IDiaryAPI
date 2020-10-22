@@ -1,4 +1,4 @@
-const {buildSchema} = require('graphql')
+const { buildSchema } = require('graphql')
 
 module.exports = buildSchema(`
   type Todo {
@@ -7,6 +7,7 @@ module.exports = buildSchema(`
     task: String!
     completed: Boolean!
     createdAt: String!
+    updateAt: String
     timeToComplete: Int
     public: Boolean!
     tags: [String]
@@ -25,9 +26,10 @@ module.exports = buildSchema(`
     firstname: String!
     lastname: String!
     public: Boolean!
+    lastSeen: String!
     email: String
-    followers: [Follower]
-    following: [Follower]
+    followers: Int
+    following: Int
     FullfilledTodos: Int
     ActiveTodos: Int
     website: String
@@ -39,20 +41,18 @@ module.exports = buildSchema(`
   type Conversation {
     _id: ID!
     participants: [Follower!]!
-    messages: [Message!]!
-  }
-
-  type Dialogue {
-    _id: ID!
-    participants: [Follower!]!
     latestMessage: Message!
+    updatedAt: String!
   }
 
   type Message {
-    id: ID!
+    _id: ID!
+    conversationID: ID!
     author: String!
     text: String!
     writtenAt: String!
+    seen: Boolean!
+    liked: Boolean
   }
 
   type FullUser {
@@ -61,20 +61,32 @@ module.exports = buildSchema(`
     firstname: String!
     lastname: String!
     email: String!
-    followers: [Follower]!
-    following: [Follower]!
+    followers: Int!
+    following: Int!
     FullfilledTodos: Int!
     ActiveTodos: Int!
-    requestsTo: [Follower]!
-    requestsFrom: [Follower]!
+    requestsTo: Int!
+    requestsFrom: Int!
     phone: String
     createdAt: String!
-    dialogues: [Dialogue]!
+    Conversations: Int!
     website: String
     company: String
     about: String
     relationshipStatus: String
     public: Boolean!
+  }
+
+  type Request {
+    _id: String!
+    receiver: Follower!
+    sender: Follower!
+    sentAt: String!
+  }
+
+  type FollowingInfo {
+    user: Follower!
+    followingSince: String!
   }
 
   type AuthData {
@@ -89,12 +101,7 @@ module.exports = buildSchema(`
     lastname: String!
     email: String!
     public: Boolean!
-    phone: String
     password: String!
-    website: String
-    company: String
-    about: String
-    relationshipStatus: String
   }
 
   input UpdateUserInputData {
@@ -133,15 +140,14 @@ module.exports = buildSchema(`
     getResetPassword(token: String!) : Boolean!
     login(email: String!, password: String!) : AuthData!
     todos(userId: ID, page: Int!) : [Todo]!
-    todo(todoId: ID!): Todo!
     user(userId: ID): User!
     findUser(username: String!) : Follower!
-    followingOrFollowers(userId: ID, field: String!): [Follower]!
-    conversation(convId: ID!) : Conversation!
-    conversations: [Dialogue]!
-    getList(listname: String!) : [Follower]!
+    followingOrFollowers(userId: ID, field: String!): [FollowingInfo]!
+    incomingRequests : [Request]!
+    outcomingRequests: [Request]!
+    conversations: [Conversation]!
     countTodosByTagname(tag: String!) : Int!
-    findTodosByTagname(tag: String!, page: Int!) : [Todo!]!
+    findTodosByTagname(tag: String!, page: Int!) : [Todo]!
   }
 
   type RootMutation {
@@ -149,7 +155,7 @@ module.exports = buildSchema(`
     requestPasswordReset(email: String!) : Boolean!
     setNewPassword(token: String!, newPassword: String!) : Boolean!
     createUser(userInput: CreateUserInputData) : Boolean!
-    updateUser(userInput: UpdateUserInputData) : Boolean!
+    updateUser(userInput: UpdateUserInputData) : User!
     deleteUser: Boolean!
     verifyPassword(password: String!) : Boolean!
     createTodo(todoInput: CreateTodoInputData) : Todo!
@@ -164,7 +170,7 @@ module.exports = buildSchema(`
     unblockUser(userId: ID!) : Boolean!
     isAbleToContact(userId: ID!) : Boolean!
     createConversation(members: [ID!]!, message: String!) : Conversation!
-    writeMessage(text: String!, convId: ID!) : Boolean!
+    writeMessage(text: String!, convId: ID!) : Message!
     updateMessage(text: String!, messageId: ID!, convId: ID!): Message!
     deleteMessage(messageId: ID!, convId: ID!) : Boolean!
   }

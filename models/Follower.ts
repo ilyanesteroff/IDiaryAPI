@@ -31,7 +31,7 @@ export default class Follower extends DbModel{
     return this.getManyModels(
       { "follower._id" : userId }, 
       this.collection, 
-      {username: -1},
+      {"followingTo.username": -1},
       currentPage,
       limit
     )
@@ -41,7 +41,7 @@ export default class Follower extends DbModel{
     return this.getManyModels(
       { "followingTo._id" : userId }, 
       this.collection, 
-      {username: -1},
+      {"follower.username": -1},
       currentPage,
       limit
     )

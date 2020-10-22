@@ -34,4 +34,14 @@ export class Conversation extends DbModel{
   static updateManyConversations(query: object, data: object){
     return this.updateManyModels(query, data, this.collection)
   }
+
+  static countConversations(userId: string){
+    return this.countModels({ 
+      participants: { 
+        $elemMatch: { 
+          _id: userId 
+        } 
+      } 
+    }, this.collection)
+  }
 }

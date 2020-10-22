@@ -33,6 +33,15 @@ class Conversation extends Model_1.default {
     static updateManyConversations(query, data) {
         return this.updateManyModels(query, data, this.collection);
     }
+    static countConversations(userId) {
+        return this.countModels({
+            participants: {
+                $elemMatch: {
+                    _id: userId
+                }
+            }
+        }, this.collection);
+    }
 }
 exports.Conversation = Conversation;
 Conversation.collection = 'Conversations';

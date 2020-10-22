@@ -16,7 +16,7 @@ export default class Message extends DbModel{
   }
 
   static findManyMessages(query: object, currentPage: number, limit: number){
-    return this.getManyModels(query, this.collection, {createdAt: -1}, currentPage, limit)
+    return this.getManyModels(query, this.collection, {writtenAt: -1}, currentPage, limit)
   }
 
   static changeMessageText(messageId: string, text: string){
@@ -55,6 +55,6 @@ export default class Message extends DbModel{
     return this.getManyModels({ 
       conversationID: convId, 
       liked: true 
-    }, this.collection, {createdAt: -1}, currentPage, limit)
+    }, this.collection, {writtenAt: -1}, currentPage, limit)
   }
 }

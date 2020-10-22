@@ -7,12 +7,13 @@ export interface Itodo {
   timeToComplete: number | undefined
   public: boolean
   tags: string[] | undefined
+  createdAt: Date
 }
 
 export interface Iconversation{
   participants: follower[]
   latestMessage: IMessage
-  updatedAt: Date | null
+  updatedAt: Date
 }
 
 export interface IMessage{
@@ -47,8 +48,6 @@ export type FullUser = {
   lastname: string
   email: string
   password: string
-  FullfilledTodos: number
-  ActiveTodos: number
   createdAt: Date
 }
 
@@ -60,16 +59,22 @@ export interface IUser {
   password: string
 }
 
+export interface IUserInfo{
+  _id: ObjectID
+  FullfilledTodos: number
+  ActiveTodos: number
+  website: string | undefined
+  company: string | undefined
+  about: string | undefined
+  relationshipStatus: string | undefined
+}
+
 export interface IUserSettings{
   _id: ObjectID
   public: boolean
   approveEmailToken: string | null
   approved: boolean
   phone: string | undefined
-  website: string | undefined
-  company: string | undefined
-  about: string | undefined
-  relationshipStatus: string | undefined
 }
 
 export interface IRequest{

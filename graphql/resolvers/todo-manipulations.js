@@ -76,7 +76,7 @@ exports.findTodosByTagname = async function(tag, page, req) {
   try { 
     if(!req.user) throwAnError('Authorization failed', 400)
     //make a const limit
-    const todos = await Todo.findManyTodos({tags: tag,public: true}, page, 20)
+    const todos = await Todo.findManyTodos({tags: tag, public: true}, page, 20)
     todos.forEach(t => {
       t._id = t._id.toString()
       t.createdAt = t.createdAt.toISOString()

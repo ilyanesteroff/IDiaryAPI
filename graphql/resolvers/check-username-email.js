@@ -1,5 +1,5 @@
-const {User} = require('../../js/models/User')
-const {checkAndThrowError} = require('../../utils/error-handlers')
+const { User } = require('../../js/models/User')
+const { checkAndThrowError } = require('../../utils/error-handlers')
 
 
 module.exports = async function verifyEmailAndUsername(email, username){

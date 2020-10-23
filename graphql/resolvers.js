@@ -8,39 +8,33 @@ const security = require('./resolvers/security-stuff')
 const convResolvers = require('./resolvers/conversation-stuff')
 const getUserData = require('./resolvers/get-full-user')
 const checkEmailAndUsername = require('./resolvers/check-username-email')
-const ifPwResetIsActual = require('./resolvers/if-pw-reset-is-actual')
 const viewTodos = require('./resolvers/view-todos')
 const viewUser = require('./resolvers/view-user')
 const findUser = require('./resolvers/find-user')
+const viewFStats = require('./resolvers/view-following')
+const getConversations = require('./resolvers/view-conversations')
+const findTodosByTagname = require('./resolvers/find-todos-by-tagname')
 
 
 module.exports = {
-  getAuthUser: (args, req) => getUserData(req),
+  getAuthUser: (args, { user }) => getUserData(user),
 
-  checkEmailAndUsername: ({username, email}) => checkEmailAndUsername(email, username),
+  checkEmailAndUsername: ({ username, email }) => checkEmailAndUsername(email, username),
   
-  getResetPassword: ({token}) => ifPwResetIsActual(token),
+  todos: ({ userId, page }, { user }) => viewTodos(userId, page, user),
 
-  login: ({email, password}) => authResolvers.login(email, password),
-
-  todos: ({userId, page}, {user}) => viewTodos(userId, page, user),
-
-  user: ({userId}, {user}) => viewUser(userId, user),
+  user: ({ userId }, { user }) => viewUser(userId, user),
   //returns a user when searching for users
-  findUser: ({username}, {user}) => findUser(username, user),
+  findUser: ({ username }, { user }) => findUser(username, user),
   //fetching who follows users or whom user is following
-  followingOrFollowers: ({userId, field}, req) => views.viewFollowersOrFollowing(userId, field, req),
+  followingOrFollowers: ({ userId, field }, { user }) => viewFStats(userId, field, user),
 
-  conversation: ({convId}, req) => views.viewConversation(convId, req),
+  conversations: ({ page }, { user }) => getConversations(user, page),
 
-  conversations: (args, req) => views.viewConversations(req),
-  //for lists that contains follower type objects
-  getList: ({listname}, req) => views.getList(listname, req),
+  findTodosByTagname: ( {tag, page }, { user }) => findTodosByTagname(tag, page, user),
+  
 
-  countTodosByTagname: ({tag}, req) => todoManips.countTodosByTagname(tag, req),
 
-  findTodosByTagname: ({tag, page}, req) => todoManips.findTodosByTagname(tag, page, req),
-  //mutations
   acceptEmail: ({token}) => authResolvers.acceptEmail(token),
 
   requestPasswordReset: ({email}, req) => pwReset.requestPasswordReset(email, req),

@@ -1,7 +1,7 @@
 import { ObjectID } from 'mongodb'
 
 export interface Itodo {
-  creator: follower
+  creator: TodoAuthor
   task: string
   completed: true
   timeToComplete: number | undefined
@@ -22,6 +22,12 @@ export interface IMessage{
   text: string
   writtenAt: Date
   seen: boolean
+}
+
+export type TodoAuthor = {
+  _id: string
+  username: string
+  public: Boolean
 }
 
 export type Message = {

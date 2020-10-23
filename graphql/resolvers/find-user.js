@@ -1,15 +1,16 @@
 const { User } = require('../../js/models/User')
 const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers')
 const someoneBlocked = require('../checks/if-users-blocked')
+const updateUserActivity = require('../../assistants/update-user-activity')
 
 
-module.exports = async function(username, user) {
+module.exports = async function(username, client) {
   try{
-    !user && throwAnError('Authorization failed', 400)
-
+    !client && throwAnError('Authorization failed', 400)
+    updateUserActivity(client._id)
     const output = await User.getSpecificFields({username: username}, { createdAt: 0, email: 0, password: 0 })
     !output && throwAnError('User not found', 404)
-    const ifBlocked = await someoneBlocked(output._id, user._id)
+    const ifBlocked = await someoneBlocked(output._id, client._id)
     ifBlocked && throwAnError('User not found', 400)
 
     return {

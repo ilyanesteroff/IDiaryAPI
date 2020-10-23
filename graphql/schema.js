@@ -3,7 +3,7 @@ const { buildSchema } = require('graphql')
 module.exports = buildSchema(`
   type Todo {
     _id: ID!
-    creator: Follower! 
+    creator: TodoAuthor! 
     task: String!
     completed: Boolean!
     createdAt: String!
@@ -11,6 +11,12 @@ module.exports = buildSchema(`
     timeToComplete: Int
     public: Boolean!
     tags: [String]
+  }
+
+  type TodoAuthor {
+    _id: ID!
+    username: String!
+    public: Boolean!
   }
   
   type Follower {
@@ -26,7 +32,7 @@ module.exports = buildSchema(`
     firstname: String!
     lastname: String!
     public: Boolean!
-    lastSeen: String
+    lastSeen: String!
     createdAt: String
     email: String
     followers: Int
@@ -70,7 +76,7 @@ module.exports = buildSchema(`
     requestsFrom: Int!
     phone: String
     createdAt: String!
-    Conversations: Int!
+    conversations: Int!
     website: String
     company: String
     about: String
@@ -89,12 +95,6 @@ module.exports = buildSchema(`
     user: Follower!
     followingSince: String!
   }
-
-  type AuthData {
-    token: String!
-    userId: ID!
-    firstname: String!
-  } 
 
   input CreateUserInputData {
     username: String!
@@ -138,16 +138,11 @@ module.exports = buildSchema(`
   type RootQuery {
     getAuthUser: FullUser!
     checkEmailAndUsername(email: String!, username: String!): Boolean!
-    getResetPassword(token: String!) : Boolean!
-    login(email: String!, password: String!) : AuthData!
     todos(userId: ID, page: Int!) : [Todo]!
     user(userId: ID): User!
     findUser(username: String!) : Follower!
     followingOrFollowers(userId: ID, field: String!): [FollowingInfo]!
-    incomingRequests : [Request]!
-    outcomingRequests: [Request]!
-    conversations: [Conversation]!
-    countTodosByTagname(tag: String!) : Int!
+    conversations(page: Int!): [Conversation]!
     findTodosByTagname(tag: String!, page: Int!) : [Todo]!
   }
 

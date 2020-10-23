@@ -4,7 +4,7 @@ const {Todo} = require('../../js/models/Todo')
 const {lists} = require('../assistants/vars')
 const {throwAnError, checkAndThrowError} = require('../../utils/error-handlers')
 const {randomBytes} = require('../assistants/random-bytes')
-const sendMail = require('../assistants/email-sender')
+const sendMail = require('../../assistants/email-sender')
 
 exports.createUser = async function(userInput, req) {
   try {

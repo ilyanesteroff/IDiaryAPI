@@ -7,14 +7,17 @@ const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers
 const findOutIfSomeoneIsBlocked = require('../checks/if-users-blocked')
 const findOutIfUserPublic = require('../checks/if-user-is-public')
 const followerStats = require('../assistants/follower-stats')
+const updateUserActivity = require('../../assistants/update-user-activity')
 
 
-module.exports = async function(userId, user){
+module.exports = async function(userId, client){
   try {
-    !user && throwAnError('Authorization failed')
-    const ifUserFollows = await Follower.findFollower(userId, user.username)
+    !client && throwAnError('Authorization failed', 400)
+    userId === client._id && throwAnError('Use fullUser endpoint instead', 400)
+    updateUserActivity(client._id)
+    const ifUserFollows = await Follower.findFollower(userId, client.username)
     if(!ifUserFollows) {
-      await findOutIfSomeoneIsBlocked(user._id, userId) && throwAnError('Unable to view', 400)
+      await findOutIfSomeoneIsBlocked(client._id, userId) && throwAnError('Unable to view', 400)
       !await findOutIfUserPublic(userId) && throwAnError('User is private', 400)
     }
     const userToView = await User.getSpecificFields({ _id: new ObjectID(userId)}, { password: 0, _id: 0 })

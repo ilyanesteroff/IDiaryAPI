@@ -7,7 +7,7 @@ exports.auth = async (req, res, next) => {
   if(authHeader) {
     try {
       const token = authHeader.split(' ')[1]
-      const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+      const decodedToken = jwt.verify(token, `q%df^&sr$r%fsdD^**^FGYJK/YUF%R&^%n%,()n3Pi$'kápan4v34v55y$v`)
       const user = await User.findUser({ _id: new ObjectID(decodedToken.userId)})
       if(user) {
         req.user = user

@@ -1,9 +1,10 @@
 const express = require('express')
-const {graphqlHTTP} = require('express-graphql')
+const { graphqlHTTP } = require('express-graphql')
 const { mongoConnect } = require('./js/utils/db-connection')
 const graphqlSchema = require('./graphql/schema')
 const graphqlResolvers = require('./graphql/resolvers')
-const {auth, cors} = require('./utils/is-auth')
+const { auth, cors } = require('./utils/is-auth')
+const apiRouter = require('./api/index')
 const app = express()
 
 app.use(express.json())
@@ -11,6 +12,8 @@ app.use(express.json())
 app.use(cors)
 
 app.use(auth)
+
+app.use('/api', apiRouter)
 
 app.use('/graphql', graphqlHTTP({
   schema: graphqlSchema, 

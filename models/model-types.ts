@@ -65,20 +65,20 @@ export interface IUser {
   password: string
 }
 
-export interface IUserInfo{
+export interface IUserInfo {
   _id: ObjectID
-  FullfilledTodos: number
-  ActiveTodos: number
+  FullfilledTodos: number | undefined
+  ActiveTodos: number | undefined
   website: string | undefined
   company: string | undefined
-  about: string | undefined
+  about: string | undefined 
   relationshipStatus: string | undefined
 }
 
-export interface IUserSettings{
+export interface IUserSettings{ 
   _id: ObjectID
   public: boolean
-  approveEmailToken: string | null
+  approveEmailToken: string 
   approved: boolean
   phone: string | undefined
 }

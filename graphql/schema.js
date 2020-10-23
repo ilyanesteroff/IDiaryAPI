@@ -84,6 +84,25 @@ module.exports = buildSchema(`
     public: Boolean!
   }
 
+  type UpdatedUser {
+    username: String
+    firstname: String
+    lastname: String 
+    password: String
+  }
+
+  type UpdatedUserInfo {
+    website: String!
+    company: String!
+    about: String!
+    relationshipStatus: String!
+  }
+
+  type UpdatedUserSettings {
+    public: !Boolean
+    phone: String
+  }
+
   type Request {
     _id: String!
     receiver: Follower!
@@ -108,15 +127,20 @@ module.exports = buildSchema(`
   input UpdateUserInputData {
     username: String
     firstname: String
-    lastname: String
-    email: String
+    lastname: String 
+    password: String
+  }
+
+  input UpdateUserInfoData {
+    website: String!
+    company: String!
+    about: String!
+    relationshipStatus: String!
+  }
+
+  input UpdatedUserSettingsData{
     public: Boolean
     phone: String
-    password: String
-    website: String
-    company: String
-    about: String
-    relationshipStatus: String
   }
 
   input CreateTodoInputData {
@@ -147,11 +171,10 @@ module.exports = buildSchema(`
   }
 
   type RootMutation {
-    acceptEmail(token: ID!) : AuthData!
-    requestPasswordReset(email: String!) : Boolean!
-    setNewPassword(token: String!, newPassword: String!) : Boolean!
     createUser(userInput: CreateUserInputData) : Boolean!
-    updateUser(userInput: UpdateUserInputData) : User!
+    updateUser(userInput: UpdateUserInputData) : UpdatedUser!
+    updateUserInfo(userInput: UpdateUserInfoData) : UpdatedUserInfo!
+    updateUserSettings(userInput: UpdatedUserSettingsData) : UpdatedUserSettings!
     deleteUser: Boolean!
     verifyPassword(password: String!) : Boolean!
     createTodo(todoInput: CreateTodoInputData) : Todo!
@@ -176,3 +199,9 @@ module.exports = buildSchema(`
     mutation: RootMutation
   }
 `)
+/*  public: Boolean
+    phone: String
+    website: String
+    company: String
+    about: String
+    relationshipStatus: String  */

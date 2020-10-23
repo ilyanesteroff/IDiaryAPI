@@ -1,7 +1,7 @@
 const bycrypt = require('bcryptjs')
 const { User } = require('../../js/models/User')
 const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers')
-const { randomBytes } = require('../assistants/random-bytes')
+const { randomBytes } = require('../../assistants/random-bytes')
 const { resetPasswordEmail } = require('../../assistants/email-sender')
 
 exports.requestPasswordReset = async function(email, req){

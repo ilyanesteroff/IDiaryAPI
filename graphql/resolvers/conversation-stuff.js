@@ -2,7 +2,7 @@ const mongo = require('mongodb')
 const {User} = require('../../js/models/User')
 const {Conversation} = require('../../js/models/Conversation')
 const {throwAnError, checkAndThrowError} = require('../../utils/error-handlers')
-const {randomBytes} = require('../assistants/random-bytes')
+const {randomBytes} = require('../../assistants/random-bytes')
 
 exports.createConversation = async function(receivers, message, req){
   try {

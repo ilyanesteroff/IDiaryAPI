@@ -27,6 +27,10 @@ export class Message extends DbModel{
     }, this.collection)
   }
 
+  static updateAuthorInManyMassages(oldName: string, newName: string){
+    return this.updateManyModels({ author: oldName }, { $set : { author: newName } }, this.collection)
+  }
+
   static updateManyMessages(query: object, data: object){
     return this.updateManyModels(query, data, this.collection)
   }

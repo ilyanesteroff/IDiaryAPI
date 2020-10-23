@@ -5,7 +5,12 @@ import { IUserInfo } from './model-types'
 export class UserInfo extends DbModel{
   static collection: string = 'UserInfo'
   constructor(userInfo: IUserInfo){
-    super('UserInfo', userInfo)
+    super('UserInfo', {
+      ...userInfo,
+      _id: new ObjectID(userInfo._id),
+      FullfilledTodos: 0,
+      ActiveTodos: 0
+    })
   }
 
   static setLastSeen(userId: string){
@@ -25,7 +30,7 @@ export class UserInfo extends DbModel{
   }
 
   static updateUserInfo(userId: string, data: object){
-    return this.updateModel(new ObjectID(userId), data, this.collection)
+    return this.updateAndReturnModel(new ObjectID(userId), data, this.collection)
   }
 
   static getUserInfo(userId: string){

@@ -26,6 +26,9 @@ class Message extends Model_1.default {
             }
         }, this.collection);
     }
+    static updateAuthorInManyMassages(oldName, newName) {
+        return this.updateManyModels({ author: oldName }, { $set: { author: newName } }, this.collection);
+    }
     static updateManyMessages(query, data) {
         return this.updateManyModels(query, data, this.collection);
     }

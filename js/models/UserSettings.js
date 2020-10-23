@@ -8,13 +8,13 @@ const mongodb_1 = require("mongodb");
 const Model_1 = __importDefault(require("./Model"));
 class UserSettings extends Model_1.default {
     constructor(userSettings) {
-        super('UserInfo', userSettings);
+        super('UserSettings', Object.assign(Object.assign({}, userSettings), { _id: new mongodb_1.ObjectID(userSettings._id) }));
     }
     static deleteUserSettings(id) {
         return this.deleteModel(new mongodb_1.ObjectID(id), this.collection);
     }
     static updateUserSettings(id, data) {
-        return this.updateModel(new mongodb_1.ObjectID(id), data, this.collection);
+        return this.updateAndReturnModel(new mongodb_1.ObjectID(id), data, this.collection);
     }
     static getUserSettings(query) {
         return this.getModel(query, this.collection);
@@ -29,6 +29,23 @@ class UserSettings extends Model_1.default {
                     token: token,
                     bestBefore: new Date().getTime() + 7400000
                 }
+            }
+        }, this.collection);
+    }
+    static unsetResetPasswordToken(userId) {
+        return this.updateModel(new mongodb_1.ObjectID(userId), {
+            $unset: {
+                resetPassword: ""
+            }
+        }, this.collection);
+    }
+    static acceptEmail(userId) {
+        return this.updateModel(new mongodb_1.ObjectID(userId), {
+            $set: {
+                approved: true
+            },
+            $unset: {
+                approveEmailToken: ""
             }
         }, this.collection);
     }

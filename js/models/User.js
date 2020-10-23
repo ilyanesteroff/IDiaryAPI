@@ -10,8 +10,8 @@ class User extends Model_1.default {
     constructor(userInfo) {
         super('Users', Object.assign(Object.assign({}, userInfo), { createdAt: new Date() }));
     }
-    static updateUser(userId, info) {
-        return this.updateModel(new mongodb_1.ObjectID(userId), info, this.collection);
+    static updateUser(userId, data) {
+        return this.updateAndReturnModel(new mongodb_1.ObjectID(userId), data, this.collection);
     }
     static deleteUser(userId) {
         return this.deleteModel(new mongodb_1.ObjectID(userId), this.collection);

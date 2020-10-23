@@ -29,7 +29,8 @@ module.exports = async function(client){
       conversations: conversations,
       requestsTo: outcomingRequests,
       requestsFrom: incomingRequests,
-      createdAt: user.createdAt.toISOString(), 
+      lastSeen: userInfo.lastSeen.toISOString(),
+      createdAt: client.createdAt.toISOString(), 
     }
   } catch(err) {
     checkAndThrowError(err) 

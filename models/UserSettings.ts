@@ -5,7 +5,10 @@ import { IUserSettings } from './model-types'
 export class UserSettings extends DbModel{
   static collection: string = 'UserSettings'
   constructor(userSettings: IUserSettings){
-    super('UserInfo', userSettings)
+    super('UserSettings', {
+      ...userSettings,
+      _id: new ObjectID(userSettings._id),
+    })
   }
 
   static deleteUserSettings(id: string){
@@ -13,7 +16,7 @@ export class UserSettings extends DbModel{
   }
 
   static updateUserSettings(id: string, data: object){
-    return this.updateModel(new ObjectID(id), data, this.collection)
+    return this.updateAndReturnModel(new ObjectID(id), data, this.collection)
   }
 
   static getUserSettings(query: object){
@@ -32,6 +35,26 @@ export class UserSettings extends DbModel{
           bestBefore: new Date().getTime() + 7400000
         }
       }
+    }, this.collection)
+  }
+
+  static unsetResetPasswordToken(userId: string){
+    return this.updateModel(new ObjectID(userId), {
+      $unset : {
+        resetPassword: ""
+      }
+    }, this.collection)
+  }
+
+  static acceptEmail(userId: string) {
+    return this.updateModel(new ObjectID(userId),  
+    { 
+      $set: { 
+        approved: true 
+      }, 
+      $unset: { 
+        approveEmailToken: "" 
+      } 
     }, this.collection)
   }
 }

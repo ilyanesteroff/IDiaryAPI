@@ -1,4 +1,4 @@
 const crypto = require('crypto')
 const { promisify } = require('util')
 
-exports.randomBytes = promisify(crypto.randomBytes)
+module.exports = promisify(crypto.randomBytes)

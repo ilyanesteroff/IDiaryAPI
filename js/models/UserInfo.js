@@ -8,7 +8,7 @@ const mongodb_1 = require("mongodb");
 const Model_1 = __importDefault(require("./Model"));
 class UserInfo extends Model_1.default {
     constructor(userInfo) {
-        super('UserInfo', userInfo);
+        super('UserInfo', Object.assign(Object.assign({}, userInfo), { _id: new mongodb_1.ObjectID(userInfo._id), FullfilledTodos: 0, ActiveTodos: 0 }));
     }
     static setLastSeen(userId) {
         return this.updateModel(new mongodb_1.ObjectID(userId), {
@@ -24,7 +24,7 @@ class UserInfo extends Model_1.default {
         return this.deleteModel(new mongodb_1.ObjectID(userId), this.collection);
     }
     static updateUserInfo(userId, data) {
-        return this.updateModel(new mongodb_1.ObjectID(userId), data, this.collection);
+        return this.updateAndReturnModel(new mongodb_1.ObjectID(userId), data, this.collection);
     }
     static getUserInfo(userId) {
         return this.getModel({ _id: new mongodb_1.ObjectID(userId) }, this.collection);

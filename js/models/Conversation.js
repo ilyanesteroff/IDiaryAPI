@@ -33,6 +33,9 @@ class Conversation extends Model_1.default {
     static updateManyConversations(query, data) {
         return this.updateManyModels(query, data, this.collection);
     }
+    static updateUserInManyConversations(userId, newUser) {
+        return this.updateManyConversations({ "participants._id": userId }, { $set: { "participants.$": newUser } });
+    }
     static countConversations(userId) {
         return this.countModels({
             participants: {

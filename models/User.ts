@@ -13,8 +13,8 @@ export class User extends DbModel{
     })
   }
 
-  static updateUser(userId: string, info: object) {
-    return this.updateModel(new ObjectID(userId), info, this.collection)
+  static updateUser(userId: string, data: object) {
+    return this.updateAndReturnModel(new ObjectID(userId), data, this.collection)
   }
 
   static deleteUser(userId: string) {

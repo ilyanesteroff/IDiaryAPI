@@ -10,7 +10,7 @@ export default class DbModel{
     this.data = data
   }
 
-  save() {
+  public save() {
     return getDb().collection(this.collection)
       .insertOne(this.data)
       .then(res => {
@@ -22,7 +22,7 @@ export default class DbModel{
       .catch(err => err)
   }
 
-  protected static updateModel(id: ObjectID, data: object, collection: string){
+  public static updateModel(id: ObjectID, data: object, collection: string){
     return getDb().collection(collection)
       .findOneAndUpdate({ _id: new ObjectID(id)}, data)
       .catch(err => err)

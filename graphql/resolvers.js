@@ -14,6 +14,11 @@ const findUser = require('./resolvers/find-user')
 const viewFStats = require('./resolvers/view-following')
 const getConversations = require('./resolvers/view-conversations')
 const findTodosByTagname = require('./resolvers/find-todos-by-tagname')
+const createNewUser = require('./resolvers/create-new-user')
+const updateUser = require('./resolvers/update-user')
+const updateUserInfo = require('./resolvers/update-user-info')
+const updateUserSettings = require('./resolvers/update-user-settings')
+const deleteUser = require('./resolvers/delete-user')
 
 
 module.exports = {
@@ -31,21 +36,19 @@ module.exports = {
 
   conversations: ({ page }, { user }) => getConversations(user, page),
 
-  findTodosByTagname: ( {tag, page }, { user }) => findTodosByTagname(tag, page, user),
+  findTodosByTagname: ( { tag, page }, { user }) => findTodosByTagname(tag, page, user),
   
 
+  
+  createUser: ({ userInput }) => createNewUser(userInput),
+  
+  updateUser: ({ userInput }, { user }) => updateUser(userInput, user),
+  
+  updateUserInfo: ({ userInput }, { user }) => updateUserInfo(userInput, user),
+  
+  updateUserSettings: ({ userInput }, { user }) => updateUserSettings(userInput, user),
 
-  acceptEmail: ({token}) => authResolvers.acceptEmail(token),
-
-  requestPasswordReset: ({email}, req) => pwReset.requestPasswordReset(email, req),
-  
-  setNewPassword: ({token, newPassword}, req) => pwReset.setNewPassword(token, newPassword, req),
-  
-  createUser: ({userInput}, req) => userManips.createUser(userInput, req),
-  
-  updateUser: ({userInput}, req) => userManips.updateUser(userInput, req),
-  
-  deleteUser: (args, req) => userManips.deleteUser(req),
+  deleteUser: (args, { user }) => deleteUser(user),
   
   verifyPassword: ({password}, req) => authResolvers.verifyPassword(password, req),
   

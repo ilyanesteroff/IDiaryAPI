@@ -16,7 +16,7 @@ module.exports = async function(req, res) {
     const hashedPw = await bycrypt.hash(newPassword, 16)
     await User.updateUser(passwordReset._id.toString(), { $set : { password : hashedPw }})
 
-    return res.status(200).json({ reset: true })
+    return res.status(201).json({ reset: true })
   } catch(err) {
     return res.status(500).json({ error: err.message })
   }

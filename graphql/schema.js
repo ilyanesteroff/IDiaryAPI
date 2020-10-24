@@ -111,6 +111,7 @@ module.exports = buildSchema(`
   }
 
   type FollowingInfo {
+    _id: String!
     user: Follower!
     followingSince: String!
   }
@@ -164,9 +165,13 @@ module.exports = buildSchema(`
     checkEmailAndUsername(email: String!, username: String!): Boolean!
     todos(userId: ID, page: Int!) : [Todo]!
     user(userId: ID): User!
+    requests(incoming: Boolean!, page: Int!) : [Request]!
     findUser(username: String!) : Follower!
-    followingOrFollowers(userId: ID, field: String!): [FollowingInfo]!
+    following(userId: ID!, page: Int!): [FollowingInfo]!
+    followers(userId: ID!, page: Int!): [FollowingInfo]!
     conversations(page: Int!): [Conversation]!
+    messages(page: Int!, convId: ID!): [Message]!
+    likedMessages(page: Int!, convId: ID!): [Message]!
     findTodosByTagname(tag: String!, page: Int!) : [Todo]!
   }
 
@@ -176,22 +181,11 @@ module.exports = buildSchema(`
     updateUserInfo(userInput: UpdateUserInfoData) : UpdatedUserInfo!
     updateUserSettings(userInput: UpdatedUserSettingsData) : UpdatedUserSettings!
     deleteUser: Boolean!
-    verifyPassword(password: String!) : Boolean!
     createTodo(todoInput: CreateTodoInputData) : Todo!
     updateTodo(todoInput: UpdateTodoInputData, todoId: ID!) : Todo!
     deleteTodo(todoId: ID!) : Boolean!
-    sendFollowRequest(to: ID!) : Boolean!
-    unsendFollowRequest(to: ID!) : Boolean!
-    rejectFollowRequest(from: ID!) : Boolean
-    acceptFollower(followerId: ID!) : Boolean!
-    unfollow(userId: ID!) : Boolean!
-    blockUser(userId: ID!) : Boolean!
-    unblockUser(userId: ID!) : Boolean!
-    isAbleToContact(userId: ID!) : Boolean!
-    createConversation(members: [ID!]!, message: String!) : Conversation!
-    writeMessage(text: String!, convId: ID!) : Message!
-    updateMessage(text: String!, messageId: ID!, convId: ID!): Message!
-    deleteMessage(messageId: ID!, convId: ID!) : Boolean!
+    blockUser(userId: ID!, reason: String!) : Boolean!
+    unblockUser(username: String!) : Boolean!
   }
 
   schema {
@@ -199,9 +193,3 @@ module.exports = buildSchema(`
     mutation: RootMutation
   }
 `)
-/*  public: Boolean
-    phone: String
-    website: String
-    company: String
-    about: String
-    relationshipStatus: String  */

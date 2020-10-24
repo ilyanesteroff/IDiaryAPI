@@ -4,6 +4,7 @@ const { Request } = require('../../js/models/Request')
 const { Follower } = require('../../js/models/Follower')
 const { Conversation } = require('../../js/models/Conversation')
 const { Message } = require('../../js/models/Message')
+const { BlockedUser } = require('../../js/models/BlockedUser')
 const updateUserActivity = require('../../assistants/update-user-activity')
 const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers')
 
@@ -20,6 +21,7 @@ module.exports = async function(userInput, client){
     await Follower.updateFollower(client._id, shortUser)
     await Follower.updateFollowing(client._id, shortUser)
     await Conversation.updateUserInManyConversations(client._id, shortUser)
+    await BlockedUser.updateBlockedUsers(client._id, shortUser)
     client.username !== userInput.username && await Message.updateAuthorInManyMassages(client.username, userInput.username)
 
     return updatedUser

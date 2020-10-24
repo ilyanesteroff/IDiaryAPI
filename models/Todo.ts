@@ -6,7 +6,10 @@ import DbModel from './Model'
 export class Todo extends DbModel{
   static collection: string = 'Todos'
   constructor(todo: Itodo){
-    super('Todos', todo)
+    super('Todos', {
+      ...todo, 
+      createdAt: new Date()
+    })
   }
 
   static updateTodo(todoId : string, data: object) {
@@ -17,14 +20,14 @@ export class Todo extends DbModel{
     return this.updateManyModels(query, data, this.collection)
   }
   
-  static findOneTodo(query: object) {
-    return this.getModel(query, this.collection)
+  static getSpecificFields(query: object, project: object){
+    return this._getSpecificFields(query, project, this.collection)
   }
-
+  
   static findManyTodos(query: object, currentPage: number, limit: number) {
     return this.getManyModels(query, this.collection, {createdAt: -1}, currentPage, limit)
   }
-   
+  
   static countTodos(query: object) {
     return this.countModels(query, this.collection)
   }

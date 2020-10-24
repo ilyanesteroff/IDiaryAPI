@@ -64,9 +64,10 @@ export class BlockedUser extends DbModel{
   }
 
   static deleteBlocked(userId: string){
-    return this.deleteManyModels({
-      userWhoBlocked: userId
-    }, this.collection)
+    return this.deleteManyModels({ $or : [
+      { userWhoBlocked: userId },
+      { "blockedUser.id" : userId }
+    ]}, this.collection)
   }
 }
 

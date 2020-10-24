@@ -9,6 +9,10 @@ export class Request extends DbModel{
     super('Requests', requestInfo)
   }
 
+  static findRequestById(reqId: string){
+    return this.getModel({ _id: new ObjectID(reqId) }, this.collection)
+  }
+
   static findRequestFrom(userId: string, username: string){
     return this.getModel(
       { 
@@ -43,6 +47,17 @@ export class Request extends DbModel{
 
   static deleteAllRequestsForSender(senderId: string){
     return this.deleteManyModels({ "sender._id" : senderId }, this.collection)
+  }
+
+  static handleUserBlocking(user1Id: string, user2Id: string){
+    return this.deleteManyModels(
+      {
+        $or : [
+          { "sender._id": user1Id ,  "receiver._id": user2Id },
+          { "sender._id": user2Id ,  "receiver._id": user1Id }
+        ]
+      }, this.collection
+    )
   }
 
   static deleteAllRequestsForReceiver(receiverId: string){

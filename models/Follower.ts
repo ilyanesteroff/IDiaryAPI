@@ -63,17 +63,28 @@ export class Follower extends DbModel{
     }, this.collection)
   }
 
-  static unfollowOrRemoveFollower(followerId: string){
-    return this.deleteModel(new ObjectID(followerId), this.collection)
+  static unfollowOrRemoveFollower(followId: string){
+    return this.deleteModel(new ObjectID(followId), this.collection)
   }
 
   static deleteFollowersAndFollowings(userId: string){
     return this.deleteManyModels(
       {
         $or: [
-            { "followingTo._id": userId }, { "followers._id": userId }
+            { "followingTo._id": userId }, { "follower._id": userId }
         ]
       }, this.collection)
+  }
+
+  static handleUserBlocking(user1Id: string, user2Id: string){
+    return this.deleteManyModels(
+      {
+        $or : [
+          { "followingTo._id": user1Id ,  "follower._id": user2Id },
+          { "followingTo._id": user2Id ,  "follower._id": user1Id }
+        ]
+      }, this.collection
+    )
   }
 
   static countFollowers(userId: string){

@@ -1,15 +1,6 @@
 const approveEmail = require('../api/controllers/accept-email')
 const { mongoConnect } = require('../js/utils/db-connection')
-
-res = {
-  json: function(_res) {
-    console.log(_res)
-  },
-  status: function(s) {
-    this.statusCode = s
-    return this
-  }
-}
+const res = require('./utils/response')
 
 req = {
   body: {

@@ -1,6 +1,6 @@
 const { User } = require('../../js/models/User')
 const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers')
-const someoneBlocked = require('../checks/if-users-blocked')
+const someoneBlocked = require('../../assistants/user/if-users-blocked')
 const updateUserActivity = require('../../assistants/update-user-activity')
 
 

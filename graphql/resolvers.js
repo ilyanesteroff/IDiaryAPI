@@ -1,17 +1,13 @@
-const userManips = require('./resolvers/user-manipuations')
-const authResolvers = require('./resolvers/auth-stuff')
-const pwReset = require('./resolvers/password-reset')
-const views = require('./resolvers/view-something')
-const todoManips = require('./resolvers/todo-manipulations')
-const FandR = require('./resolvers/following-requesting')
-const security = require('./resolvers/security-stuff')
-const convResolvers = require('./resolvers/conversation-stuff')
 const getUserData = require('./resolvers/get-full-user')
 const checkEmailAndUsername = require('./resolvers/check-username-email')
 const viewTodos = require('./resolvers/view-todos')
 const viewUser = require('./resolvers/view-user')
+const viewRequests = require('./resolvers/requests')
 const findUser = require('./resolvers/find-user')
-const viewFStats = require('./resolvers/view-following')
+const viewFollowers = require('./resolvers/view-followers')
+const viewFollowings = require('./resolvers/view-followings')
+const viewMessages = require('./resolvers/messages')
+const viewLikedMessages = require('./resolvers/liked-messags')
 const getConversations = require('./resolvers/view-conversations')
 const findTodosByTagname = require('./resolvers/find-todos-by-tagname')
 const createNewUser = require('./resolvers/create-new-user')
@@ -19,6 +15,11 @@ const updateUser = require('./resolvers/update-user')
 const updateUserInfo = require('./resolvers/update-user-info')
 const updateUserSettings = require('./resolvers/update-user-settings')
 const deleteUser = require('./resolvers/delete-user')
+const createTodo = require('./resolvers/create-todo')
+const updateTodo = require('./resolvers/update-todo')
+const deleteTodo = require('./resolvers/delete-todo')
+const blockUser = require('./resolvers/block-user')
+const unblockUser = require('./resolvers/unblock-user')
 
 
 module.exports = {
@@ -29,12 +30,20 @@ module.exports = {
   todos: ({ userId, page }, { user }) => viewTodos(userId, page, user),
 
   user: ({ userId }, { user }) => viewUser(userId, user),
-  //returns a user when searching for users
+
+  requests: ({ incoming, page }, { user }) => viewRequests(incoming, page, user),
+
   findUser: ({ username }, { user }) => findUser(username, user),
-  //fetching who follows users or whom user is following
-  followingOrFollowers: ({ userId, field }, { user }) => viewFStats(userId, field, user),
+  
+  following: ({ userId, page }, { user }) => viewFollowings(userId, page, user),
+  
+  followers: ({ userId, page }, { user }) => viewFollowers(userId, page, user),
 
   conversations: ({ page }, { user }) => getConversations(user, page),
+
+  messages: ({ page, convId }, { user }) => viewMessages(page, convId, user),
+
+  likedMessages: ({ page, convId }, { user }) => viewLikedMessages(page, convId, user),
 
   findTodosByTagname: ( { tag, page }, { user }) => findTodosByTagname(tag, page, user),
   
@@ -49,36 +58,14 @@ module.exports = {
   updateUserSettings: ({ userInput }, { user }) => updateUserSettings(userInput, user),
 
   deleteUser: (args, { user }) => deleteUser(user),
+    
+  createTodo: ({ todoInput }, { user }) => createTodo(todoInput, user),
+
+  updateTodo: ({ todoInput, todoId }, { user }) => updateTodo(todoInput, todoId, user),
   
-  verifyPassword: ({password}, req) => authResolvers.verifyPassword(password, req),
+  deleteTodo: ({ todoId }, { user }) => deleteTodo(todoId, user),
   
-  createTodo: ({todoInput}, req) => todoManips.createTodo(todoInput, req),
+  blockUser: ({ userId, reason }, { user }) => blockUser(userId, reason, user),
 
-  updateTodo: ({todoInput, todoId}, req) => todoManips.updateTodo(todoInput, todoId, req),
-  
-  deleteTodo: ({todoId}, req) => todoManips.deleteTodo(todoId, req),
-
-  sendFollowRequest: ({to}, req) => FandR.sendFollowRequest(to, req),
-
-  unsendFollowRequest: ({to}, req) => FandR.unsendFollowRequest(to, req),
-
-  rejectFollowRequest: ({from}, req) => FandR.rejectFollowRequest(from, req),
-  
-  acceptFollower: ({followerId}, req) => FandR.acceptFollower(followerId, req),
-
-  unfollow: ({userId}, req) => FandR.unfollow(userId, req),
-  
-  blockUser: ({userId}, req) => security.blockUser(userId, req),
-
-  unblockUser: ({userId}, req) => security.unblockUser(userId, req),
-
-  isAbleToContact: ({userId}, req) => security.isAbleToContact(userId, req),
-  //ps dont forget to improve conversation searchers
-  createConversation: ({members, message}, req) => convResolvers.createConversation(members, message, req),
-
-  writeMessage: ({text, convId}, req) => convResolvers.writeMessage(text, convId, req),
-
-  updateMessage: ({text, messageId, convId}, req) => convResolvers.updateMessage(text, messageId, convId, req),
-
-  deleteMessage: ({messageId, convId}, req) => convResolvers.deleteMessage(messageId, convId, req)
+  unblockUser: ({ username }, { user }) => unblockUser(username, user)
 }

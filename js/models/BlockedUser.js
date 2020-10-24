@@ -44,9 +44,10 @@ class BlockedUser extends Model_1.default {
         }, this.collection);
     }
     static deleteBlocked(userId) {
-        return this.deleteManyModels({
-            userWhoBlocked: userId
-        }, this.collection);
+        return this.deleteManyModels({ $or: [
+                { userWhoBlocked: userId },
+                { "blockedUser.id": userId }
+            ] }, this.collection);
     }
 }
 exports.BlockedUser = BlockedUser;

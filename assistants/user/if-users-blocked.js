@@ -1,5 +1,4 @@
-const {BlockedUser} = require('../../js/models/BlockedUser')
-const {checkAndThrowError} = require('../../utils/error-handlers')
+const { BlockedUser } = require('../../js/models/BlockedUser')
 
 
 module.exports = async function(user1Id, user2Id){
@@ -11,6 +10,6 @@ module.exports = async function(user1Id, user2Id){
     
     return false
   } catch(err){
-    checkAndThrowError(err)
+    throw err
   }
 }

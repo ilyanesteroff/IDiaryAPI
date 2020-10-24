@@ -8,7 +8,7 @@ const mongodb_1 = require("mongodb");
 const Model_1 = __importDefault(require("./Model"));
 class Message extends Model_1.default {
     constructor(messageInfo) {
-        super('Messages', messageInfo);
+        super('Messages', Object.assign(Object.assign({}, messageInfo), { writtenAt: new Date(), seen: false }));
     }
     static viewMessages(convId) {
         return this.updateManyModels({

@@ -7,21 +7,18 @@ export interface Itodo {
   timeToComplete: number | undefined
   public: boolean
   tags: string[] | undefined
-  createdAt: Date
 }
 
 export interface Iconversation{
   participants: follower[]
-  latestMessage: IMessage
-  updatedAt: Date
+  latestMessage: IMessage | null
+  updatedAt: Date | null
 }
 
 export interface IMessage{
   conversationID: string
   author: string
   text: string
-  writtenAt: Date
-  seen: boolean
 }
 
 export type TodoAuthor = {

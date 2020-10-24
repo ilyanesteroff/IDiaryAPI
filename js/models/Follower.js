@@ -42,13 +42,21 @@ class Follower extends Model_1.default {
             }
         }, this.collection);
     }
-    static unfollowOrRemoveFollower(followerId) {
-        return this.deleteModel(new mongodb_1.ObjectID(followerId), this.collection);
+    static unfollowOrRemoveFollower(followId) {
+        return this.deleteModel(new mongodb_1.ObjectID(followId), this.collection);
     }
     static deleteFollowersAndFollowings(userId) {
         return this.deleteManyModels({
             $or: [
-                { "followingTo._id": userId }, { "followers._id": userId }
+                { "followingTo._id": userId }, { "follower._id": userId }
+            ]
+        }, this.collection);
+    }
+    static handleUserBlocking(user1Id, user2Id) {
+        return this.deleteManyModels({
+            $or: [
+                { "followingTo._id": user1Id, "follower._id": user2Id },
+                { "followingTo._id": user2Id, "follower._id": user1Id }
             ]
         }, this.collection);
     }

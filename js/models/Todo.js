@@ -8,7 +8,7 @@ const mongodb_1 = require("mongodb");
 const Model_1 = __importDefault(require("./Model"));
 class Todo extends Model_1.default {
     constructor(todo) {
-        super('Todos', todo);
+        super('Todos', Object.assign(Object.assign({}, todo), { createdAt: new Date() }));
     }
     static updateTodo(todoId, data) {
         return this.updateAndReturnModel(new mongodb_1.ObjectID(todoId), data, this.collection);
@@ -16,8 +16,8 @@ class Todo extends Model_1.default {
     static updateManyTodos(query, data) {
         return this.updateManyModels(query, data, this.collection);
     }
-    static findOneTodo(query) {
-        return this.getModel(query, this.collection);
+    static getSpecificFields(query, project) {
+        return this._getSpecificFields(query, project, this.collection);
     }
     static findManyTodos(query, currentPage, limit) {
         return this.getManyModels(query, this.collection, { createdAt: -1 }, currentPage, limit);

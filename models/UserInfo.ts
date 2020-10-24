@@ -33,6 +33,22 @@ export class UserInfo extends DbModel{
     return this.updateAndReturnModel(new ObjectID(userId), data, this.collection)
   }
 
+  static increaseActiveTodos(userId: string){
+    return this.updateModel(new ObjectID(userId), { $inc : { ActiveTodos: 1 } }, this.collection)
+  }
+
+  static increaseCompletedTodos(userId: string){
+    return this.updateModel(new ObjectID(userId), { $inc : { FullfilledTodos: 1 } }, this.collection)
+  }
+
+  static decreaseActiveTodos(userId: string){
+    return this.updateModel(new ObjectID(userId), { $inc : { ActiveTodos: -1 } }, this.collection)
+  }
+
+  static decreaseCompletedTodos(userId: string){
+    return this.updateModel(new ObjectID(userId), { $inc : { FullfilledTodos: -1 } }, this.collection)
+  }
+
   static getUserInfo(userId: string){
     return this.getModel({ _id: new ObjectID(userId) }, this.collection)
   }

@@ -24,7 +24,7 @@ module.exports = async function(req, res) {
       userId: user._id.toString()
     }, `q%df^&sr$r%fsdD^**^FGYJK/YUF%R&^%n%,()n3Pi$'kápan4v34v55y$v`, { expiresIn : '720h'})
 
-    return res.status(200).json({
+    return res.status(201).json({
       token: token,
       userId: user._id.toString(),
       firstname: user.firstname

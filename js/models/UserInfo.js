@@ -26,6 +26,18 @@ class UserInfo extends Model_1.default {
     static updateUserInfo(userId, data) {
         return this.updateAndReturnModel(new mongodb_1.ObjectID(userId), data, this.collection);
     }
+    static increaseActiveTodos(userId) {
+        return this.updateModel(new mongodb_1.ObjectID(userId), { $inc: { ActiveTodos: 1 } }, this.collection);
+    }
+    static increaseCompletedTodos(userId) {
+        return this.updateModel(new mongodb_1.ObjectID(userId), { $inc: { FullfilledTodos: 1 } }, this.collection);
+    }
+    static decreaseActiveTodos(userId) {
+        return this.updateModel(new mongodb_1.ObjectID(userId), { $inc: { ActiveTodos: -1 } }, this.collection);
+    }
+    static decreaseCompletedTodos(userId) {
+        return this.updateModel(new mongodb_1.ObjectID(userId), { $inc: { FullfilledTodos: -1 } }, this.collection);
+    }
     static getUserInfo(userId) {
         return this.getModel({ _id: new mongodb_1.ObjectID(userId) }, this.collection);
     }

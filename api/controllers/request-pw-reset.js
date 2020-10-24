@@ -22,7 +22,7 @@ module.exports = async function(req, res){
     await UserSettings.setResetPasswordToken(user._id.toString(), token)
     resetPasswordEmail(email, 'Password reset', token)
 
-    return res.status(400).json({ requested: true })
+    return res.status(201).json({ requested: true })
   } catch(err) {
     return res.status(500).json({ error: err.massage })
   }

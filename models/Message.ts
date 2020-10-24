@@ -5,7 +5,11 @@ import { IMessage } from './model-types'
 export class Message extends DbModel{
   static collection: string = 'Messages'
   constructor(messageInfo: IMessage){
-    super('Messages', messageInfo)
+    super('Messages', {
+      ...messageInfo,
+      writtenAt: new Date(),
+      seen: false
+    })
   }
 
   static viewMessages(convId: string){

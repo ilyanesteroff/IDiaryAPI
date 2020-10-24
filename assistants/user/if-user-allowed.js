@@ -1,12 +1,12 @@
 const { Follower } = require('../../js/models/Follower')
-const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers')
-const findOutIfSomeoneIsBlocked = require('../../assistants/user/if-users-blocked')
-const findOutIfUserPublic = require('../../assistants/user/if-user-is-public')
+const findOutIfUserPublic = require('./if-user-is-public')
+const findOutIfSomeoneIsBlocked = require('./if-users-blocked')
 
 
-module.exports = async function(client, userId){
+module.exports = async function(userId, client) {
   try {
-    !client && throwAnError('Authorization failed', 400) 
+    if(!client || !userId) throw new Error('client or user Id was not provided')
+
     const ifUserFollowsAnotherUser = await Follower.findFollower(userId, client.username)
     if(!ifUserFollowsAnotherUser) {
       const ifBlocked = await findOutIfSomeoneIsBlocked(client._id, userId)
@@ -14,8 +14,9 @@ module.exports = async function(client, userId){
       const ifUserIsPublic = await findOutIfUserPublic(userId)
       if(!ifUserIsPublic) return false
     }
+
     return true
-  } catch(err){
-    checkAndThrowError(err)
+  } catch(err) {
+    throw err
   }
 }

@@ -10,6 +10,9 @@ class Request extends Model_1.default {
     constructor(requestInfo) {
         super('Requests', requestInfo);
     }
+    static findRequestById(reqId) {
+        return this.getModel({ _id: new mongodb_1.ObjectID(reqId) }, this.collection);
+    }
     static findRequestFrom(userId, username) {
         return this.getModel({
             "sender.username": username,
@@ -33,6 +36,14 @@ class Request extends Model_1.default {
     }
     static deleteAllRequestsForSender(senderId) {
         return this.deleteManyModels({ "sender._id": senderId }, this.collection);
+    }
+    static handleUserBlocking(user1Id, user2Id) {
+        return this.deleteManyModels({
+            $or: [
+                { "sender._id": user1Id, "receiver._id": user2Id },
+                { "sender._id": user2Id, "receiver._id": user1Id }
+            ]
+        }, this.collection);
     }
     static deleteAllRequestsForReceiver(receiverId) {
         return this.deleteManyModels({ "receiver._id": receiverId }, this.collection);

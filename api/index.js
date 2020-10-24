@@ -6,6 +6,16 @@ const checkIfPwResetIsActual = require('./controllers/if-pw-reset-is-actual')
 const acceptEmail = require('./controllers/accept-email')
 const requestPwReset = require('./controllers/request-pw-reset')
 const setNewPassword = require('./controllers/set-new-password')
+const verifyPassword = require('./controllers/veify-password')
+const ifUserAbleToContact = require('./controllers/if-user-is-allowed')
+const sendFollowRequest = require('./controllers/send-follow-request')
+const unsendFollowRequest = require('./controllers/unsend-follow-request')
+const rejectFollowRequest = require('./controllers/reject-follow-request')
+const acceptFollowRequest = require('./controllers/accept-follow-request')
+const unfollow = require('./controllers/unfollow')
+const writeFirstMessage = require('./controllers/create-conversation')
+const writeMessage = require('./controllers/write-message')
+
 
 const router = express.Router()
 
@@ -16,6 +26,24 @@ router.patch('/acceptEmail', acceptEmail)
 router.patch('/requestPasswordReset', requestPwReset)
 
 router.patch('/setNewPassword', setNewPassword)
+
+router.patch('/verifyPassword', checkAuthorization, verifyPassword)
+
+router.patch('/ifUserAbleToContact', checkAuthorization, ifUserAbleToContact)
+
+router.patch('/sendFollowRequest', checkAuthorization, sendFollowRequest)
+
+router.patch('/acceptFollowRequest', checkAuthorization, acceptFollowRequest)
+
+router.patch('/writeFirstMessage', checkAuthorization, writeFirstMessage)
+
+router.patch('/writeMessage', checkAuthorization, writeMessage)
+
+router.delete('/unsendFollowRequest/:reqId', checkAuthorization, unsendFollowRequest)
+
+router.delete('/rejectFollowRequest/:reqId', checkAuthorization, rejectFollowRequest)
+
+router.delete('/unfollowOrRemoveFollower/:followId', checkAuthorization, unfollow)
 
 router.get('/countTodosByTag', checkAuthorization, countTodosByTag)
 

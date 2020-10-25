@@ -88,18 +88,17 @@ module.exports = buildSchema(`
     username: String
     firstname: String
     lastname: String 
-    password: String
   }
 
   type UpdatedUserInfo {
-    website: String!
-    company: String!
-    about: String!
-    relationshipStatus: String!
+    website: String
+    company: String
+    about: String
+    relationshipStatus: String
   }
 
   type UpdatedUserSettings {
-    public: !Boolean
+    public: Boolean
     phone: String
   }
 
@@ -188,8 +187,6 @@ module.exports = buildSchema(`
     createTodo(todoInput: CreateTodoInputData) : Todo!
     updateTodo(todoInput: UpdateTodoInputData, todoId: ID!) : Todo!
     deleteTodo(todoId: ID!) : Boolean!
-    blockUser(userId: ID!, reason: String!) : Boolean!
-    unblockUser(username: String!) : Boolean!
   }
 
   schema {

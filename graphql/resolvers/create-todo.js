@@ -9,7 +9,7 @@ const updateUserActivity = require('../../assistants/update-user-activity')
 module.exports = async function(todoInput, client){
   try {
     !client && throwAnError('Authorization failed', 400)
-    await updateUserActivity(client._id)
+    updateUserActivity(client._id)
     const clientPublic = await UserSettings.getSpecificFields({ _id: new ObjectID(client._id) }, { _id : 0, public: 1 })
     const todo = new Todo({ 
       ...todoInput, 
@@ -20,7 +20,8 @@ module.exports = async function(todoInput, client){
       }
     })
     const savedTodo = await todo.save()
-    if(todo.completed) await UserInfo.increaseCompletedTodos(client._id)
+
+    if(savedTodo.completed) await UserInfo.increaseCompletedTodos(client._id)
     else await UserInfo.increaseActiveTodos(client._id)
     return {
       ...savedTodo,

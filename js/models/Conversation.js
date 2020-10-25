@@ -33,6 +33,7 @@ class Conversation extends Model_1.default {
             }
         }, this.collection);
     }
+    //mb remove this
     static updateManyConversations(query, data) {
         return this.updateManyModels(query, data, this.collection);
     }

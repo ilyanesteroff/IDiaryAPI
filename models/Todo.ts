@@ -1,5 +1,5 @@
 import { ObjectID } from 'mongodb'
-import { Itodo } from './model-types'
+import { Itodo, TodoAuthor } from './model-types'
 import DbModel from './Model'
 
 
@@ -16,10 +16,14 @@ export class Todo extends DbModel{
     return this.updateAndReturnModel(new ObjectID(todoId), data, this.collection)
   }
   
-  static updateManyTodos(query: object, data: object){
-    return this.updateManyModels(query, data, this.collection)
+  static updateCreatorName(creatorId: string, newUsername: string){
+    return this.updateManyModels({ "creator._id" : creatorId }, { $set: { "creator.username" : newUsername } }, this.collection)
   }
   
+  static updateCreatorPrivacy(creatorId: string, privacy: boolean){
+    return this.updateManyModels({ "creator._id" : creatorId }, { $set: { "creator.public" : privacy } }, this.collection)
+  }
+
   static getSpecificFields(query: object, project: object){
     return this._getSpecificFields(query, project, this.collection)
   }

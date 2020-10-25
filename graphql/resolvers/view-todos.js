@@ -1,9 +1,9 @@
 const { Todo } = require('../../js/models/Todo')
 const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers')
-const checkUsersCompatibility = require('./if-user-able-contact')
+const checkUsersCompatibility = require('../../assistants/user/if-user-allowed')
 const updateUserActivity = require('../../assistants/update-user-activity')
 
-
+ 
 module.exports = async function(userId, page, client) {
   try{
     !client && throwAnError('Authorization failed', 400)
@@ -11,9 +11,9 @@ module.exports = async function(userId, page, client) {
     let todos 
     if(client._id === userId || !userId) todos = await Todo.findManyTodos({ "creator._id" : client._id }, page, 20)
     else {
-      const verdict = await checkUsersCompatibility(client, userId)
+      const verdict = await checkUsersCompatibility(userId, client)
       verdict
-        ? todos = await Todo.findManyTodos({ "creator._id" : client._id }, page, 20)
+        ? todos = await Todo.findManyTodos({ "creator._id" : client._id, public: true }, page, 20)
         : throwAnError('You are not allowed doing this', 400)
     }
 

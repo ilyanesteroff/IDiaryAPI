@@ -27,7 +27,7 @@ module.exports = async function(req, res){
     if(!requestReceiver) return res.status(404).json({ error: 'Receiver not found' })
     
     const request = new Request({
-      sender: User.formatUserAsFollower(user),
+      sender: { ...User.formatUserAsFollower(user), _id: user._id },
       receiver: { ...requestReceiver, _id: requestReceiver._id.toString() },
       sentAt: new Date
     })

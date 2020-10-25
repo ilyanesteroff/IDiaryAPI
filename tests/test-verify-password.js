@@ -2,11 +2,11 @@ const rl = require('./utils/readline')
 const verify =  require('../api/controllers/veify-password')
 const { mongoConnect } = require('../js/utils/db-connection')
 const res = require('./utils/response')
-const client = require('./utils/client')
+const { client1 } = require('./utils/client')
 
 const req = {
   body: {},
-  user: client
+  user: client1
 }
 
 const _verify = async _ => {

@@ -13,6 +13,10 @@ export class Request extends DbModel{
     return this.getModel({ _id: new ObjectID(reqId) }, this.collection)
   }
 
+  static getSpecificFields(reqId: string, project: object){
+    return this._getSpecificFields({ _id: new ObjectID(reqId) }, project, this.collection)
+  }
+
   static findRequestFrom(userId: string, username: string){
     return this.getModel(
       { 

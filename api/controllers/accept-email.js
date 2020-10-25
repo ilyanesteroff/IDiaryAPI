@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const { User } = require('../../js/models/User')
 const { UserSettings } = require('../../js/models/UserSettings')
 

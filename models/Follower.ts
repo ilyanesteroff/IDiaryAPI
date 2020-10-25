@@ -94,4 +94,8 @@ export class Follower extends DbModel{
   static countFollowing(userId: string){
     return this.countModels({ "followers._id" : userId }, this.collection)
   }
+
+  static getSpecificFields(followId: string, project: object){
+    return this._getSpecificFields({ _id: new ObjectID(followId) }, project, this.collection)
+  }
 }

@@ -12,10 +12,11 @@ export class Message extends DbModel{
     })
   }
 
-  static viewMessages(convId: string){
+  static viewMessages(convId: string, to: string){
     return this.updateManyModels({ 
-      conversationID: new ObjectID(convId),
-      seen: false
+      conversationID: convId,
+      seen: false,
+      to: to
     }, { $set : { seen : true }}, this.collection)
   }
 

@@ -11,6 +11,7 @@ module.exports = async function(todoInput, todoId, client){
     !client && throwAnError('Authorization failed', 400)
     updateUserActivity(client._id)
     const ifClientIsAuthor = await Todo.getSpecificFields({ _id: new ObjectID(todoId), "creator._id" : client._id }, { _id: 1 })
+  
     !ifClientIsAuthor && throwAnError('Cannot update this todo', 400)
 
     const updatedTodo =  await Todo.updateTodo(todoId, { $set: todoInput })

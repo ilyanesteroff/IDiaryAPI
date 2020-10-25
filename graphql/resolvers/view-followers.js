@@ -7,7 +7,7 @@ const updateUserActivity = require('../../assistants/update-user-activity')
 module.exports = async function(userId, page, client){
   try {
     !client && throwAnError('Authorization failed', 400)
-    await updateUserActivity(client._id)
+    updateUserActivity(client._id)
 
     if(client._id !== userId){
       const isAllowed = await ifUserIsAllowedToView(userId, client)

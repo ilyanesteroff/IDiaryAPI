@@ -10,7 +10,7 @@ module.exports = async function(tag, page, client) {
     const todos = await Todo.findManyTodos({
       tags: tag, 
       public: true, 
-      "author.public" : true 
+      "creator.public" : true 
     }, page, 20)
     todos.forEach(t => {
       t._id = t._id.toString()

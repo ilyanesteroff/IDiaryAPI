@@ -10,10 +10,11 @@ class Message extends Model_1.default {
     constructor(messageInfo) {
         super('Messages', Object.assign(Object.assign({}, messageInfo), { writtenAt: new Date(), seen: false }));
     }
-    static viewMessages(convId) {
+    static viewMessages(convId, to) {
         return this.updateManyModels({
-            conversationID: new mongodb_1.ObjectID(convId),
-            seen: false
+            conversationID: convId,
+            seen: false,
+            to: to
         }, { $set: { seen: true } }, this.collection);
     }
     static getSpecificFields(messageId, project) {

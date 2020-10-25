@@ -13,8 +13,11 @@ class Todo extends Model_1.default {
     static updateTodo(todoId, data) {
         return this.updateAndReturnModel(new mongodb_1.ObjectID(todoId), data, this.collection);
     }
-    static updateManyTodos(query, data) {
-        return this.updateManyModels(query, data, this.collection);
+    static updateCreatorName(creatorId, newUsername) {
+        return this.updateManyModels({ "creator._id": creatorId }, { $set: { "creator.username": newUsername } }, this.collection);
+    }
+    static updateCreatorPrivacy(creatorId, privacy) {
+        return this.updateManyModels({ "creator._id": creatorId }, { $set: { "creator.public": privacy } }, this.collection);
     }
     static getSpecificFields(query, project) {
         return this._getSpecificFields(query, project, this.collection);

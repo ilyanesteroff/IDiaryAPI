@@ -17,8 +17,6 @@ const deleteUser = require('./resolvers/delete-user')
 const createTodo = require('./resolvers/create-todo')
 const updateTodo = require('./resolvers/update-todo')
 const deleteTodo = require('./resolvers/delete-todo')
-const blockUser = require('./resolvers/block-user')
-const unblockUser = require('./resolvers/unblock-user')
 
 
 module.exports = {
@@ -60,9 +58,5 @@ module.exports = {
 
   updateTodo: ({ todoInput, todoId }, { user }) => updateTodo(todoInput, todoId, user),
   
-  deleteTodo: ({ todoId }, { user }) => deleteTodo(todoId, user),
-  
-  blockUser: ({ userId, reason }, { user }) => blockUser(userId, reason, user),
-
-  unblockUser: ({ username }, { user }) => unblockUser(username, user)
+  deleteTodo: ({ todoId }, { user }) => deleteTodo(todoId, user)
 }

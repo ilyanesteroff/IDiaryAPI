@@ -66,6 +66,9 @@ class Follower extends Model_1.default {
     static countFollowing(userId) {
         return this.countModels({ "followers._id": userId }, this.collection);
     }
+    static getSpecificFields(followId, project) {
+        return this._getSpecificFields({ _id: new mongodb_1.ObjectID(followId) }, project, this.collection);
+    }
 }
 exports.Follower = Follower;
 Follower.collection = 'Followers';

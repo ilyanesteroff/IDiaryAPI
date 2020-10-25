@@ -10,7 +10,7 @@ module.exports = async function(req, res){
 
     updateUserActivity(user._id)
 
-    await Message.viewMessages(convId)
+    await Message.viewMessages(convId, user._id) 
 
     return res.status(201).json({ messagesViewed: true })
   } catch(err) {

@@ -9,7 +9,7 @@ module.exports = async function(req, res){
     const { messageId } = req.params
     if(!messageId || messageId === '') return res.status(400).json({ error: 'Message ID is missing' })
     
-    await updateUserActivity(user._id)
+    updateUserActivity(user._id)
 
     const message = await Message.getSpecificFields(messageId, { author: 1, conversationID: 1, _id: 0 })
     if(!message) return res.status(404).json({ error: 'Message not found' })

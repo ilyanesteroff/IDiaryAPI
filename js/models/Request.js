@@ -13,6 +13,9 @@ class Request extends Model_1.default {
     static findRequestById(reqId) {
         return this.getModel({ _id: new mongodb_1.ObjectID(reqId) }, this.collection);
     }
+    static getSpecificFields(reqId, project) {
+        return this._getSpecificFields({ _id: new mongodb_1.ObjectID(reqId) }, project, this.collection);
+    }
     static findRequestFrom(userId, username) {
         return this.getModel({
             "sender.username": username,

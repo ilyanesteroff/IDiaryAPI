@@ -1,22 +1,7 @@
-const readline = require('readline')
+const rl = require('./utils/readline')
 const login = require('../api/controllers/login')
 const { mongoConnect } = require('../js/utils/db-connection')
-
-
-const res = {
-  json: function(_res) {
-    console.log(_res)
-  },
-  status: function(s) {
-    this.statusCode = s
-    return this
-  }
-}
-  
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
+const res = require('./utils/response')
 
 const req = {
   body: {}

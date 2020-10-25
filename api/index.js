@@ -20,7 +20,8 @@ const updateMessage = require('./controllers/update-message')
 const toggleLikeMessage = require('./controllers/toggle-like-message')
 const checkEmailAndUsername = require('./controllers/check-userame-email')
 const viewMessages = require('./controllers/mark-messages-as-viewed')
-
+const blockUser = require('./controllers/block-user')
+const unblockUser = require('./controllers/unblock-user')
 
 const router = express.Router()
 
@@ -50,6 +51,8 @@ router.patch('/toggleLikeMessage', checkAuthorization, toggleLikeMessage)
 
 router.patch('/viewMessages', checkAuthorization, viewMessages)
 
+router.patch('/blockUser', checkAuthorization, blockUser)
+
 router.delete('/unsendFollowRequest/:reqId', checkAuthorization, unsendFollowRequest)
 
 router.delete('/rejectFollowRequest/:reqId', checkAuthorization, rejectFollowRequest)
@@ -58,9 +61,11 @@ router.delete('/unfollowOrRemoveFollower/:followId', checkAuthorization, unfollo
 
 router.delete('/deleteMessage/:messageId', checkAuthorization, deleteMessage)
 
+router.delete('/unblockUser', checkAuthorization, unblockUser)
+
 router.get('/checkUsernameAndEmail', checkEmailAndUsername)
 
-router.get('/countTodosByTag', checkAuthorization, countTodosByTag)
+router.get('/countTodosByTag/:tag', checkAuthorization, countTodosByTag)
 
 router.get('/getResetPassword', checkIfPwResetIsActual)
 

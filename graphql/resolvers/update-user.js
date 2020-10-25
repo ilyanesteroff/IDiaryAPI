@@ -1,5 +1,6 @@
 const bycrypt = require('bcryptjs')
 const { User } = require('../../js/models/User')
+const { Todo } = require('../../js/models/Todo')
 const { Request } = require('../../js/models/Request')
 const { Follower } = require('../../js/models/Follower')
 const { Conversation } = require('../../js/models/Conversation')
@@ -12,7 +13,8 @@ const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers
 module.exports = async function(userInput, client){
   try {      
     !client && throwAnError('Authorization failed', 400)
-    await updateUserActivity(client._id)
+
+    updateUserActivity(client._id)
     if(userInput.password) userInput.password = await bycrypt.hash(userInput.password, 16)
     const updatedUser = await User.updateUser(client._id, { $set: userInput })
     const shortUser = User.formatUserAsFollower(updatedUser)
@@ -22,7 +24,10 @@ module.exports = async function(userInput, client){
     await Follower.updateFollowing(client._id, shortUser)
     await Conversation.updateUserInManyConversations(client._id, shortUser)
     await BlockedUser.updateBlockedUsers(client._id, shortUser)
-    client.username !== userInput.username && await Message.updateAuthorInManyMassages(client.username, userInput.username)
+    if(client.username !== userInput.username){
+      await Message.updateAuthorInManyMassages(client.username, userInput.username)
+      await Todo.updateCreatorName(client._id, userInput.username)
+    }
 
     return updatedUser
   } catch(err) {

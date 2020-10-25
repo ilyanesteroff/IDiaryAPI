@@ -2,10 +2,10 @@ const createUser = require('../graphql/resolvers/create-new-user')
 const { mongoConnect } = require('../js/utils/db-connection')
 
 const userInput = {
-  firstname: 'tester',
-  lastname: 'tester',
-  username: 'tester',
-  email: 'protech17ilja@gmail.com',
+  firstname: 'tester2',
+  lastname: 'tester2',
+  username: 'tester2',
+  email: 'test@gmail.com',
   password: 'password',
   public: true
 }

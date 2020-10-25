@@ -1,7 +1,7 @@
 const { Message } = require('../../js/models/Message')
 const { Conversation } = require('../../js/models/Conversation')
 const updateUserActivity = require('../../assistants/update-user-activity')
-const ifUserAllowed = require('../../assistants/user/if-user-allowed')
+const ifSomeoneIsBlocked = require('../../assistants/user/if-users-blocked')
 
 
 module.exports = async function(req, res){
@@ -10,11 +10,10 @@ module.exports = async function(req, res){
     const { text, to, convId } = req.body
     if(!text || !to || !convId) return res.status(400).json({ error: 'Something is missing' })
 
-    await updateUserActivity(user._id)
-    
+    updateUserActivity(user._id)
 
-    const ifUserCanWriteMessage = await ifUserAllowed(to, user)
-    if(!ifUserCanWriteMessage) return res.status(400).json({ error: 'User not allowed to write' })
+    const ifUserCanWriteMessage = await ifSomeoneIsBlocked(user._id, to)
+    if(ifUserCanWriteMessage) return res.status(400).json({ error: 'User not allowed to write' })
 
     const message = new Message({
       text: text,

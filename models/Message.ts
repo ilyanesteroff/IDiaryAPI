@@ -19,6 +19,10 @@ export class Message extends DbModel{
     }, { $set : { seen : true }}, this.collection)
   }
 
+  static getSpecificFields(messageId: string, project: object){
+    return this._getSpecificFields({ _id: new ObjectID(messageId) }, project, this.collection)
+  }
+
   static findManyMessages(query: object, currentPage: number, limit: number){
     return this.getManyModels(query, this.collection, {writtenAt: -1}, currentPage, limit)
   }
@@ -43,26 +47,22 @@ export class Message extends DbModel{
     return this.deleteModel(new ObjectID(messageId), this.collection)
   }
 
-  static likeMessage(messageId: string){
+  static toggleLikeMessage(messageId: string, like: boolean){
     return this.updateAndReturnModel(new ObjectID(messageId), {
       $set: {
-        liked: true
+        liked: like
       }
     }, this.collection)
   }
 
-  static unlikeMessage(messageId: string){
-    return this.updateAndReturnModel(new ObjectID(messageId), {
-      $set: {
-        liked: false
-      }
-    }, this.collection)
+  static getLatestMessage(convId: string){
+    return this.getManyModels({
+      conversationID: convId,
+    }, this.collection, { writtenAt: -1 }, 1, 1)
+      .then(res => res[0])
   }
 
-  static getLikedMessages(convId: string, currentPage: number, limit: number){
-    return this.getManyModels({ 
-      conversationID: convId, 
-      liked: true 
-    }, this.collection, {writtenAt: -1}, currentPage, limit)
+  static countUnseenMessages(userId: string){
+    return this.countModels({ seen: false, to: userId }, this.collection)
   }
 }

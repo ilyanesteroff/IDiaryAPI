@@ -19,6 +19,7 @@ export interface IMessage{
   conversationID: string
   author: string
   text: string
+  to: string
 }
 
 export type TodoAuthor = {
@@ -34,6 +35,7 @@ export type Message = {
   text: string
   writtenAt: Date
   seen: boolean
+  to: string
   liked: boolean | null
 }
 

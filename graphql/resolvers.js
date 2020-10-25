@@ -1,5 +1,4 @@
 const getUserData = require('./resolvers/get-full-user')
-const checkEmailAndUsername = require('./resolvers/check-username-email')
 const viewTodos = require('./resolvers/view-todos')
 const viewUser = require('./resolvers/view-user')
 const viewRequests = require('./resolvers/requests')
@@ -7,7 +6,7 @@ const findUser = require('./resolvers/find-user')
 const viewFollowers = require('./resolvers/view-followers')
 const viewFollowings = require('./resolvers/view-followings')
 const viewMessages = require('./resolvers/messages')
-const viewLikedMessages = require('./resolvers/liked-messags')
+const getUserStats = require('./resolvers/get-user-stats')
 const getConversations = require('./resolvers/view-conversations')
 const findTodosByTagname = require('./resolvers/find-todos-by-tagname')
 const createNewUser = require('./resolvers/create-new-user')
@@ -24,8 +23,6 @@ const unblockUser = require('./resolvers/unblock-user')
 
 module.exports = {
   getAuthUser: (args, { user }) => getUserData(user),
-
-  checkEmailAndUsername: ({ username, email }) => checkEmailAndUsername(email, username),
   
   todos: ({ userId, page }, { user }) => viewTodos(userId, page, user),
 
@@ -43,7 +40,7 @@ module.exports = {
 
   messages: ({ page, convId }, { user }) => viewMessages(page, convId, user),
 
-  likedMessages: ({ page, convId }, { user }) => viewLikedMessages(page, convId, user),
+  userStats: (args, { user }) => getUserStats(user),
 
   findTodosByTagname: ( { tag, page }, { user }) => findTodosByTagname(tag, page, user),
   

@@ -116,6 +116,11 @@ module.exports = buildSchema(`
     followingSince: String!
   }
 
+  type UserStats {
+    incomingRequests: Int!
+    unseenMessages: Int!
+  }
+
   input CreateUserInputData {
     username: String!
     firstname: String!
@@ -145,7 +150,7 @@ module.exports = buildSchema(`
   }
 
   input CreateTodoInputData {
-    task: String!
+    task: String! 
     completed: Boolean!
     timeToComplete: Int
     public: Boolean!
@@ -162,7 +167,6 @@ module.exports = buildSchema(`
 
   type RootQuery {
     getAuthUser: FullUser!
-    checkEmailAndUsername(email: String!, username: String!): Boolean!
     todos(userId: ID, page: Int!) : [Todo]!
     user(userId: ID): User!
     requests(incoming: Boolean!, page: Int!) : [Request]!
@@ -171,7 +175,7 @@ module.exports = buildSchema(`
     followers(userId: ID!, page: Int!): [FollowingInfo]!
     conversations(page: Int!): [Conversation]!
     messages(page: Int!, convId: ID!): [Message]!
-    likedMessages(page: Int!, convId: ID!): [Message]!
+    userStats: UserStats!
     findTodosByTagname(tag: String!, page: Int!) : [Todo]!
   }
 

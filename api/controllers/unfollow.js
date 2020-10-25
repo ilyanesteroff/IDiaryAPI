@@ -6,6 +6,8 @@ module.exports = async function(req, res){
   try {
     const { user } = req
     const { followId } = req.params
+    if(!followId || followId === '') return res.status(400).json({ error: 'Follow ID is missing' })
+    
     updateUserActivity(user._id)
 
     await Follower.unfollowOrRemoveFollower(followId)

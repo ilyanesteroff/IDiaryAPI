@@ -15,6 +15,11 @@ const acceptFollowRequest = require('./controllers/accept-follow-request')
 const unfollow = require('./controllers/unfollow')
 const writeFirstMessage = require('./controllers/create-conversation')
 const writeMessage = require('./controllers/write-message')
+const deleteMessage = require('./controllers/delete-message')
+const updateMessage = require('./controllers/update-message')
+const toggleLikeMessage = require('./controllers/toggle-like-message')
+const checkEmailAndUsername = require('./controllers/check-userame-email')
+const viewMessages = require('./controllers/mark-messages-as-viewed')
 
 
 const router = express.Router()
@@ -39,11 +44,21 @@ router.patch('/writeFirstMessage', checkAuthorization, writeFirstMessage)
 
 router.patch('/writeMessage', checkAuthorization, writeMessage)
 
+router.patch('/updateMessage', checkAuthorization, updateMessage)
+
+router.patch('/toggleLikeMessage', checkAuthorization, toggleLikeMessage)
+
+router.patch('/viewMessages', checkAuthorization, viewMessages)
+
 router.delete('/unsendFollowRequest/:reqId', checkAuthorization, unsendFollowRequest)
 
 router.delete('/rejectFollowRequest/:reqId', checkAuthorization, rejectFollowRequest)
 
 router.delete('/unfollowOrRemoveFollower/:followId', checkAuthorization, unfollow)
+
+router.delete('/deleteMessage/:messageId', checkAuthorization, deleteMessage)
+
+router.get('/checkUsernameAndEmail', checkEmailAndUsername)
 
 router.get('/countTodosByTag', checkAuthorization, countTodosByTag)
 

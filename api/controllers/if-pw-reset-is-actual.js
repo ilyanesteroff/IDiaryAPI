@@ -4,6 +4,8 @@ const { UserSettings } = require('../../js/models/UserSettings')
 module.exports = async function(req, res) {
   try {
     const { token } = req.body
+    if(!token) return res.status(400).json({ error: 'Token is missing' })
+    
     const settings = await UserSettings.getSpecificFields(
       {"resetPassword.token" : token}, 
       { resetPassword: 1 } 

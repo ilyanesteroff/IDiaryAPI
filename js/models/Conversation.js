@@ -10,6 +10,9 @@ class Conversation extends Model_1.default {
     constructor(convInfo) {
         super('Conversations', convInfo);
     }
+    static getSpecificFields(convId, project) {
+        return this._getSpecificFields({ _id: new mongodb_1.ObjectID(convId) }, project, this.collection);
+    }
     static findManyConversationsForOneUser(userId, currentPage, limit) {
         return this.getManyModels({
             participants: {
@@ -22,11 +25,11 @@ class Conversation extends Model_1.default {
     static destroyConversation(id) {
         return this.deleteModel(new mongodb_1.ObjectID(id), this.collection);
     }
-    static setAnotherLatestMessage(id, message) {
+    static setAnotherLatestMessage(id, message, updatedAt) {
         return this.updateModel(new mongodb_1.ObjectID(id), {
             $set: {
                 latestMessage: message,
-                updatedAt: new Date()
+                updatedAt: updatedAt || new Date()
             }
         }, this.collection);
     }

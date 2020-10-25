@@ -5,6 +5,8 @@ const { UserSettings } = require('../../js/models/UserSettings')
 module.exports = async function(req, res) {
   try {
     const { token } = req.body
+    if(!token) return res.status(400).json({ error: 'Token is missing' })
+    
     const user = await UserSettings.getSpecificFields({ approveEmailToken: token }, { approveEmailToken: 1, approved: 1 })
     if(!user) return res.status(404).json({ error: 'user not found'})
     if(user.approved) return res.status(400).json({ error: 'User has been approved' })

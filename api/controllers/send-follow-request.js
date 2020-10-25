@@ -10,6 +10,8 @@ module.exports = async function(req, res){
   try {
     const { user } = req
     const { to } = req.body
+    if(!to) return res.status(400).json({ error: 'Request receiver is missing' })
+    
     updateUserActivity(user._id)
 
     if(user._id === to) return res.status(400).json({ error: 'Cannot send follow request to yourself' })

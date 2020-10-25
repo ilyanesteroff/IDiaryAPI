@@ -7,6 +7,7 @@ module.exports = async function(req, res) {
   try {
     const { user } = req
     const { reqId } = req.body
+    if(!reqId) return res.status(400).json({ error: 'request ID is missing' })
     updateUserActivity(user._id)
 
     const request = await Request.findRequestById(reqId)

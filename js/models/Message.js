@@ -16,6 +16,9 @@ class Message extends Model_1.default {
             seen: false
         }, { $set: { seen: true } }, this.collection);
     }
+    static getSpecificFields(messageId, project) {
+        return this._getSpecificFields({ _id: new mongodb_1.ObjectID(messageId) }, project, this.collection);
+    }
     static findManyMessages(query, currentPage, limit) {
         return this.getManyModels(query, this.collection, { writtenAt: -1 }, currentPage, limit);
     }
@@ -35,25 +38,21 @@ class Message extends Model_1.default {
     static deleteMessage(messageId) {
         return this.deleteModel(new mongodb_1.ObjectID(messageId), this.collection);
     }
-    static likeMessage(messageId) {
+    static toggleLikeMessage(messageId, like) {
         return this.updateAndReturnModel(new mongodb_1.ObjectID(messageId), {
             $set: {
-                liked: true
+                liked: like
             }
         }, this.collection);
     }
-    static unlikeMessage(messageId) {
-        return this.updateAndReturnModel(new mongodb_1.ObjectID(messageId), {
-            $set: {
-                liked: false
-            }
-        }, this.collection);
-    }
-    static getLikedMessages(convId, currentPage, limit) {
+    static getLatestMessage(convId) {
         return this.getManyModels({
             conversationID: convId,
-            liked: true
-        }, this.collection, { writtenAt: -1 }, currentPage, limit);
+        }, this.collection, { writtenAt: -1 }, 1, 1)
+            .then(res => res[0]);
+    }
+    static countUnseenMessages(userId) {
+        return this.countModels({ seen: false, to: userId }, this.collection);
     }
 }
 exports.Message = Message;

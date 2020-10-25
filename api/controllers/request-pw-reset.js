@@ -7,6 +7,8 @@ const randomBytes = require('../../assistants/random-bytes')
 module.exports = async function(req, res){
   try {
     const { email } = req.body
+    if(!email) return res.status(400).json({ error: 'Email is missing' })
+
     const user = await User.getSpecificFields({ $or : [ { username: email }, { email: email } ]}, { _id: 1 })
     if(!user) return res.status(404).json({ error: 'User not found' })
 

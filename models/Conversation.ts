@@ -8,6 +8,10 @@ export class Conversation extends DbModel{
     super('Conversations', convInfo)
   }
 
+  static getSpecificFields(convId: string, project: object){
+    return this._getSpecificFields({ _id: new ObjectID(convId) }, project, this.collection)
+  }
+
   static findManyConversationsForOneUser(userId: string, currentPage: number, limit: number){
     return this.getManyModels({ 
       participants: { 
@@ -22,15 +26,15 @@ export class Conversation extends DbModel{
     return this.deleteModel(new ObjectID(id), this.collection)
   }
 
-  static setAnotherLatestMessage(id: string, message: Message){
+  static setAnotherLatestMessage(id: string, message: Message, updatedAt: Date | null){
     return this.updateModel(new ObjectID(id), {
       $set : {
         latestMessage: message,
-        updatedAt: new Date()
+        updatedAt: updatedAt || new Date()
       }
     }, this.collection)
   }
-
+  //mb remove this
   static updateManyConversations(query: object, data: object){
     return this.updateManyModels(query, data, this.collection)
   }

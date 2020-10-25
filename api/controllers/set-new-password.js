@@ -6,6 +6,7 @@ const { User } = require('../../js/models/User')
 module.exports = async function(req, res) { 
   try {
     const { token , newPassword } = req.body
+    if(!token || !newPassword) return res.status(400).json({ error: 'something is missing' })
    
     const passwordReset = await UserSettings.getSpecificFields({ "resetPassword.token" : token }, { resetPassword: 1 })
     if(!passwordReset) return res.status(404).json({ error: 'User not found' })

@@ -10,7 +10,7 @@ module.exports = async function(req, res) {
     if(!settings) return res.status(404).json('User not found')
     if(settings.resetPassword.bestBefore < new Date().getTime()) await UserSettings.unsetResetPasswordToken(settings._id)
 
-    return res.status(200).json({ resetPasswordIsActual: settings.resetPassword.bestBefore < new Date().getTime() })
+    return res.status(200).json({ resetPasswordIsActual: settings.resetPassword.bestBefore > new Date().getTime() })
   } catch(err) {
     return res.status(500).json({ error: err.message })
   }

@@ -7,7 +7,7 @@ module.exports = async function(client, page) {
   try{
     !client && throwAnError('Authorization failed', 400)
     await updateUserActivity(client._id)
-    const conversations = await Conversation.findManyConversationsForOneUser(client._id, page, 20)
+    const conversations = await Conversation.findManyConversationsForOneUser(client._id, page, parseInt(process.env.ITEMS_PER_PAGE) / 5)
 
     conversations.forEach(conv => {
       conv._id = conv._id.toString()

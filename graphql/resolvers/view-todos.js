@@ -9,11 +9,11 @@ module.exports = async function(userId, page, client) {
     !client && throwAnError('Authorization failed', 400)
     updateUserActivity(client._id)
     let todos 
-    if(client._id === userId || !userId) todos = await Todo.findManyTodos({ "creator._id" : client._id }, page, 20)
+    if(client._id === userId || !userId) todos = await Todo.findManyTodos({ "creator._id" : client._id }, page, parseInt(process.env.ITEMS_PER_PAGE) / 2)
     else {
       const verdict = await checkUsersCompatibility(userId, client)
       verdict
-        ? todos = await Todo.findManyTodos({ "creator._id" : client._id, public: true }, page, 20)
+        ? todos = await Todo.findManyTodos({ "creator._id" : client._id, public: true }, page, parseInt(process.env.ITEMS_PER_PAGE) / 2)
         : throwAnError('You are not allowed doing this', 400)
     }
 

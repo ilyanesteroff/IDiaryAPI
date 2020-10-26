@@ -50,6 +50,7 @@ module.exports = buildSchema(`
     participants: [Follower!]!
     latestMessage: Message!
     updatedAt: String!
+    unseenMessages: Int!
   }
 
   type Message {

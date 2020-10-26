@@ -5,7 +5,10 @@ import { Iconversation, Message } from './model-types'
 export class Conversation extends DbModel{
   static collection : string = 'Conversations'
   constructor(convInfo: Iconversation){
-    super('Conversations', convInfo)
+    super('Conversations', {
+      ...convInfo,
+      unseenMessages: 0
+    })
   }
 
   static getSpecificFields(convId: string, project: object){
@@ -34,16 +37,21 @@ export class Conversation extends DbModel{
       }
     }, this.collection)
   }
-  //mb remove this
-  static updateManyConversations(query: object, data: object){
-    return this.updateManyModels(query, data, this.collection)
+  
+  static increaseUnseenMessages(convId: string){
+    return this.updateModel(new ObjectID(convId), { $inc : { unseenMessages : 1 } }, this.collection)
+  }
+
+  static decreaseUnseenMessages(convId: string){
+    return this.updateModel(new ObjectID(convId), { $inc : { unseenMessages : -1 } }, this.collection)
+  }
+
+  static unsetUnseenMessages(convId: string){
+    return this.updateModel(new ObjectID(convId), { $set : { unseenMessages : 0 } }, this.collection)
   }
 
   static updateUserInManyConversations(userId: string, newUser: object){
-    return this.updateManyConversations(
-      { "participants._id": userId }, 
-      { $set: { "participants.$": newUser } }
-    )
+    return this.updateManyModels({ "participants._id": userId }, { $set: { "participants.$": newUser } }, this.collection)
   }
 
   static countConversations(userId: string){

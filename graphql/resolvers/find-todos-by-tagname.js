@@ -11,7 +11,7 @@ module.exports = async function(tag, page, client) {
       tags: tag, 
       public: true, 
       "creator.public" : true 
-    }, page, 20)
+    }, page, parseInt(process.env.ITEMS_PER_PAGE) / 2)
     todos.forEach(t => {
       t._id = t._id.toString()
       t.createdAt = t.createdAt.toISOString()

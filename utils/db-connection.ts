@@ -3,8 +3,7 @@ const MongoClient = mongo.MongoClient
 let _db: mongo.Db
 
 const client = new  MongoClient(
-  //`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@firstcluster.hazg0.mongodb.net/${process.env.DB}`, TodoList
-  `mongodb+srv://Vasya_Pupkin:A5-lapas@firstcluster.hazg0.mongodb.net/TodoList`,
+  `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@base.ml3ol.mongodb.net/${process.env.DB}?retryWrites=true&w=majority`,
   { useUnifiedTopology: true }
 )
 

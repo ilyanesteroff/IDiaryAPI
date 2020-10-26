@@ -10,8 +10,8 @@ module.exports = async function(incoming, page, client) {
 
     let requests 
     incoming
-      ? requests = await Request.findManyRequestForReceiver(client._id, page, 200)
-      : requests = await Request.findManyRequestForSender(client._id, page, 200)
+      ? requests = await Request.findManyRequestForReceiver(client._id, page, parseInt(process.env.ITEMS_PER_PAGE))
+      : requests = await Request.findManyRequestForSender(client._id, page, parseInt(process.env.ITEMS_PER_PAGE))
     requests.forEach(r => {
       r._id = r._id.toString()
       r.sentAt = r.sentAt.toISOString()

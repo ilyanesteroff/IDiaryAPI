@@ -1,4 +1,5 @@
 const { Message } = require('../../js/models/Message')
+const { Conversation } = require('../../js/models/Conversation')
 const updateUserActivity = require('../../assistants/update-user-activity')
 
 
@@ -11,6 +12,7 @@ module.exports = async function(req, res){
     updateUserActivity(user._id)
 
     await Message.viewMessages(convId, user._id) 
+    await Conversation.unsetUnseenMessages(convId)
 
     return res.status(201).json({ messagesViewed: true })
   } catch(err) {

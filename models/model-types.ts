@@ -12,6 +12,7 @@ export interface Itodo {
 export interface Iconversation{
   participants: follower[]
   latestMessage: IMessage | null
+  unseenMessages: number
   updatedAt: Date | null
 }
 

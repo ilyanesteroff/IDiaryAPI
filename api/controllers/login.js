@@ -22,7 +22,7 @@ module.exports = async function(req, res) {
     updateUserActivity(user._id.toString())
     const token = jwt.sign({
       userId: user._id.toString()
-    }, `q%df^&sr$r%fsdD^**^FGYJK/YUF%R&^%n%,()n3Pi$'kápan4v34v55y$v`, { expiresIn : '720h'})
+    }, process.env.JWT_SECRET, { expiresIn : '720h'})
 
     return res.status(201).json({
       token: token,

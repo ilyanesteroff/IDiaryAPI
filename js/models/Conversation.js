@@ -8,7 +8,7 @@ const mongodb_1 = require("mongodb");
 const Model_1 = __importDefault(require("./Model"));
 class Conversation extends Model_1.default {
     constructor(convInfo) {
-        super('Conversations', convInfo);
+        super('Conversations', Object.assign(Object.assign({}, convInfo), { unseenMessages: 0 }));
     }
     static getSpecificFields(convId, project) {
         return this._getSpecificFields({ _id: new mongodb_1.ObjectID(convId) }, project, this.collection);
@@ -33,12 +33,17 @@ class Conversation extends Model_1.default {
             }
         }, this.collection);
     }
-    //mb remove this
-    static updateManyConversations(query, data) {
-        return this.updateManyModels(query, data, this.collection);
+    static increaseUnseenMessages(convId) {
+        return this.updateModel(new mongodb_1.ObjectID(convId), { $inc: { unseenMessages: 1 } }, this.collection);
+    }
+    static decreaseUnseenMessages(convId) {
+        return this.updateModel(new mongodb_1.ObjectID(convId), { $inc: { unseenMessages: -1 } }, this.collection);
+    }
+    static unsetUnseenMessages(convId) {
+        return this.updateModel(new mongodb_1.ObjectID(convId), { $set: { unseenMessages: 0 } }, this.collection);
     }
     static updateUserInManyConversations(userId, newUser) {
-        return this.updateManyConversations({ "participants._id": userId }, { $set: { "participants.$": newUser } });
+        return this.updateManyModels({ "participants._id": userId }, { $set: { "participants.$": newUser } }, this.collection);
     }
     static countConversations(userId) {
         return this.countModels({

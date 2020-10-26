@@ -38,5 +38,4 @@ app.use('/', (req, res) => res.send('This is graphql API'))
 
 app.use('*', (req, res) => res.send('Found nothing matching your query'))
 
-//mongoConnect(_ => app.listen(process.env.PORT))
-mongoConnect(_ => app.listen(3000))
+mongoConnect(_ => app.listen(process.env.PORT))

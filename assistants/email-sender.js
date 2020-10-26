@@ -15,11 +15,11 @@ exports.sendAcceptEmail = (to, subject, token) => {
     subject: subject,
     html: `<!DOCTYPE html>
     <html lang="en">
-    <head>
+      <head>
         <meta charset="UTF-8">
         <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300&display=swap" rel="stylesheet">
         <style> 
-          *{box-sizing: border-box;margin: 8%;}
+         *{box-sizing: border-box;margin: 8%;}
           #body{
             width: 100%;
             height: auto;
@@ -39,19 +39,17 @@ exports.sendAcceptEmail = (to, subject, token) => {
           #linkarea{text-align: center;}
           #p{font-size: 1.1rem;color: #333;font-weight: 700;}
         </style>
-    </head>
-    <body id="body">
+      </head>
+      <body id="body">
         <h1 id="h1">You just created an account at Toodoodoo!&#128526;</h1>
         <h2 id="h2">About Toodoodoo&#128540;</h2>
         <p id="p">Toodoodoo is online platform that allows you to create todos and share them with your friends and others, toodoodoo also allows you communicate with everyone&#128519;</p>
         <div id="linkarea">
           <h3>Cannot wait to get started?&#129488;</h3>
-          <a id="link" href="http://localhost:3000/acceptemail/${token}">tap to complete your registration!&#128591;</a>
+          <a id="link" href="http://localhost:3000/acceptemail/${token}">tap to complete your registration!&#128591;</a> 
         </div>
-    </body>
-    <script>
-    </script>
-    </html>`
+      </body>
+    </html>` 
   })
 }
 

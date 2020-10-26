@@ -53,6 +53,10 @@ router.patch('/viewMessages', checkAuthorization, viewMessages)
 
 router.patch('/blockUser', checkAuthorization, blockUser)
 
+router.patch('/getResetPassword', checkIfPwResetIsActual)
+
+router.patch('/checkUsernameAndEmail', checkEmailAndUsername)
+
 router.delete('/unsendFollowRequest/:reqId', checkAuthorization, unsendFollowRequest)
 
 router.delete('/rejectFollowRequest/:reqId', checkAuthorization, rejectFollowRequest)
@@ -63,10 +67,6 @@ router.delete('/deleteMessage/:messageId', checkAuthorization, deleteMessage)
 
 router.delete('/unblockUser', checkAuthorization, unblockUser)
 
-router.get('/checkUsernameAndEmail', checkEmailAndUsername)
-
 router.get('/countTodosByTag/:tag', checkAuthorization, countTodosByTag)
-
-router.get('/getResetPassword', checkIfPwResetIsActual)
 
 module.exports = router

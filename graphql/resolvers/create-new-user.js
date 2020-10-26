@@ -12,12 +12,13 @@ module.exports = async function(userInput) {
     const userExists = await User.findUser({ $or: [ { email: email }, { username: username } ] })
     if(userExists) throwAnError('User with that username or email already exists', 404)
 
-    const hashedPw = await bycrypt.hash(password, 16)
     const approveEmailToken = (await randomBytes(24)).toString('hex')
 
-    await saveUserModels(userInput, approveEmailToken, hashedPw)
-
     sendAcceptEmail(email, 'accept email', approveEmailToken)
+    
+    const hashedPw = await bycrypt.hash(password, 16)
+
+    await saveUserModels(userInput, approveEmailToken, hashedPw)
 
     return true
   } catch (err) {

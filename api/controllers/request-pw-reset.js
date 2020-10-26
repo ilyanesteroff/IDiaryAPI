@@ -16,7 +16,7 @@ module.exports = async function(req, res){
     if(!userSettings.approved) return res.status(400).json({ requested: false })
 
     if(userSettings.resetPassword) {
-      if(userSettings.resetPassword.bestBefore > new Date()) return res.status(400).json({ requested: true })
+      if(userSettings.resetPassword.bestBefore > new Date()) return res.json({ requested: true })
       else await UserSettings.unsetResetPasswordToken(user._id.toString())
     }
     

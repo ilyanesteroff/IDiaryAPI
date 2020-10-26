@@ -35,7 +35,7 @@ module.exports = async function(req, res){
 
     return res.status(201).json({ requestSent: true })
   } catch(err) {
-    return res.status(500).json({ error: err.massage })
+    return res.status(500).json({ error: err.massage || 'Something went wrong'  })
   }
 }
   

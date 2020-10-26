@@ -19,6 +19,6 @@ module.exports = async function(req, res) {
 
     return res.status(201).json({ reset: true })
   } catch(err) {
-    return res.status(500).json({ error: err.message })
+    return res.status(500).json({ error: err.message || 'Something went wrong' })
   }
 }

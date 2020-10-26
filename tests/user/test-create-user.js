@@ -5,7 +5,7 @@ const userInput = {
   firstname: 'tester2',
   lastname: 'tester2',
   username: 'tester2',
-  email: 'test@gmail.com',
+  email: 'protech17ilja@gmail.com',
   password: 'password',
   public: true
 }

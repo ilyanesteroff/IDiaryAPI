@@ -4,7 +4,7 @@ const res = require('../utils/response')
 
 req = {
   body: {
-    token: '68a4c16c0f437e395b1b7b14f90eb7a74146ed819048d088'
+    token: 'cb92f9c4369786bb8fe09fa946144da7a5ee725fcf3b24ba'
   }
 }
 

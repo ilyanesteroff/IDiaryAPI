@@ -12,7 +12,7 @@ module.exports = async function(req, res) {
     let passwordReset 
     token !== undefined
       ? passwordReset = await UserSettings.getSpecificFields({ "resetPassword.token" : token }, { resetPassword: 1 })
-      : passwordReset = await User.getSpecificFields({ _id: new ObjectID(userId) })
+      : passwordReset = await User.getSpecificFields({ _id: new ObjectID(userId) }, { _id: 1 })
 
     if(!passwordReset) return res.status(404).json({ error: 'User not found' })
     

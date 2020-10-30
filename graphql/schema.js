@@ -138,10 +138,10 @@ module.exports = buildSchema(`
   }
 
   input UpdateUserInfoData {
-    website: String!
-    company: String!
-    about: String!
-    relationshipStatus: String!
+    website: String
+    company: String
+    about: String
+    relationshipStatus: String
   }
 
   input UpdatedUserSettingsData{

@@ -15,12 +15,15 @@ module.exports = async function(todoInput, todoId, client){
     !ifClientIsAuthor && throwAnError('Cannot update this todo', 400)
 
     const updatedTodo =  await Todo.updateTodo(todoId, { $set: todoInput })
-    if(updatedTodo.completed) {
-      await UserInfo.decreaseActiveTodos(client._id)
-      await UserInfo.increaseCompletedTodos(client._id)
-    } else {
-      await UserInfo.decreaseCompletedTodos(client._id)
-      await UserInfo.increaseActiveTodos(client._id)
+ 
+    if(todoInput.completed !== undefined && todoInput.completed !== updatedTodo.completed){
+      if(updatedTodo.completed) {
+        await UserInfo.decreaseActiveTodos(client._id)
+        await UserInfo.increaseCompletedTodos(client._id)
+      } else {
+        await UserInfo.decreaseCompletedTodos(client._id)
+        await UserInfo.increaseActiveTodos(client._id)
+      }
     }
     return {
       ...updatedTodo,

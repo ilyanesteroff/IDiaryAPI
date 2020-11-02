@@ -10,6 +10,7 @@ module.exports = async function(todoInput, client){
   try {
     !client && throwAnError('Authorization failed', 400)
     updateUserActivity(client._id)
+    
     const clientPublic = await UserSettings.getSpecificFields({ _id: new ObjectID(client._id) }, { _id : 0, public: 1 })
     const todo = new Todo({ 
       ...todoInput, 

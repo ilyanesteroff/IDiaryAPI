@@ -1,5 +1,5 @@
 import { ObjectID } from 'mongodb'
-import { Itodo, TodoAuthor } from './model-types'
+import { Itodo } from './model-types'
 import DbModel from './Model'
 
 

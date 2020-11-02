@@ -9,9 +9,9 @@ const todoInput = {
 }
 
 const update = async _ => {                   
-  try{
-    const todo = await updateTodo(todoInput, '5f95a766638645408876d7c1', client1)
-    console.log(todo)
+  try { 
+    const todo = await updateTodo(todoInput, '5f9f07fe0ae6e90004c87d18', client1)
+    console.log(todo, 'todo')
   } catch (err) {
     console.log(err.message)
   }

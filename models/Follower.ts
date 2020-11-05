@@ -1,6 +1,6 @@
 import { ObjectID } from 'mongodb'
 import DbModel from './Model'
-import { follower, IFollower } from './model-types'
+import { follower, IFollower } from './model-types' 
 
 export class Follower extends DbModel{
   static collection: string = 'Followers' 
@@ -29,9 +29,9 @@ export class Follower extends DbModel{
 
   static findManyFollowers(userId: string, currentPage: number, limit: number){
     return this.getManyModels(
-      { "follower._id" : userId }, 
+      { "followingTo._id" : userId }, 
       this.collection, 
-      {"followingTo.username": -1},
+      {"follower.username": -1},
       currentPage,
       limit
     )
@@ -39,9 +39,9 @@ export class Follower extends DbModel{
 
   static findManyFollowings(userId: string, currentPage: number, limit: number){
     return this.getManyModels(
-      { "followingTo._id" : userId }, 
+      { "follower._id" : userId }, 
       this.collection, 
-      {"follower.username": -1},
+      {"followingTo.username": -1},
       currentPage,
       limit
     )
@@ -92,7 +92,7 @@ export class Follower extends DbModel{
   }
 
   static countFollowing(userId: string){
-    return this.countModels({ "followers._id" : userId }, this.collection)
+    return this.countModels({ "follower._id" : userId }, this.collection)
   }
 
   static getSpecificFields(followId: string, project: object){

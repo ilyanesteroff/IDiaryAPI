@@ -1,10 +1,10 @@
-const viewFollowers = require('../../graphql/resolvers/view-followers')
+const viewFollowers = require('../../graphql/resolvers/view-followings')
 const { mongoConnect } = require('../../js/utils/db-connection')
-const { client2 } = require('../utils/client')
+const { client1 } = require('../utils/client')
 
 const view = async _ => {
   try {
-    const followers = await viewFollowers('5f9d46c47f16750004a85759', 1, client2)
+    const followers = await viewFollowers(client1._id, 1, client1)
     console.log(followers)
   } catch(err) {
     console.log(err.message)

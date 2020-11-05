@@ -14,7 +14,7 @@ module.exports = async function(userId, page, client){
       !isAllowed && throwAnError('Not allowed to do this', 400)
     }
 
-    const followers = await Follower.findManyFollowers(userId, page, parseInt(process.env.ITEMS_PER_PAGE))
+    const followers = await Follower.findManyFollowers(userId, page, 20/*parseInt(process.env.ITEMS_PER_PAGE)*/)
 
     followers.forEach(f => {
       f._id 

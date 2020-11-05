@@ -10,7 +10,7 @@ module.exports.client1 = {
 }
 
 module.exports.client2 = {
-  _id: '5f95a46818b75b26e8215922',
+  _id: '5f9d46c47f16750004a85759',
   createdAt: new Date(),
   password: '$2a$16$jUpsMD3ZtI7ooDS.IkwWZ.5CL7UJ1CC6dK5ZnyXalym3Jr6pFV/om',
   firstname: 'tester2',

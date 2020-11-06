@@ -28,7 +28,8 @@ module.exports = async function(userId, client){
           ...userToView,
           ...userIsPublic,
           _id: userId,
-          lastSeen: lastSeen.lastSeen.toISOString()
+          lastSeen: lastSeen.lastSeen.toISOString(),
+          createdAt: userToView.createdAt.toISOString()
         }
       }
     }

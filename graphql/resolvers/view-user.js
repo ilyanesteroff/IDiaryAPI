@@ -28,7 +28,7 @@ module.exports = async function(userId, client){
           ...userToView,
           ...userIsPublic,
           _id: userId,
-          lastSeen: lastSeen
+          lastSeen: lastSeen.toISOString()
         }
       }
     }

@@ -23,6 +23,8 @@ const viewMessages = require('./controllers/mark-messages-as-viewed')
 const blockUser = require('./controllers/block-user')
 const unblockUser = require('./controllers/unblock-user')
 const ifUserFollows = require('./controllers/if-user-follows')
+const requestFrom = require('./controllers/find-request-from')
+const requestTo = require('./controllers/find-request-to')
 
 
 const router = express.Router()
@@ -40,6 +42,10 @@ router.patch('/verifyPassword', checkAuthorization, verifyPassword)
 router.patch('/ifUserAbleToContact', checkAuthorization, ifUserAbleToContact)
 
 router.patch('/ifUserFollows', checkAuthorization, ifUserFollows)
+
+router.patch('/requestTo', checkAuthorization, requestTo)
+
+router.patch('/requestFrom', checkAuthorization, requestFrom)
 
 router.patch('/sendFollowRequest', checkAuthorization, sendFollowRequest)
 

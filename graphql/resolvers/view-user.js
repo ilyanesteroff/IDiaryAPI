@@ -23,10 +23,12 @@ module.exports = async function(userId, client){
       if(!userIsPublic) {
         let userToView = await User.getSpecificFields({ _id: new ObjectID(userId)}, { password: 0, _id: 0 })
         let userIsPublic = await UserSettings.getSpecificFields({ _id: new ObjectID(userId) }, { public : 1, _id: 0 })
+        let lastSeen = await UserInfo.getSpecificFields({ _id: new ObjectID(userId) }, { _id: 0, lastSeen: 1 })
         return {
           ...userToView,
           ...userIsPublic,
           _id: userId,
+          lastSeen: lastSeen
         }
       }
     }

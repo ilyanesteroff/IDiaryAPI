@@ -98,5 +98,4 @@ export interface IFollower{
 export interface IBlock{
   blockedUser: follower
   userWhoBlocked: string
-  reason: string | null
 }

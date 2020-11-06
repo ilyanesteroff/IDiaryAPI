@@ -2,6 +2,7 @@ const { ObjectID } = require('mongodb')
 const { UserInfo } = require('../../js/models/UserInfo')
 const { UserSettings } = require('../../js/models/UserSettings')
 const { Request } = require('../../js/models/Request')
+const { BlockedUser } = require('../../js/models/BlockedUser')
 const { Conversation } = require('../../js/models/Conversation')
 const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers')
 const followingStats = require('../assistants/follower-stats')
@@ -20,6 +21,8 @@ module.exports = async function(client){
     const conversations = await Conversation.countConversations(client._id)
     const incomingRequests = await Request.countIncomingRequests(client._id)
     const outcomingRequests = await Request.countOutcomingRequests(client._id)
+    const blockedUsers = await BlockedUser.countBlockedUsers(client._id)
+    
     return {
       ...client,
       ...userInfo,
@@ -29,8 +32,9 @@ module.exports = async function(client){
       conversations: conversations,
       requestsTo: outcomingRequests,
       requestsFrom: incomingRequests,
+      blockedUsers: blockedUsers,
       lastSeen: userInfo.lastSeen.toISOString(),
-      createdAt: client.createdAt.toISOString(), 
+      createdAt: client.createdAt.toISOString()
     }
   } catch(err) {
     checkAndThrowError(err) 

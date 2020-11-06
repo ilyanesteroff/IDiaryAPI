@@ -71,6 +71,7 @@ module.exports = buildSchema(`
     email: String!
     followers: Int!
     following: Int!
+    blockedUsers: Int!
     FullfilledTodos: Int!
     ActiveTodos: Int!
     requestsTo: Int!
@@ -108,6 +109,12 @@ module.exports = buildSchema(`
     receiver: Follower!
     sender: Follower!
     sentAt: String!
+  }
+
+  type BlockedUser {
+    _id: ID!
+    user: Follower!
+    userWhoBlocked: ID!
   }
 
   type FollowingInfo {
@@ -173,6 +180,7 @@ module.exports = buildSchema(`
     findUser(username: String!) : Follower!
     following(userId: ID!, page: Int!): [FollowingInfo]!
     followers(userId: ID!, page: Int!): [FollowingInfo]!
+    blockedUsers(page: Int!): [BlockedUser]!
     conversations(page: Int!): [Conversation]!
     messages(page: Int!, convId: ID!): [Message]!
     userStats: UserStats!

@@ -6,6 +6,7 @@ const findUser = require('./resolvers/find-user')
 const viewFollowers = require('./resolvers/view-followers')
 const viewFollowings = require('./resolvers/view-followings')
 const viewMessages = require('./resolvers/messages')
+const viewBlockedUsers = require('./resolvers/get-blocked-users')
 const getUserStats = require('./resolvers/get-user-stats')
 const getConversations = require('./resolvers/view-conversations')
 const findTodosByTagname = require('./resolvers/find-todos-by-tagname')
@@ -33,6 +34,8 @@ module.exports = {
   following: ({ userId, page }, { user }) => viewFollowings(userId, page, user),
   
   followers: ({ userId, page }, { user }) => viewFollowers(userId, page, user),
+
+  blockedUsers: ({ page }, { user }) => viewBlockedUsers(page, user),
 
   conversations: ({ page }, { user }) => getConversations(user, page),
 

@@ -9,7 +9,7 @@ const updateUserActivity = require('../../assistants/update-user-activity')
 module.exports = async function(req, res){
   try {
     const { user } = req
-    const { reason, userId } = req.body
+    const { userId } = req.body
     if(!reason || !userId) return res.status(400).json({ error: 'Something is missing' })
 
     if(user._id === userId) return res.status(400).json({ error: 'Cannot block yourself' })
@@ -23,8 +23,7 @@ module.exports = async function(req, res){
     
     const blockingAction = new BlockedUser({
       blockedUser: { ...userToBlock, _id: userToBlock._id.toString() },
-      userWhoBlocked: user._id,
-      reason: reason
+      userWhoBlocked: user._id
     })
 
     await blockingAction.save()

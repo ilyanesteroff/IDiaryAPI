@@ -22,6 +22,8 @@ const checkEmailAndUsername = require('./controllers/check-userame-email')
 const viewMessages = require('./controllers/mark-messages-as-viewed')
 const blockUser = require('./controllers/block-user')
 const unblockUser = require('./controllers/unblock-user')
+const ifUserFollows = require('./controllers/if-user-follows')
+
 
 const router = express.Router()
 
@@ -36,6 +38,8 @@ router.patch('/setNewPassword', setNewPassword)
 router.patch('/verifyPassword', checkAuthorization, verifyPassword)
 
 router.patch('/ifUserAbleToContact', checkAuthorization, ifUserAbleToContact)
+
+router.patch('/ifUserFollows', checkAuthorization, ifUserFollows)
 
 router.patch('/sendFollowRequest', checkAuthorization, sendFollowRequest)
 

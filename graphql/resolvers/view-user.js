@@ -5,9 +5,9 @@ const { UserInfo } = require('../../js/models/UserInfo')
 const { UserSettings } = require('../../js/models/UserSettings')
 const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers')
 const findOutIfSomeoneIsBlocked = require('../../assistants/user/if-users-blocked')
-const findOutIfUserPublic = require('../../assistants/user/if-user-is-public')
 const followerStats = require('../assistants/follower-stats')
 const updateUserActivity = require('../../assistants/update-user-activity')
+const ifUserIsPublic = require('../../assistants/user/if-user-is-public')
 
 
 module.exports = async function(userId, client){
@@ -19,8 +19,8 @@ module.exports = async function(userId, client){
 
     if(!ifUserFollows) {
       await findOutIfSomeoneIsBlocked(client._id, userId) && throwAnError('Unable to view', 400)
-      const ifUserIsPrivate = await findOutIfUserPublic(userId)
-      if(ifUserIsPrivate) {
+      const userIsPublic = await ifUserIsPublic(userId)
+      if(!userIsPublic) {
         let userToView = await User.getSpecificFields({ _id: new ObjectID(userId)}, { password: 0, _id: 0 })
         let userIsPublic = await UserSettings.getSpecificFields({ _id: new ObjectID(userId) }, { public : 1, _id: 0 })
         return {

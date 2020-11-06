@@ -31,9 +31,9 @@ module.exports = async function(req, res){
       receiver: { ...requestReceiver, _id: requestReceiver._id.toString() },
       sentAt: new Date
     })
-    await request.save()
+    const savedReq = await request.save()
 
-    return res.status(201).json({ requestSent: true })
+    return res.status(201).json({ requestSent: savedReq })
   } catch(err) {
     return res.status(500).json({ error: err.massage || 'Something went wrong'  })
   }

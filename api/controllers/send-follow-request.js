@@ -33,7 +33,7 @@ module.exports = async function(req, res){
     })
     const savedReq = await request.save()
 
-    return res.status(201).json({ requestSent: savedReq })
+    return res.status(201).json({ requestSent: savedReq._id })
   } catch(err) {
     return res.status(500).json({ error: err.massage || 'Something went wrong'  })
   }

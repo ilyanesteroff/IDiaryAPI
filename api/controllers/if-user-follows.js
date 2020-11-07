@@ -11,7 +11,7 @@ module.exports = async function(req, res){
     return verdict
       ? res.status(200).json({ userFollows: verdict._id })
       : res.status(200).json({ userFollows: false })
-} catch(err) {
+  } catch(err) {
     res.status(500).json({ error: err.massage || 'Something went wrong' })
   }
 }

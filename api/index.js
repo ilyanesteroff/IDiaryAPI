@@ -75,7 +75,7 @@ router.delete('/unfollowOrRemoveFollower/:followId', checkAuthorization, unfollo
 
 router.delete('/deleteMessage/:messageId', checkAuthorization, deleteMessage)
 
-router.delete('/unblockUser', checkAuthorization, unblockUser)
+router.delete('/unblockUser/:username', checkAuthorization, unblockUser)
 
 router.get('/countTodosByTag/:tag', checkAuthorization, countTodosByTag)
 

@@ -15,7 +15,7 @@ module.exports = async function(req, res){
     
     await BlockedUser.unblock(user._id, username)
 
-    return true
+    return res.status(201).json({ userUnblocked: true })
   } catch(err){
     return res.status(500).json({ error: err.message })
   }

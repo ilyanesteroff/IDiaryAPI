@@ -7,7 +7,9 @@ module.exports = async function(page, client){
     !client && throwAnError('Authorization failed', 400)
     
     const blockedUsers = await BlockedUser.findManyBlockedUsers(client._id, page, parseInt(process.env.ITEMS_PER_PAGE))
-
+    blockedUsers.forEach(b => {
+      b.user = b.blockedUser
+    })
     return blockedUsers
   } catch(err) {
     checkAndThrowError(err)

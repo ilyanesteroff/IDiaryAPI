@@ -9,7 +9,7 @@ module.exports = async function(req, res){
 
     updateUserActivity(user._id)
 
-    if(client.username === username) return res.status(400).json({ error: 'Cannot block/unblock yourself' })
+    if(user.username === username) return res.status(400).json({ error: 'Cannot block/unblock yourself' })
     const blockedUserExist = await BlockedUser.findByUsername(user._id, username)
     if(!blockedUserExist) return res.status(404).json({ error: 'blocked user not found' })
     

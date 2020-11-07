@@ -10,7 +10,7 @@ module.exports = async function(req, res){
   try {
     const { user } = req
     const { userId } = req.body
-    if(!reason || !userId) return res.status(400).json({ error: 'Something is missing' })
+    if(!userId) return res.status(400).json({ error: 'User ID is missing' })
 
     if(user._id === userId) return res.status(400).json({ error: 'Cannot block yourself' })
     updateUserActivity(user._id)

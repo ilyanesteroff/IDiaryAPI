@@ -13,7 +13,7 @@ module.exports = async function(userId, page, client) {
     else {
       const verdict = await checkUsersCompatibility(userId, client)
       verdict
-        ? todos = await Todo.findManyTodos({ "creator._id" : client._id, public: true }, page, parseInt(process.env.ITEMS_PER_PAGE) / 2)
+        ? todos = await Todo.findManyTodos({ "creator._id" : userId, public: true }, page, parseInt(process.env.ITEMS_PER_PAGE) / 2)
         : throwAnError('You are not allowed doing this', 400)
     }
 

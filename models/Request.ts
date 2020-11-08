@@ -18,7 +18,7 @@ export class Request extends DbModel{
   }
 
   static findRequestFrom(userId: string, username: string){
-    return this.getModel(
+    return this.getModel( 
       { 
         "sender.username" : username,
         "receiver._id" : userId 
@@ -27,7 +27,7 @@ export class Request extends DbModel{
     )
   }
 
-  static findRequestsTo(userId: string, username: string){
+  static findRequestTo(userId: string, username: string){
     return this.getModel(
       { 
         "receiver.username" : username,

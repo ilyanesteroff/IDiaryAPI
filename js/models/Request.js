@@ -22,7 +22,7 @@ class Request extends Model_1.default {
             "receiver._id": userId
         }, this.collection);
     }
-    static findRequestsTo(userId, username) {
+    static findRequestTo(userId, username) {
         return this.getModel({
             "receiver.username": username,
             "sender._id": userId

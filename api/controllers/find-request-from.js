@@ -6,11 +6,11 @@ module.exports = async function(req, res){
     const { user } = req
     const { userId } = req.body
 
-    const request = await Request.findRequestTo(userId, user.username)
+    const request = await Request.findRequestsTo(userId, user.username)
     return request
       ? res.status(200).json({ requestReceived: true, request: request._id })
       : res.status(200).json({ requestReceived: false })
   } catch(err) {
-    return res.status(500).json({ error:  err.message || 'Sometnihg went wrong' })
+    return res.status(500).json({ error:  err.message || 'Something went wrong' })
   }
 }

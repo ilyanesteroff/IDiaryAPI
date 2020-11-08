@@ -46,6 +46,7 @@ module.exports = async function(userId, client){
       ...userIsPublic,
       ...userInfo,
       _id: userId,
+      lastSeen: userInfo.lastSeen.toISOString(),
       createdAt: userToView.createdAt.toISOString(),
       followers: followers,
       following: following

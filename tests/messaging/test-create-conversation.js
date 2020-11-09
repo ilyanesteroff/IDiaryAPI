@@ -3,16 +3,17 @@ const { mongoConnect } = require('../../js/utils/db-connection')
 const res = require('../utils/response')
 const { client1, client2 } = require('../utils/client')
 
+
 const req = {
-  user: client2,
+  user: client1,
   body: {
-    receiver: client1._id,
+    receiver: client2._id,
     messageText: 'Hi there'
   }
 }
 
 const create = async _ => {
-  try {
+  try { 
     await createConv(req, res)
   } catch(err) {
     console.log(err.message)

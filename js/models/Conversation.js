@@ -10,6 +10,9 @@ class Conversation extends Model_1.default {
     constructor(convInfo) {
         super('Conversations', Object.assign(Object.assign({}, convInfo), { unseenMessages: 0 }));
     }
+    static getConversation(convId) {
+        return this.getModel({ _id: new mongodb_1.ObjectID(convId) }, this.collection);
+    }
     static getSpecificFields(convId, project) {
         return this._getSpecificFields({ _id: new mongodb_1.ObjectID(convId) }, project, this.collection);
     }
@@ -34,10 +37,16 @@ class Conversation extends Model_1.default {
         }, this.collection);
     }
     static increaseUnseenMessages(convId) {
-        return this.updateModel(new mongodb_1.ObjectID(convId), { $inc: { unseenMessages: 1 } }, this.collection);
+        return this.updateModel(new mongodb_1.ObjectID(convId), { $inc: { unseenMessages: 1 } }, this.collection)
+            .then(_ => {
+            return this.getConversation(convId);
+        });
     }
     static decreaseUnseenMessages(convId) {
-        return this.updateModel(new mongodb_1.ObjectID(convId), { $inc: { unseenMessages: -1 } }, this.collection);
+        return this.updateModel(new mongodb_1.ObjectID(convId), { $inc: { unseenMessages: -1 } }, this.collection)
+            .then(_ => {
+            return this.getConversation(convId);
+        });
     }
     static unsetUnseenMessages(convId) {
         return this.updateModel(new mongodb_1.ObjectID(convId), { $set: { unseenMessages: 0 } }, this.collection);

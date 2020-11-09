@@ -11,6 +11,10 @@ export class Conversation extends DbModel{
     })
   }
 
+  static getConversation(convId: string){
+    return this.getModel({ _id: new ObjectID(convId) }, this.collection)
+  }
+
   static getSpecificFields(convId: string, project: object){
     return this._getSpecificFields({ _id: new ObjectID(convId) }, project, this.collection)
   }
@@ -40,10 +44,16 @@ export class Conversation extends DbModel{
   
   static increaseUnseenMessages(convId: string){
     return this.updateModel(new ObjectID(convId), { $inc : { unseenMessages : 1 } }, this.collection)
+      .then(_ => {
+        return this.getConversation(convId)
+      })
   }
 
   static decreaseUnseenMessages(convId: string){
     return this.updateModel(new ObjectID(convId), { $inc : { unseenMessages : -1 } }, this.collection)
+      .then(_ => {
+        return this.getConversation(convId)
+      })
   }
 
   static unsetUnseenMessages(convId: string){

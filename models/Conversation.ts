@@ -19,6 +19,15 @@ export class Conversation extends DbModel{
     return this._getSpecificFields({ _id: new ObjectID(convId) }, project, this.collection)
   }
 
+  static getConversationByUserId(user2Id: string, user1Id: string){
+    return this.getModel({ 
+      $and : [
+        { "participants" : { $elemMatch : { _id: user1Id } } },
+        { "participants" : { $elemMatch : { _id: user2Id } } }
+      ]
+    }, this.collection)
+  }
+
   static findManyConversationsForOneUser(userId: string, currentPage: number, limit: number){
     return this.getManyModels({ 
       participants: { 

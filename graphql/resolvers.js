@@ -9,6 +9,7 @@ const viewMessages = require('./resolvers/messages')
 const viewBlockedUsers = require('./resolvers/get-blocked-users')
 const getUserStats = require('./resolvers/get-user-stats')
 const getConversations = require('./resolvers/view-conversations')
+const getConversation = require('./resolvers/get-conversation')
 const findTodosByTagname = require('./resolvers/find-todos-by-tagname')
 const createNewUser = require('./resolvers/create-new-user')
 const updateUser = require('./resolvers/update-user')
@@ -38,6 +39,8 @@ module.exports = {
   blockedUsers: ({ page }, { user }) => viewBlockedUsers(page, user),
 
   conversations: ({ page }, { user }) => getConversations(user, page),
+
+  conversation:({ userId }, { user }) => getConversation(userId, user),
 
   messages: ({ page, convId }, { user }) => viewMessages(page, convId, user),
 

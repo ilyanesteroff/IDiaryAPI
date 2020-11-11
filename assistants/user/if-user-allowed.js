@@ -17,6 +17,6 @@ module.exports = async function(userId, client) {
 
     return true
   } catch(err) {
-    throw err
+    return false
   }
 }

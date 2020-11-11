@@ -53,6 +53,13 @@ module.exports = buildSchema(`
     unseenMessages: Int!
   }
 
+  type ConversationWithMessages {
+    conversation: Conversation
+    messages: [Message]
+    exists: Boolean
+    ifUserAllowed: Boolean!
+  }
+
   type Message {
     _id: ID!
     conversationID: ID!
@@ -182,6 +189,7 @@ module.exports = buildSchema(`
     followers(userId: ID!, page: Int!): [FollowingInfo]!
     blockedUsers(page: Int!): [BlockedUser]!
     conversations(page: Int!): [Conversation]!
+    conversation(userId: ID!): ConversationWithMessages!
     messages(page: Int!, convId: ID!): [Message]!
     userStats: UserStats!
     findTodosByTagname(tag: String!, page: Int!) : [Todo]!

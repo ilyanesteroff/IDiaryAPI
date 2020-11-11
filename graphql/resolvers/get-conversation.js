@@ -13,7 +13,7 @@ module.exports = async function(username, client){
     updateUserActivity(client._id)
 
     const userExists = await User.getSpecificFields({ username: username }, { _id: 1 })
-    if(!allowed) return { ifUserAllowed: false }
+    if(!userExists) return { ifUserAllowed: false }
 
     const allowed = await ifUserAllowed(userExists._id, client)
     if(!allowed) return { ifUserAllowed: false }

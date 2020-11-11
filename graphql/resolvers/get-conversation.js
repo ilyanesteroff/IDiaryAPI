@@ -1,20 +1,24 @@
 const { Conversation } = require('../../js/models/Conversation')
 const { Message } = require('../../js/models/Message')
+const { User } = require('../../js/models/User')
 const ifUserAllowed = require('../../assistants/user/if-user-allowed')
 const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers')
 const updateUserActivity = require('../../assistants/update-user-activity')
 
 
-module.exports = async function(userId, client){
+module.exports = async function(username, client){
   try {
     !client && throwAnError('Authorization failed', 400)
     
     updateUserActivity(client._id)
-    
-    const allowed = await ifUserAllowed(userId, client)
+
+    const userExists = await User.getSpecificFields({ username: username }, { _id: 1 })
     if(!allowed) return { ifUserAllowed: false }
 
-    const conv = await Conversation.getConversationByUserId(userId, client._id)
+    const allowed = await ifUserAllowed(userExists._id, client)
+    if(!allowed) return { ifUserAllowed: false }
+
+    const conv = await Conversation.getConversationByUserneme(username, client._id)
     if(!conv) return { exists: false, ifUserAllowed: true }
     const messages = await Message.findManyMessages({ conversationID: conv._id.toString() }, 1, 20)
     

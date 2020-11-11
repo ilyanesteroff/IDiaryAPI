@@ -16,11 +16,11 @@ class Conversation extends Model_1.default {
     static getSpecificFields(convId, project) {
         return this._getSpecificFields({ _id: new mongodb_1.ObjectID(convId) }, project, this.collection);
     }
-    static getConversationByUserId(user2Id, user1Id) {
+    static getConversationByUserneme(username, user1Id) {
         return this.getModel({
             $and: [
                 { "participants": { $elemMatch: { _id: user1Id } } },
-                { "participants": { $elemMatch: { _id: user2Id } } }
+                { "participants": { $elemMatch: { username: username } } }
             ]
         }, this.collection);
     }

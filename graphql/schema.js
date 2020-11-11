@@ -189,7 +189,7 @@ module.exports = buildSchema(`
     followers(userId: ID!, page: Int!): [FollowingInfo]!
     blockedUsers(page: Int!): [BlockedUser]!
     conversations(page: Int!): [Conversation]!
-    conversation(userId: ID!): ConversationWithMessages!
+    conversation(username: String!): ConversationWithMessages!
     messages(page: Int!, convId: ID!): [Message]!
     userStats: UserStats!
     findTodosByTagname(tag: String!, page: Int!) : [Todo]!

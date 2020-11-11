@@ -40,7 +40,7 @@ module.exports = {
 
   conversations: ({ page }, { user }) => getConversations(user, page),
 
-  conversation:({ userId }, { user }) => getConversation(userId, user),
+  conversation:({ username }, { user }) => getConversation(username, user),
 
   messages: ({ page, convId }, { user }) => viewMessages(page, convId, user),
 

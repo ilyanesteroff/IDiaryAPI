@@ -64,6 +64,10 @@ export class Message extends DbModel{
       .then(res => res[0])
   }
 
+  static countMessages(convID: string){
+    return this.countModels({ conversationID: convID }, this.collection)
+  }
+
   static countUnseenMessages(userId: string){
     return this.countModels({ seen: false, to: userId }, this.collection)
   }

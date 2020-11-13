@@ -52,6 +52,9 @@ class Message extends Model_1.default {
         }, this.collection, { writtenAt: -1 }, 1, 1)
             .then(res => res[0]);
     }
+    static countMessages(convID) {
+        return this.countModels({ conversationID: convID }, this.collection);
+    }
     static countUnseenMessages(userId) {
         return this.countModels({ seen: false, to: userId }, this.collection);
     }

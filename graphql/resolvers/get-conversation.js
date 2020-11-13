@@ -17,10 +17,10 @@ module.exports = async function(username, client){
 
     const allowed = await ifUserAllowed(userExists._id, client)
     if(!allowed) return { ifUserAllowed: false }
-
+    
     const conv = await Conversation.getConversationByUserneme(username, client._id)
     if(!conv) return { exists: false, ifUserAllowed: true }
-    const messages = await Message.findManyMessages({ conversationID: conv._id.toString() }, 1, 20)
+    const messages = await Message.findManyMessages({ conversationID: conv._id.toString() }, 1, parseInt(process.env.ITEMS_PER_PAGE))
     
     messages.forEach(m => {
       m.writtenAt = m.writtenAt.toISOString()

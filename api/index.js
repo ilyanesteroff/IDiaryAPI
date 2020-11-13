@@ -25,6 +25,7 @@ const unblockUser = require('./controllers/unblock-user')
 const ifUserFollows = require('./controllers/if-user-follows')
 const requestFrom = require('./controllers/find-request-from')
 const requestTo = require('./controllers/find-request-to')
+const countMessages = require('./controllers/count-messages')
 
 
 const router = express.Router()
@@ -36,6 +37,8 @@ router.patch('/acceptEmail', acceptEmail)
 router.patch('/requestPasswordReset', requestPwReset)
 
 router.patch('/setNewPassword', setNewPassword)
+
+router.patch('/countMessages', checkAuthorization, countMessages)
 
 router.patch('/verifyPassword', checkAuthorization, verifyPassword)
 

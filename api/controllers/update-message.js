@@ -16,9 +16,10 @@ module.exports = async function(req, res){
     updateUserActivity(user._id)
     
     const updatedMessage = await Message.changeMessageText(messageId, newText)
-    const conversation = await Conversation.getSpecificFields(updatedMessage.conversationID, { latestMessage: 1, updatedAt: 1, _id: 0 })
+    const conversation = await Conversation.getSpecificFields(updatedMessage.conversationID, { latestMessage: 1, updatedAt: 1 })
     if(!conversation) return res.status(404).json({ error: 'Conversation not found' })
     let conv = null
+    console.log(conversation.latestMessage, messageId)
     if(conversation.latestMessage._id === messageId) {
       await Conversation.setAnotherLatestMessage(updatedMessage.conversationID, { ...updatedMessage, _id: updatedMessage._id.toString }, conversation.updatedAt)
       conv = await Conversation.getConversation(updatedMessage.conversationID)

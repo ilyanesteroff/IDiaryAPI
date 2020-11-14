@@ -59,7 +59,7 @@ export class Conversation extends DbModel{
   }
 
   static decreaseUnseenMessages(convId: string){
-    return this.updateModel(new ObjectID(convId), { $inc : { unseenMessages : -1 } }, this.collection)
+    return this.updateModel(new ObjectID(convId), { $inc : { unseenMessages : -2 } }, this.collection)
       .then(_ => {
         return this.getConversation(convId)
       })

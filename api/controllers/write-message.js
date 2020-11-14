@@ -23,8 +23,9 @@ module.exports = async function(req, res){
     })
 
     const savedMessage = await message.save()
-    await Conversation.setAnotherLatestMessage(convId, { ...savedMessage, _id: savedMessage._id.toString() })
-    await Conversation.increaseUnseenMessages(convId.toString())
+
+    await Conversation.setAnotherLatestMessage(convId, { ...savedMessage })
+    await Conversation.increaseUnseenMessages(convId)
 
     const updatedConv = await Conversation.getConversation(convId)
 

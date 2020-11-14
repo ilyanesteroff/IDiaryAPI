@@ -22,6 +22,7 @@ module.exports = async function(req, res){
     }
     const updatedAt = await Conversation.getSpecificFields(message.conversationID, { updatedAt: 1, _id: 0 })
     if(!message.seen) await Conversation.decreaseUnseenMessages(messageId.conversationID)
+    
     await Conversation.setAnotherLatestMessage(message.conversationID, { ...latestMessage, _id: latestMessage._id.toString() }, updatedAt.updatedAt)
     
     const conv = await Conversation.getConversation(message.conversationID)

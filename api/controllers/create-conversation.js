@@ -10,11 +10,11 @@ module.exports = async function(req, res){
     const { user } = req
     const { receiver, messageText } = req.body
     if(!receiver || !messageText) return res.status(400).json({ error: 'Something is missing' })
-    if(receiver === user._id) return res.status(400).json({ error: 'Cannot contact yourself' })
+    if(receiver === user.username) return res.status(400).json({ error: 'Cannot contact yourself' })
     
     updateUserActivity(user._id)
 
-    const user2 = await User.getSpecificFields({ _id: new ObjectID(receiver) }, { username: 1, lastname: 1, firstname: 1})
+    const user2 = await User.getSpecificFields({ username: receiver }, { username: 1, lastname: 1, firstname: 1})
     const conversation = new Conversation({
       participants: [
         User.formatUserAsFollower(user),
@@ -28,7 +28,7 @@ module.exports = async function(req, res){
       conversationID: savedConv._id.toString(),
       author: user.username,
       text: messageText, 
-      to: receiver
+      to: user2._id.toString()
     })
 
     const savedMessage = await firstMessage.save()

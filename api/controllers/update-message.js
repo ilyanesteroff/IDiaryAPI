@@ -18,13 +18,13 @@ module.exports = async function(req, res){
     const updatedMessage = await Message.changeMessageText(messageId, newText)
     const conversation = await Conversation.getSpecificFields(updatedMessage.conversationID, { latestMessage: 1, updatedAt: 1, _id: 0 })
     if(!conversation) return res.status(404).json({ error: 'Conversation not found' })
-    let conv
+    let conv = null
     if(conversation.latestMessage._id === messageId) {
-      await Conversation.setAnotherLatestMessage(updatedMessage.conversationID, updatedMessage, conversation.updatedAt)
-      conv = await Conversation.getConversation(updatedMessage.conversationID.toString())
+      await Conversation.setAnotherLatestMessage(updatedMessage.conversationID, { ...updatedMessage, _id: updatedMessage._id.toString }, conversation.updatedAt)
+      conv = await Conversation.getConversation(updatedMessage.conversationID)
     }
 
-    return res.status(201).json({ messageUpdated: true, conversation: conv ? conv : null })
+    return res.status(201).json({ messageUpdated: true, conversation: conv })
   } catch(err) {
     return res.status(500).json({ error: err.message })
   }

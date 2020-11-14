@@ -68,6 +68,7 @@ module.exports = buildSchema(`
     writtenAt: String!
     seen: Boolean!
     liked: Boolean
+    to: ID!
   }
 
   type FullUser {

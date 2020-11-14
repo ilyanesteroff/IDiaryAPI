@@ -21,7 +21,7 @@ module.exports = async function(req, res){
     let conv = null
 
     if(conversation.latestMessage._id === messageId) {
-      await Conversation.setAnotherLatestMessage(updatedMessage.conversationID, { ...updatedMessage, _id: updatedMessage._id.toString() }, conversation.updatedAt)
+      await Conversation.setAnotherLatestMessage(updatedMessage.conversationID, { ...updatedMessage }, conversation.updatedAt)
       conv = await Conversation.getConversation(updatedMessage.conversationID)
     }
 

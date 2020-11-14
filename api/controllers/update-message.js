@@ -20,8 +20,8 @@ module.exports = async function(req, res){
     if(!conversation) return res.status(404).json({ error: 'Conversation not found' })
     let conv = null
 
-    if(conversation.latestMessage._id === messageId) {
-      await Conversation.setAnotherLatestMessage(updatedMessage.conversationID, { ...updatedMessage }, conversation.updatedAt)
+    if(conversation.latestMessage._id.toString() === messageId) {
+      await Conversation.setAnotherLatestMessage(updatedMessage.conversationID, { ...updatedMessage, _id: updatedMessage._id.toString() }, conversation.updatedAt)
       conv = await Conversation.getConversation(updatedMessage.conversationID)
     }
 

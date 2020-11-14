@@ -19,9 +19,9 @@ module.exports = async function(req, res){
     const conversation = await Conversation.getSpecificFields(updatedMessage.conversationID, { latestMessage: 1, updatedAt: 1 })
     if(!conversation) return res.status(404).json({ error: 'Conversation not found' })
     let conv = null
-    console.log(conversation.latestMessage, messageId)
+
     if(conversation.latestMessage._id === messageId) {
-      await Conversation.setAnotherLatestMessage(updatedMessage.conversationID, { ...updatedMessage, _id: updatedMessage._id.toString }, conversation.updatedAt)
+      await Conversation.setAnotherLatestMessage(updatedMessage.conversationID, { ...updatedMessage, _id: updatedMessage._id.toString() }, conversation.updatedAt)
       conv = await Conversation.getConversation(updatedMessage.conversationID)
     }
 

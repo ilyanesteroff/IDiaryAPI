@@ -21,7 +21,7 @@ class Message extends Model_1.default {
         return this._getSpecificFields({ _id: new mongodb_1.ObjectID(messageId) }, project, this.collection);
     }
     static findManyMessages(query, currentPage, limit) {
-        return this.getManyModels(query, this.collection, { writtenAt: -1 }, currentPage, limit);
+        return this.getManyModels(query, this.collection, { writtenAt: 1 }, currentPage, limit);
     }
     static changeMessageText(messageId, text) {
         return this.updateAndReturnModel(new mongodb_1.ObjectID(messageId), {

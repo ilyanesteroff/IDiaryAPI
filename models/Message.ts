@@ -26,7 +26,7 @@ export class Message extends DbModel{
   }
 
   static findManyMessages(query: object, currentPage: number, limit: number){
-    return this.getManyModels(query, this.collection, {writtenAt: -1}, currentPage, limit)
+    return this.getManyModels(query, this.collection, {writtenAt: 1}, currentPage, limit)
   }
 
   static changeMessageText(messageId: string, text: string){

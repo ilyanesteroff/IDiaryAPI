@@ -8,7 +8,7 @@ const req = {
   body: {
     to: client2._id,
     text: 'What bout you',
-    convId: '5f95d026194ad5418835375c'
+    convId: '5fa93adfc2f78d2930645559'
   }
 }
 

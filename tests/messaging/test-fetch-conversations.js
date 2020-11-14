@@ -11,4 +11,4 @@ const view = async _ => {
     }
   }
   
-  mongoConnect(_ => view())
+  mongoConnect(_ => view()) 

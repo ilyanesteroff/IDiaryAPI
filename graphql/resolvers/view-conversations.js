@@ -14,7 +14,6 @@ module.exports = async function(client, page) {
       conv.updatedAt = conv.updatedAt.toISOString()
       conv.latestMessage = {
         ...conv.latestMessage,
-        _id: conv.latestMessage._id.toString(),
         writtenAt: conv.latestMessage.writtenAt.toISOString()
       }
     })

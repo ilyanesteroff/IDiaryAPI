@@ -51,7 +51,7 @@ class Conversation extends Model_1.default {
         });
     }
     static decreaseUnseenMessages(convId) {
-        return this.updateModel(new mongodb_1.ObjectID(convId), { $inc: { unseenMessages: -2 } }, this.collection)
+        return this.updateModel(new mongodb_1.ObjectID(convId), { $inc: { unseenMessages: -1 } }, this.collection)
             .then(_ => {
             return this.getConversation(convId);
         });

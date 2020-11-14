@@ -9,9 +9,10 @@ module.exports = async function(page, convId, client){
     !client && throwAnError('Authorization failed', 400)
     updateUserActivity(client._id)
 
-    const participants = await Conversation.getSpecificFields(convId, { participants: 1, _id: 0 })
+    const participants = await Conversation.getSpecificFields(convId, { participants: 1 })
+
     if(!participants) throwAnError('Conversation not found', 404)
-    if(!participants.some(p => p._id === client._id)) throwAnError('Access denied', 400)
+    if(!participants.participants.some(p => p._id === client._id)) throwAnError('Access denied', 400)
     const messages = await Message.findManyMessages({ conversationID: convId }, page, parseInt(process.env.ITEMS_PER_PAGE))
 
     messages.forEach(m => {

@@ -15,7 +15,7 @@ module.exports = async function(username, client){
     const userExists = await User.getSpecificFields({ username: username }, { _id: 1 })
     if(!userExists) return { ifUserAllowed: false }
 
-    const allowed = await ifUserAllowed(userExists._id, client)
+    const allowed = await ifUserAllowed(userExists._id.toString(), client)
     if(!allowed) return { ifUserAllowed: false }
     
     const conv = await Conversation.getConversationByUserneme(username, client._id)

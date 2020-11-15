@@ -7,7 +7,10 @@ exports.getDb = exports.mongoConnect = void 0;
 const mongodb_1 = __importDefault(require("mongodb"));
 const MongoClient = mongodb_1.default.MongoClient;
 let _db;
-const client = new MongoClient(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@base.ml3ol.mongodb.net/${process.env.DB}?retryWrites=true&w=majority`, { useUnifiedTopology: true });
+const client = new MongoClient(
+  //`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@base.ml3ol.mongodb.net/${process.env.DB}?retryWrites=true&w=majority`, 
+  `mongodb+srv://IDiary_Admin:A5-lapas@base.ml3ol.mongodb.net/IDiary?retryWrites=true&w=majority`, 
+  { useUnifiedTopology: true });
 exports.mongoConnect = (cb) => {
     client.connect()
         .then(client => {

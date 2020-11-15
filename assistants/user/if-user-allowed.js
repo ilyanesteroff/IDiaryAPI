@@ -8,6 +8,7 @@ module.exports = async function(userId, client) {
     if(!client || !userId) throw new Error('client or user Id was not provided')
 
     const ifUserFollowsAnotherUser = await Follower.findFollower(userId, client.username)
+    
     if(!ifUserFollowsAnotherUser) {
       const ifBlocked = await findOutIfSomeoneIsBlocked(client._id, userId)
       if(ifBlocked) return false

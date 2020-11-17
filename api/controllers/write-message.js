@@ -27,9 +27,7 @@ module.exports = async function(req, res){
     await Conversation.setAnotherLatestMessage(convId, { ...savedMessage, _id: savedMessage._id.toString() })
     await Conversation.increaseUnseenMessages(convId)
 
-    const updatedConv = await Conversation.getConversation(convId)
-
-    return res.status(201).json({ message: savedMessage, conversation: updatedConv })
+    return res.status(201).json({ message: savedMessage })
   } catch(err) {
     return res.status(500).json({ error: err.message })
   }

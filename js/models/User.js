@@ -24,7 +24,7 @@ class User extends Model_1.default {
     }
     static formatUserAsFollower(user) {
         return {
-            _id: user._id,
+            _id: user._id.toString(),
             username: user.username,
             firstname: user.firstname,
             lastname: user.lastname

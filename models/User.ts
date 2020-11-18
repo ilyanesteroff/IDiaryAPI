@@ -31,7 +31,7 @@ export class User extends DbModel{
  
   static formatUserAsFollower(user: FullUser) {
     return {
-      _id: user._id,
+      _id: user._id.toString(),
       username: user.username,
       firstname: user.firstname,
       lastname: user.lastname

@@ -24,7 +24,7 @@ module.exports = async function(userInput, client){
     await Follower.updateFollowing(client._id, shortUser)
     await Conversation.updateUserInManyConversations(client._id, shortUser)
     await BlockedUser.updateBlockedUsers(client._id, shortUser)
-    if(client.username !== userInput.username){
+    if(userInput.username && userInput.username !== client.username){
       await Message.updateAuthorInManyMassages(client.username, userInput.username)
       await Todo.updateCreatorName(client._id, userInput.username)
     }

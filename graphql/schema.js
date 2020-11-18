@@ -185,7 +185,7 @@ module.exports = buildSchema(`
     todos(userId: ID, page: Int!) : [Todo]!
     user(userId: ID): User!
     requests(incoming: Boolean!, page: Int!) : [Request]!
-    findUser(username: String!) : Follower!
+    findUsers(username: String!, page: Int!) : [Follower]!
     following(userId: ID!, page: Int!): [FollowingInfo]!
     followers(userId: ID!, page: Int!): [FollowingInfo]!
     blockedUsers(page: Int!): [BlockedUser]!

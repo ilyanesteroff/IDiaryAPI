@@ -22,6 +22,9 @@ class User extends Model_1.default {
     static getSpecificFields(query, project) {
         return this._getSpecificFields(query, project, this.collection);
     }
+    static findManyUsers(query, page, limit) {
+        return this.getManyModels(query, this.collection, { firstname: -1 }, page, limit);
+    }
     static formatUserAsFollower(user) {
         return {
             _id: user._id.toString(),

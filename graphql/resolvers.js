@@ -2,7 +2,7 @@ const getUserData = require('./resolvers/get-full-user')
 const viewTodos = require('./resolvers/view-todos')
 const viewUser = require('./resolvers/view-user')
 const viewRequests = require('./resolvers/requests')
-const findUser = require('./resolvers/find-user')
+const findUser = require('./resolvers/find-users')
 const viewFollowers = require('./resolvers/view-followers')
 const viewFollowings = require('./resolvers/view-followings')
 const viewMessages = require('./resolvers/messages')
@@ -27,10 +27,10 @@ module.exports = {
   todos: ({ userId, page }, { user }) => viewTodos(userId, page, user),
 
   user: ({ userId }, { user }) => viewUser(userId, user),
-
+  
   requests: ({ incoming, page }, { user }) => viewRequests(incoming, page, user),
-
-  findUser: ({ username }, { user }) => findUser(username, user),
+  
+  findUsers: ({ username, page }, { user }) => findUser(username, page, user),
   
   following: ({ userId, page }, { user }) => viewFollowings(userId, page, user),
   
@@ -48,7 +48,7 @@ module.exports = {
 
   findTodosByTagname: ( { tag, page }, { user }) => findTodosByTagname(tag, page, user),
   
-
+  
   
   createUser: ({ userInput }) => createNewUser(userInput),
   

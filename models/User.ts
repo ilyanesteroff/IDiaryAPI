@@ -28,6 +28,10 @@ export class User extends DbModel{
   static getSpecificFields(query: object, project: object){
     return this._getSpecificFields(query, project, this.collection)
   }
+
+  static findManyUsers(query: object, page: number, limit: number){
+    return this.getManyModels(query, this.collection, { firstname: -1 }, page, limit)
+  }
  
   static formatUserAsFollower(user: FullUser) {
     return {

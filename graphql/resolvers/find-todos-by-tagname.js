@@ -17,12 +17,13 @@ module.exports = async function(tag, page, client) {
     const output = []
 
     for await (let todo of todos){
-      const ifBlocked = await someoneBlocked(todo.creator._id, client._id)
-      if(!ifBlocked){
-        todo._id = todo._id.toString()
-        todo.createdAt = todo.createdAt.toISOString()
-        output.push(todo)
+      if(todo.creator._id !== client._id){
+        const ifBlocked = await someoneBlocked(todo.creator._id, client._id)
+        if(!ifBlocked) return 
       }
+      todo._id = todo._id.toString()
+      todo.createdAt = todo.createdAt.toISOString()
+      output.push(todo)
     }
 
     return output

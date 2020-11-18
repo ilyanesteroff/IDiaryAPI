@@ -10,7 +10,7 @@ module.exports = async function(tag, page, client) {
     updateUserActivity(client._id)
     const todos = await Todo.findManyTodos({
       tags: tag, 
-      public: true, 
+      public: true,
       "creator.public" : true 
     }, page, parseInt(process.env.ITEMS_PER_PAGE) / 2)
 
@@ -19,7 +19,7 @@ module.exports = async function(tag, page, client) {
     for await (let todo of todos){
       if(todo.creator._id !== client._id){
         const ifBlocked = await someoneBlocked(todo.creator._id, client._id)
-        if(!ifBlocked) return 
+        if(ifBlocked) return 
       }
       todo._id = todo._id.toString()
       todo.createdAt = todo.createdAt.toISOString()

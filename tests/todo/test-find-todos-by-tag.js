@@ -5,7 +5,7 @@ const { client1, client2 } = require('../utils/client')
 
 const find = async _ => {
   try {
-    const todos = await findTodos('test', 1, client2)
+    const todos = await findTodos('tag', 1, client2)
     console.log(todos)
   } catch(err) {
     console.log(err.message)

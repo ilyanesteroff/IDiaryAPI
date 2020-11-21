@@ -59,7 +59,7 @@ class Request extends Model_1.default {
         }, this.collection);
     }
     static updateReceiverForManyRequests(receiverId, receiver) {
-        return this.updateManyModels({ "sender._id": receiverId }, {
+        return this.updateManyModels({ "receiver._id": receiverId }, {
             $set: {
                 receiver: receiver
             }

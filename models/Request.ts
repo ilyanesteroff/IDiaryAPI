@@ -77,7 +77,7 @@ export class Request extends DbModel{
   }
 
   static updateReceiverForManyRequests(receiverId: string, receiver: follower){
-    return this.updateManyModels({ "sender._id" : receiverId }, {
+    return this.updateManyModels({ "receiver._id" : receiverId }, {
       $set: {
         receiver: receiver
       }

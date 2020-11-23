@@ -26,6 +26,7 @@ const ifUserFollows = require('./controllers/if-user-follows')
 const requestFrom = require('./controllers/find-request-from')
 const requestTo = require('./controllers/find-request-to')
 const countMessages = require('./controllers/count-messages')
+const ifEnoughSpace = require('./controllers/enough-available-space')
 
 
 const router = express.Router()
@@ -35,6 +36,8 @@ router.patch('/login', login)
 router.patch('/acceptEmail', acceptEmail)
 
 router.patch('/requestPasswordReset', requestPwReset)
+
+router.patch('/enoughSpace', ifEnoughSpace)
 
 router.patch('/setNewPassword', setNewPassword)
 

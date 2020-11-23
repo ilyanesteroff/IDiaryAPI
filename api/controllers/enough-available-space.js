@@ -8,7 +8,7 @@ module.exports = async function(req, res){
 
     const stats = await getDbStats()
 
-    return res.status(200).json({ enough: documentsAmount * stats.avarage * 1.5 > stats.available })
+    return res.status(200).json({ enough: documentsAmount * stats.avarage * 1.5 < stats.available })
 
   } catch(err) {
     return res.status(500).json({ error: err.message || 'Something went wrong' })

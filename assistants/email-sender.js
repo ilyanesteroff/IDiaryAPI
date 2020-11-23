@@ -46,7 +46,7 @@ exports.sendAcceptEmail = (to, subject, token) => {
         <p id="p">Toodoodoo is online platform that allows you to create todos and share them with your friends and others, toodoodoo also allows you communicate with everyone&#128519;</p>
         <div id="linkarea">
           <h3>Cannot wait to get started?&#129488;</h3>
-          <a id="link" href="http://localhost:3000/acceptemail/${token}">tap to complete your registration!&#128591;</a> 
+          <a id="link" href="https://idiary.netlify.app/acceptemail/${token}">tap to complete your registration!&#128591;</a> 
         </div>
       </body>
     </html>` 
@@ -86,8 +86,8 @@ exports.resetPasswordEmail = (to, subject, token) => {
     <body id="body">
         <h1 id="h1">You requested password reset&#128640;</h1>
         <div id="linkarea">
-          <h3>To reset password follow the link below&#128521;</h3>
-          <a id="link" href="http://localhost:3000/resetpassword/${token}">reset password!&#129505;</a>
+          <h3>To reset password follow the link below</h3>
+          <a id="link" href="https://idiary.netlify.app/resetpassword/${token}">reset password!&#129505;</a>
         </div>
     </body>
     <script>

@@ -82,4 +82,14 @@ export class Conversation extends DbModel{
       } 
     }, this.collection)
   }
+
+  static deleteConversations(userId: string){
+    return this.deleteManyModels({ 
+      participants: { 
+        $elemMatch: { 
+          _id: userId 
+        } 
+      } 
+    }, this.collection)
+  }
 }

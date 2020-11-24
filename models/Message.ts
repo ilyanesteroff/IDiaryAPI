@@ -57,6 +57,15 @@ export class Message extends DbModel{
     }, this.collection)
   }
 
+  static deleteManyMessages(userId: string, username: string){
+    return this.deleteManyModels({
+      $or: [
+        { to: userId },
+        { author: username }
+      ]
+    }, this.collection)
+  }
+
   static getLatestMessage(convId: string){
     return this.getManyModels({
       conversationID: convId,

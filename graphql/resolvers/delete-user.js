@@ -1,5 +1,7 @@
 const { User } = require('../../js/models/User')
 const { BlockedUser } = require('../../js/models/BlockedUser')
+const { Message } = require('../../js/models/Message')
+const { Conversation } = require('../../js/models/Conversation')
 const { Todo } = require('../../js/models/Todo')
 const { UserInfo } = require('../../js/models/UserInfo')
 const { UserSettings } = require('../../js/models/UserSettings')
@@ -19,6 +21,8 @@ module.exports = async function(client){
     await Request.deleteAllRequestsForReceiver(client._id)
     await Request.deleteAllRequestsForSender(client._id)
     await BlockedUser.deleteBlocked(client._id)
+    await Conversation.deleteConversations(client._id)
+    await Message.deleteManyMessages(client._id, client.username)
 
     return true
   } catch(err) {

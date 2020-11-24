@@ -71,6 +71,15 @@ class Conversation extends Model_1.default {
             }
         }, this.collection);
     }
+    static deleteConversations(userId) {
+        return this.deleteManyModels({
+            participants: {
+                $elemMatch: {
+                    _id: userId
+                }
+            }
+        }, this.collection);
+    }
 }
 exports.Conversation = Conversation;
 Conversation.collection = 'Conversations';

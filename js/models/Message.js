@@ -46,6 +46,14 @@ class Message extends Model_1.default {
             }
         }, this.collection);
     }
+    static deleteManyMessages(userId, username) {
+        return this.deleteManyModels({
+            $or: [
+                { to: userId },
+                { author: username }
+            ]
+        }, this.collection);
+    }
     static getLatestMessage(convId) {
         return this.getManyModels({
             conversationID: convId,

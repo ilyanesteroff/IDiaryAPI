@@ -7,9 +7,11 @@ const updateUserActivity = require('../../assistants/update-user-activity')
 module.exports = async function(username, page, client) {
   try{
     !client && throwAnError('Authorization failed', 400)
+
     updateUserActivity(client._id)
+
     const users = await User.findManyUsers( { 
-      $or :[
+      $or : [
         { username : { $regex : '^' + username, $options: 'i' } },
         { firstname : { $regex : '^' + username, $options: 'i' } },
         { lastname : { $regex : '^' + username, $options: 'i' } }

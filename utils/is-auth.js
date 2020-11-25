@@ -22,7 +22,7 @@ exports.auth = async (req, res, next) => {
 }
 
 exports.cors = (req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*')  //https://idiary.netlify.app
+  res.setHeader('Access-Control-Allow-Origin', 'https://idiary.netlify.app') 
   res.setHeader('Access-Control-Allow-Methods', '*')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
   req.method === 'OPTIONS'

@@ -9,7 +9,11 @@ module.exports = async function(username, page, client) {
     !client && throwAnError('Authorization failed', 400)
     updateUserActivity(client._id)
     const users = await User.findManyUsers( { 
-      username : { '$regex' : "^" + username } 
+      $or :[
+        { username : { '$regex' : "^" + username } },
+        { firstname : { '$regex' : "^" + username } },
+        { lastname : { '$regex' : "^" + username } }
+      ]
     }, page, parseInt(process.env.ITEMS_PER_PAGE)) 
                                           
     const output = []

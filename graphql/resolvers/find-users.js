@@ -10,9 +10,9 @@ module.exports = async function(username, page, client) {
     updateUserActivity(client._id)
     const users = await User.findManyUsers( { 
       $or :[
-        { username : { '$regex' : "^" + username } },
-        { firstname : { '$regex' : "^" + username } },
-        { lastname : { '$regex' : "^" + username } }
+        { username : { $regex : '^' + username, $options: 'i' } },
+        { firstname : { $regex : '^' + username, $options: 'i' } },
+        { lastname : { $regex : '^' + username, $options: 'i' } }
       ]
     }, page, parseInt(process.env.ITEMS_PER_PAGE)) 
                                           

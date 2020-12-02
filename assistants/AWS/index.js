@@ -1,13 +1,8 @@
 const s3 = require('./config')
-const { promisify } = require('util')
 
-class S3 {
-  constructor(S3){
-    this.S3 = S3
-  }
-
-  getURL(key){
-    return this.S3.getSignedUrlPromise('putObject', {
+module.exports = class S3 {
+  static getURL(key){
+    return s3.getSignedUrlPromise('putObject', {
       Bucket: process.env.AWS_BUCKET,
       ContentType: 'image/jpeg',
       Key: key
@@ -18,8 +13,8 @@ class S3 {
       })
   }
 
-  deleteFile(key){
-    return this.S3.deleteObject({
+  static deleteFile(key){
+    return s3.deleteObject({
       Bucket: process.env.AWS_BUCKET, 
       Key: key
     }).promise()
@@ -29,5 +24,3 @@ class S3 {
       })
   }
 }
-
-module.exports = new S3(s3)

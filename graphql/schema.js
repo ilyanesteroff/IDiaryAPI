@@ -10,6 +10,7 @@ module.exports = buildSchema(`
     updatedAt: String
     timeToComplete: Int
     public: Boolean!
+    imageUrl: String
     tags: [String]
   }
 
@@ -168,6 +169,7 @@ module.exports = buildSchema(`
     task: String! 
     completed: Boolean!
     timeToComplete: Int
+    imageUrl: String
     public: Boolean!
     tags: [String]
   }
@@ -177,6 +179,7 @@ module.exports = buildSchema(`
     completed: Boolean
     timeToComplete: Int
     public: Boolean
+    imageUrl: String
     tags: [String]
   }
 

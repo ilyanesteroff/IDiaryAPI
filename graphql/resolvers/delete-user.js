@@ -8,6 +8,7 @@ const { UserSettings } = require('../../js/models/UserSettings')
 const { Follower } = require('../../js/models/Follower')
 const { Request } = require('../../js/models/Request')
 const { throwAnError, checkAndThrowError } = require('../../utils/error-handlers')
+const S3 = require('../../assistants/AWS/index')
 
 
 module.exports = async function(client){
@@ -23,6 +24,7 @@ module.exports = async function(client){
     await BlockedUser.deleteBlocked(client._id)
     await Conversation.deleteConversations(client._id)
     await Message.deleteManyMessages(client._id, client.username)
+    await S3.deleteFile(client._id)
 
     return true
   } catch(err) {

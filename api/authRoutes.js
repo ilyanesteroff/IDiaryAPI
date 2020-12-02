@@ -19,6 +19,7 @@ const ifUserFollows = require('./controllers/if-user-follows')
 const requestFrom = require('./controllers/find-request-from')
 const requestTo = require('./controllers/find-request-to')
 const countMessages = require('./controllers/count-messages')
+const getPresignedURL = require('./controllers/get-presigned-url')
 
 
 module.exports = router => {
@@ -37,6 +38,8 @@ module.exports = router => {
   router.get('/countTodosByTag/:tag', countTodosByTag)
 
   router.patch('/ifUserAbleToContact', ifUserAbleToContact)
+  
+  router.patch('/getPresignedURL', getPresignedURL)
 
   router.patch('/ifUserFollows', ifUserFollows)
 

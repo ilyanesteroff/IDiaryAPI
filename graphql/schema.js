@@ -186,7 +186,7 @@ module.exports = buildSchema(`
   type RootQuery {
     getAuthUser: FullUser!
     todos(userId: ID, page: Int!) : [Todo]!
-    user(userId: ID): User!
+    user(username: String!): User!
     requests(incoming: Boolean!, page: Int!) : [Request]!
     findUsers(username: String!, page: Int!) : [Follower]!
     following(userId: ID!, page: Int!): [FollowingInfo]!

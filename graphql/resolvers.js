@@ -26,7 +26,7 @@ module.exports = {
   
   todos: ({ userId, page }, { user }) => viewTodos(userId, page, user),
 
-  user: ({ userId }, { user }) => viewUser(userId, user),
+  user: ({ username }, { user }) => viewUser(username, user),
   
   requests: ({ incoming, page }, { user }) => viewRequests(incoming, page, user),
   

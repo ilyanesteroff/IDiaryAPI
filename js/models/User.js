@@ -19,6 +19,9 @@ class User extends Model_1.default {
     static findUser(query) {
         return this.getModel(query, this.collection);
     }
+    static findByUsername(username) {
+        return this.getModel({ username: username }, this.collection);
+    }
     static getSpecificFields(query, project) {
         return this._getSpecificFields(query, project, this.collection);
     }

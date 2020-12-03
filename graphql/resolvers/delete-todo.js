@@ -13,13 +13,13 @@ module.exports = async function(todoId, client){
     const ifClientIsAuthor = await Todo.getSpecificFields({ _id: new ObjectID(todoId), "creator._id" : client._id }, { completed: 1, imageUrl: 1 })
     !ifClientIsAuthor && throwAnError('Cannot delete this todo', 400)
 
+    if(ifClientIsAuthor.imageUrl) S3.deleteFile(ifClientIsAuthor.imageUrl)
+    
     if(ifClientIsAuthor.completed)
       await UserInfo.decreaseCompletedTodos(client._id)
     else
       await UserInfo.decreaseActiveTodos(client._id)
     await Todo.deleteTodo(todoId)
-
-    if(ifClientIsAuthor.imageUrl) await S3.deleteFile(ifClientIsAuthor.imageUrl)
 
     return true
   } catch {

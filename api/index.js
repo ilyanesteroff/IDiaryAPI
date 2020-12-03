@@ -2,8 +2,8 @@ const express = require('express')
 
 const router = express.Router()
 
-require('./authRoutes')(router)
-
 require('./routes')(router)
+
+require('./authRoutes')(router)
 
 module.exports = router

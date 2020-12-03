@@ -6,7 +6,7 @@ module.exports = async function (req, res){
   try {
     const { user } = req
     
-    const imgID = await randomBytes(24)
+    const imgID = (await randomBytes(24)).toString('hex')
 
     const key = `${user._id}/${imgID}.jpeg`
 

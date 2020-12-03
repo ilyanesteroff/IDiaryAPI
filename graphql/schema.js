@@ -187,6 +187,7 @@ module.exports = buildSchema(`
     getAuthUser: FullUser!
     todos(userId: ID, page: Int!) : [Todo]!
     user(username: String!): User!
+    userByID(userId: ID!): User!
     requests(incoming: Boolean!, page: Int!) : [Request]!
     findUsers(username: String!, page: Int!) : [Follower]!
     following(userId: ID!, page: Int!): [FollowingInfo]!

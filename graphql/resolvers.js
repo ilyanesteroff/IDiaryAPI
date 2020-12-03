@@ -1,6 +1,7 @@
 const getUserData = require('./resolvers/get-full-user')
 const viewTodos = require('./resolvers/view-todos')
 const viewUser = require('./resolvers/view-user')
+const viewUserById = require('./resolvers/view-user-by-id')
 const viewRequests = require('./resolvers/requests')
 const findUser = require('./resolvers/find-users')
 const viewFollowers = require('./resolvers/view-followers')
@@ -27,6 +28,8 @@ module.exports = {
   todos: ({ userId, page }, { user }) => viewTodos(userId, page, user),
 
   user: ({ username }, { user }) => viewUser(username, user),
+
+  userByID: ({ userId }, { user }) => viewUserById(userId, user),
   
   requests: ({ incoming, page }, { user }) => viewRequests(incoming, page, user),
   

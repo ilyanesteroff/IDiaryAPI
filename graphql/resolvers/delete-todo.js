@@ -19,7 +19,7 @@ module.exports = async function(todoId, client){
       await UserInfo.decreaseActiveTodos(client._id)
     await Todo.deleteTodo(todoId)
 
-    if(ifClientIsAuthor.imageUrl) await S3.deleteFile(ifClientIsAuthor.imageUrl)
+    //if(ifClientIsAuthor.imageUrl) await S3.deleteFile(ifClientIsAuthor.imageUrl)
 
     return true
   } catch {

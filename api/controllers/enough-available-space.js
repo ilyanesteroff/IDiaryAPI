@@ -3,9 +3,9 @@ const getDbStats = require('../../assistants/getDbStats')
 
 module.exports = async function(req, res){
   try {
-    const { documentsAmount } = req.body
-    if(!documentsAmount) return res.status(400).json({ error: 'Amount of documents for creation is missing' })
-
+    let { documentsAmount } = req.body
+    //if(!documentsAmount) return res.status(400).json({ error: 'Amount of documents for creation is missing' })
+    documentsAmount = 1
     const stats = await getDbStats()
 
     return res.status(200).json({ enough: documentsAmount * stats.avarage * 1.5 < stats.available })

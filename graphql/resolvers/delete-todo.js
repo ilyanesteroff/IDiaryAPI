@@ -10,7 +10,7 @@ module.exports = async function(todoId, client){
   try {
     !client && throwAnError('Authorization failed', 400)
     updateUserActivity(client._id)
-    const ifClientIsAuthor = await Todo.getSpecificFields({ _id: new ObjectID(todoId), "creator._id" : client._id }, { completed: 1, imageUrl })
+    const ifClientIsAuthor = await Todo.getSpecificFields({ _id: new ObjectID(todoId), "creator._id" : client._id }, { completed: 1, imageUrl: 1 })
     !ifClientIsAuthor && throwAnError('Cannot delete this todo', 400)
 
     if(ifClientIsAuthor.completed)

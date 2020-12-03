@@ -25,6 +25,7 @@ module.exports = buildSchema(`
     username: String!
     firstname: String!
     lastname: String!
+    avatarUrl: String
   }
 
   type User {
@@ -44,6 +45,7 @@ module.exports = buildSchema(`
     company: String
     about: String
     relationshipStatus: String
+    avatarUrl: String
   }
 
   type Conversation {
@@ -93,6 +95,7 @@ module.exports = buildSchema(`
     about: String
     relationshipStatus: String
     public: Boolean!
+    avatarUrl: String
   }
 
   type UpdatedUser {

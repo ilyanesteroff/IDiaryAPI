@@ -20,12 +20,16 @@ const requestFrom = require('./controllers/find-request-from')
 const requestTo = require('./controllers/find-request-to')
 const countMessages = require('./controllers/count-messages')
 const getPresignedURL = require('./controllers/get-presigned-url')
+const setAvatar = require('./controllers/set-avatar')
+const deleteAvatar = require('./controllers/delete-avatar')
 
 
 module.exports = router => {
   router.use(checkAuthorization)
 
   router.delete('/unsendFollowRequest/:reqId', unsendFollowRequest)
+
+  router.delete('/deleteAvatar/:url', deleteAvatar)
 
   router.delete('/rejectFollowRequest/:reqId', rejectFollowRequest)
 
@@ -36,6 +40,8 @@ module.exports = router => {
   router.delete('/unblockUser/:username', unblockUser)
 
   router.get('/countTodosByTag/:tag', countTodosByTag)
+
+  router.patch('/setAvatar', setAvatar)
 
   router.patch('/ifUserAbleToContact', ifUserAbleToContact)
   

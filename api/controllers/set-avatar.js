@@ -1,5 +1,6 @@
 const { User } = require('../../js/models/User')
 
+
 module.exports = async function(req, res){
   try {
     const { user } = req

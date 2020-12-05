@@ -6,7 +6,7 @@ const S3 = require('../../assistants/AWS/index')
 module.exports = async function(req, res){
   try {
     const { user } = req
-    const { url } = req.params
+    const { url } = req.body
     if(!url) return res.status(400).json({ error: 'Url is missing' })
 
     const _user = await User.getSpecificFields({ _id: new ObjectID(user._id) }, { avatarUrl: 1 })

@@ -29,8 +29,6 @@ module.exports = router => {
 
   router.delete('/unsendFollowRequest/:reqId', unsendFollowRequest)
 
-  router.delete('/deleteAvatar/:url', deleteAvatar)
-
   router.delete('/rejectFollowRequest/:reqId', rejectFollowRequest)
 
   router.delete('/unfollowOrRemoveFollower/:followId', unfollow)
@@ -42,6 +40,8 @@ module.exports = router => {
   router.get('/countTodosByTag/:tag', countTodosByTag)
 
   router.patch('/setAvatar', setAvatar)
+
+  router.patch('/deleteAvatar', deleteAvatar)
 
   router.patch('/ifUserAbleToContact', ifUserAbleToContact)
   

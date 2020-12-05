@@ -11,7 +11,7 @@ module.exports = async function(req, res){
 
     const _user = await User.getSpecificFields({ _id: new ObjectID(user._id) }, { avatarUrl: 1 })
 
-    if(!_user || !_user.avatarUrl || _user.avatarUrl + process.env.AWS_URL !== url ) 
+    if(!_user || !_user.avatarUrl || _user.avatarUrl !== url ) 
       return res.status(403).json({ error: 'Forbidden' })
 
     await S3.deleteFile(_user.avatarUrl)

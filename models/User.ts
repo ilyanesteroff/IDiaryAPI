@@ -38,7 +38,8 @@ export class User extends DbModel{
       _id: user._id.toString(),
       username: user.username,
       firstname: user.firstname,
-      lastname: user.lastname
+      lastname: user.lastname,
+      avatarUrl: user.avatarUrl
     }
   }
 }

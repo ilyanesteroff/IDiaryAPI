@@ -55,6 +55,7 @@ export type FullUser = {
   email: string
   password: string
   createdAt: Date
+  avatarUrl: string | null
 }
 
 export interface IUser {

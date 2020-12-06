@@ -37,11 +37,11 @@ module.exports = router => {
 
   router.delete('/unblockUser/:username', unblockUser)
 
+  router.delete('/deleteAvatar/:fileName', deleteAvatar)
+
   router.get('/countTodosByTag/:tag', countTodosByTag)
 
   router.patch('/setAvatar', setAvatar)
-
-  router.patch('/deleteAvatar', deleteAvatar)
 
   router.patch('/ifUserAbleToContact', ifUserAbleToContact)
   

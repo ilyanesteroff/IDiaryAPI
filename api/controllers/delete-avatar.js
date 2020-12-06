@@ -6,12 +6,13 @@ const S3 = require('../../assistants/AWS/index')
 module.exports = async function(req, res){
   try {
     const { user } = req
-    const { url } = req.body
-    if(!url) return res.status(400).json({ error: 'Url is missing' })
+    const { fileName } = req.params
+    
+    if(!fileName) return res.status(400).json({ error: 'Url is missing' })
 
     const _user = await User.getSpecificFields({ _id: new ObjectID(user._id) }, { avatarUrl: 1 })
 
-    if(!_user || !_user.avatarUrl || _user.avatarUrl !== url ) 
+    if(!_user || !_user.avatarUrl || _user.avatarUrl !== `${user._id}/${fileName}` ) 
       return res.status(403).json({ error: 'Forbidden' })
 
     await S3.deleteFile(_user.avatarUrl)

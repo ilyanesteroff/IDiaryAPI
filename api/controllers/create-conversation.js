@@ -14,7 +14,7 @@ module.exports = async function(req, res){
     
     updateUserActivity(user._id)
 
-    const user2 = await User.getSpecificFields({ username: receiver }, { username: 1, lastname: 1, firstname: 1})
+    const user2 = await User.getSpecificFields({ username: receiver }, { username: 1, lastname: 1, firstname: 1, avatarUrl: 1 })
     const conversation = new Conversation({
       participants: [
         User.formatUserAsFollower(user),

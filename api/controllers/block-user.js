@@ -18,7 +18,7 @@ module.exports = async function(req, res){
     const userAlreadyBlocked = await BlockedUser.findById(user._id, userId)
     if(userAlreadyBlocked) return res.status(400).json({ error: 'User already had been blocked' })
 
-    const userToBlock = await User.getSpecificFields({ _id: new ObjectID(userId) }, { username: 1, firstname: 1, lastname: 1 })
+    const userToBlock = await User.getSpecificFields({ _id: new ObjectID(userId) }, { username: 1, firstname: 1, lastname: 1, avatarUrl: 1 })
     if(!userToBlock) return res.status(404).json({ error: 'User to block not found' })
     
     const blockingAction = new BlockedUser({

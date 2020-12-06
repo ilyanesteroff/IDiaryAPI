@@ -23,7 +23,7 @@ module.exports = async function(req, res){
     const ifReqSent = await Request.findRequestFrom(to, user.username)
     if(ifReqSent) return res.status(400).json({ error: 'Request already sent' })
 
-    const requestReceiver = await User.getSpecificFields({ _id: new ObjectID(to) }, { username: 1, lastname: 1, firstname: 1 })
+    const requestReceiver = await User.getSpecificFields({ _id: new ObjectID(to) }, { username: 1, lastname: 1, firstname: 1, avatarUrl: 1 })
     if(!requestReceiver) return res.status(404).json({ error: 'Receiver not found' })
     
     const request = new Request({

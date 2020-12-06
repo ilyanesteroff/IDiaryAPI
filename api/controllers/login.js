@@ -10,7 +10,7 @@ module.exports = async function(req, res) {
     const { email, password } = req.body
     if(!email || !password) return res.status(400).json({ error: 'something is missing' })
 
-    const user = await User.getSpecificFields({ $or : [{ username: email }, { email: email }]}, { password: 1 , firstname: 1 })
+    const user = await User.getSpecificFields({ $or : [{ username: email }, { email: email }]}, { password: 1 , firstname: 1, username: 1 })
     if(!user) return res.status(404).json({ error: 'Email or username is invalid' })
     const ifUserApproved = await UserSettings.getSpecificFields({ _id: user._id }, { approved: 1 })
     if(!ifUserApproved) return res.status(404).json({ error: 'User not found' })
@@ -27,7 +27,8 @@ module.exports = async function(req, res) {
     return res.status(201).json({
       token: token,
       userId: user._id.toString(),
-      firstname: user.firstname
+      firstname: user.firstname,
+      username: user.username
     })
 
   } catch(err) {

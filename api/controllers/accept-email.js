@@ -17,11 +17,12 @@ module.exports = async function(req, res) {
       const token = jwt.sign({
         userId: user._id.toString()
       }, process.env.JWT_SECRET, { expiresIn : '720h'})
-      const firstname = await User.getSpecificFields({ _id: user._id }, { firstname: 1 })
+      const firstname = await User.getSpecificFields({ _id: user._id }, { firstname: 1, username: 1 })
       return res.status(201).json({
         token: token,
         userId: user._id.toString(),
-        firstname: firstname.firstname
+        firstname: firstname.firstname,
+        username: firstname.username
       })
     } else return res.status(400).json({ error: 'Token is invalid' })
   } catch(err) {
